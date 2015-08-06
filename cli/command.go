@@ -3,12 +3,14 @@ package cli
 import (
 	"errors"
 	"strings"
+
+	"github.com/gsamokovarov/jump/config"
 )
 
 // Every registered command gets saved in this global commands registry.
 var Commands = map[string]Command{}
 
-type CommandFn func([]string)
+type CommandFn func(Args, *config.Config)
 
 // Represents a command line action.
 type Command struct {
@@ -26,7 +28,7 @@ func (c *Command) IsOption() bool {
 
 // Register a command in the global command registry. ParseArguments looks into
 // it to decide which command to dispatch.
-func RegisterCommand(name, desc string, action func([]string)) {
+func RegisterCommand(name, desc string, action CommandFn) {
 	Commands[name] = Command{name, desc, action}
 }
 
@@ -38,16 +40,15 @@ var ErrNoDefaultCommand = errors.New("default command is not registered")
 // A command name is guessed out of the arguments. If the guessed name isn't
 // registered, the dispatch will fall-back to the default command specified. It
 // is expected that it is always registered. It is an error if its not.
-func DispatchCommand(args Args, defaultCommand string) error {
-	if _, ok := Commands[defaultCommand]; !ok {
-		return ErrNoDefaultCommand
+func DispatchCommand(args Args, defaultCommand string) (*Command, error) {
+	command, ok := Commands[defaultCommand]
+	if !ok {
+		return nil, ErrNoDefaultCommand
 	}
 
 	if command, ok := Commands[args.CommandName()]; ok {
-		command.Action(args.Rest())
-	} else {
-		Commands[defaultCommand].Action(args.Rest())
+		return &command, nil
 	}
 
-	return nil
+	return &command, nil
 }

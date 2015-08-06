@@ -1,10 +1,13 @@
 package cmd
 
-import "github.com/gsamokovarov/jump/cli"
+import (
+	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
+)
 
 const version = "0.0.1"
 
-func versionCmd([]string) {
+func versionCmd(cli.Args, *config.Config) {
 	cli.Errf("%s\n", version)
 }
 

@@ -5,6 +5,7 @@ import (
 	"text/template"
 
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 )
 
 const helpUsage = `Usage: jump [COMMAND ...]
@@ -15,7 +16,7 @@ Commands:{{range .}}
   {{.Name}} {{.Desc}}{{end}}
 `
 
-func helpCmd([]string) {
+func helpCmd(cli.Args, *config.Config) {
 	tmpl := template.Must(template.New("--help").Parse(helpUsage))
 	tmpl.Execute(os.Stderr, cli.Commands)
 }

@@ -12,11 +12,15 @@ import (
 func main() {
 	args := cli.ParseArgs(os.Args)
 
-	if err := config.SetupDefault(os.Getenv("JUMP_HOME")); err != nil {
+	config, err := config.SetupDefault(os.Getenv("JUMP_HOME"))
+	if err != nil {
 		panic(fmt.Sprintf("bug: %s", err.Error()))
 	}
 
-	if err := cli.DispatchCommand(args, "--help"); err != nil {
+	command, err := cli.DispatchCommand(args, "--help")
+	if err != nil {
 		panic(fmt.Sprintf("bug: %s", err.Error()))
 	}
+
+	command.Action(args.Rest(), config)
 }

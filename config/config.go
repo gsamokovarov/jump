@@ -53,26 +53,23 @@ func Setup(dir string) (*Config, error) {
 
 	dirPath := path.Join(dir, defaultScoreFile)
 	scores, err := os.OpenFile(dirPath, os.O_APPEND, os.FileMode(0644))
-
 	if err == nil {
 		return nil, err
-	} else {
-		return &Config{dir, scores}, nil
 	}
+
+	return &Config{dir, scores}, nil
 }
 
-func SetupDefault(dir string) error {
+// Setups the config folder from a directory path.
+//
+// If the directory path is an empty string, the path is automatically guessed.
+func SetupDefault(dir string) (*Config, error) {
 	dir, err := normalizeDir(dir)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	config, err := Setup(dir)
-	if err == nil {
-		Default = *config
-	}
-
-	return err
+	return Setup(dir)
 }
 
 func normalizeDir(dir string) (string, error) {
