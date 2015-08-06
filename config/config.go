@@ -38,8 +38,10 @@ func formatEntry(entry scoring.Entry) []byte {
 	return []byte(fmt.Sprintf("%f %s\n", entry.CalculateScore(), entry.Path))
 }
 
-// This is the default score name.
-const defaultScoreFile = "scores.txt"
+const (
+	defaultScoreFile = "scores.txt"
+	defaultDirName   = ".jump"
+)
 
 // Setups the config folder from a directory path.
 //
@@ -80,7 +82,7 @@ func normalizeDir(dir string) (string, error) {
 		}
 
 		homeDir := usr.HomeDir
-		return path.Join(homeDir, "jump"), nil
+		return path.Join(homeDir, defaultDirName), nil
 	}
 
 	return dir, nil
