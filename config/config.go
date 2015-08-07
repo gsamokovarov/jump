@@ -9,9 +9,6 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-// The default configuration.
-var Default Config
-
 // A config represents the config directory and the file that stores the score
 // values.
 type Config struct {
