@@ -6,6 +6,11 @@ type Entry struct {
 	Score *Score
 }
 
+// Update the score for an entry.
+func (e *Entry) UpdateScore() {
+	e.Score.Update()
+}
+
 // Calculates the score for an entry.
 func (e *Entry) CalculateScore() float64 {
 	return e.Score.Calculate()
