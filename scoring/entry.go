@@ -16,6 +16,8 @@ func (e *Entry) CalculateScore() float64 {
 	return e.Score.Calculate()
 }
 
+// Create a new entry with the specified path. The score is created with
+// NewScore.
 func NewEntry(path string) *Entry {
 	return &Entry{path, NewScore()}
 }
