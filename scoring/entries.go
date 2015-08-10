@@ -1,5 +1,7 @@
 package scoring
 
+import "sort"
+
 // An entries slice that supports sort.Interface.
 type Entries []Entry
 
@@ -19,4 +21,21 @@ func (e Entries) Swap(i, j int) {
 // This is to ensure a descending order as we want the bigger elements on top.
 func (e Entries) Less(i, j int) bool {
 	return e[i].CalculateScore() >= e[j].CalculateScore()
+}
+
+// Find finds an entry by a given function.
+//
+// The function is given an index which it can use to match the entry in the
+// entries type.
+//
+// If the entry isn't found, (nil, false) is returned.
+func (e Entries) Find(fn func(i int) bool) (*Entry, bool) {
+	length := len(e)
+	index := sort.Search(length, fn)
+
+	if index != length {
+		return &e[index], true
+	}
+
+	return nil, false
 }
