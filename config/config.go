@@ -1,44 +1,71 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/user"
-	"path"
+	"path/filepath"
+	"sort"
 
 	"github.com/gsamokovarov/jump/scoring"
+)
+
+const (
+	defaultScoreFile = "scores.json"
+	defaultDirName   = ".jump"
 )
 
 // A config represents the config directory and the file that stores the score
 // values.
 type Config struct {
 	Dir    string
-	Scores *os.File
+	Scores string
+}
+
+// Entries returns the current entries for the config.
+//
+// If the scores file is empty, the returned entries are empty.
+func (c *Config) ReadEntries() scoring.Entries {
+	var entries scoring.Entries
+
+	scoresFile, err := c.scoresFile()
+	if err != nil {
+		return entries
+	}
+
+	defer scoresFile.Close()
+
+	decoder := json.NewDecoder(scoresFile)
+	for {
+		if err := decoder.Decode(&entries); err != nil {
+			break
+		}
+	}
+
+	return entries
 }
 
 // Write the input scoring entries to a file.
 //
-// Formats them in a similar format of autojump.
-func (c *Config) WriteEntries(entries *scoring.Entries) error {
-	buffer := []byte{}
-
-	for _, entry := range *entries {
-		buffer = append(buffer, formatEntry(entry)...)
+// Sorts the entries before writing them to disk.
+func (c *Config) WriteEntries(entries scoring.Entries) error {
+	scoresFile, err := c.scoresFile()
+	if err != nil {
+		return err
 	}
 
-	_, err := c.Scores.Write(buffer)
+	defer scoresFile.Close()
+	sort.Sort(entries)
 
-	return err
+	encoder := json.NewEncoder(scoresFile)
+	return encoder.Encode(&entries)
 }
 
-func formatEntry(entry scoring.Entry) []byte {
-	return []byte(fmt.Sprintf("%f %s\n", entry.CalculateScore(), entry.Path))
+// Returns a file object for the saved scores path.
+func (c *Config) scoresFile() (*os.File, error) {
+	return createOrOpenFile(c.Scores)
 }
-
-const (
-	defaultScoreFile = "scores.txt"
-	defaultDirName   = ".jump"
-)
 
 // Setups the config folder from a directory path.
 //
@@ -46,15 +73,11 @@ const (
 // file is present, it is loaded.
 func Setup(dir string) (*Config, error) {
 	// We get the directory check for free form os.MkdirAll.
-	if err := os.MkdirAll(dir, os.ModeDir); err != nil {
+	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, err
 	}
 
-	dirPath := path.Join(dir, defaultScoreFile)
-	scores, err := os.OpenFile(dirPath, os.O_APPEND, os.FileMode(0644))
-	if err == nil {
-		return nil, err
-	}
+	scores := filepath.Join(dir, defaultScoreFile)
 
 	return &Config{dir, scores}, nil
 }
@@ -71,6 +94,14 @@ func SetupDefault(dir string) (*Config, error) {
 	return Setup(dir)
 }
 
+func createOrOpenFile(name string) (file *os.File, err error) {
+	if _, err := os.Stat(name); os.IsNotExist(err) {
+		return os.Create(name)
+	}
+
+	return os.OpenFile(name, os.O_RDWR, 0644)
+}
+
 func normalizeDir(dir string) (string, error) {
 	if len(dir) == 0 {
 		usr, err := user.Current()
@@ -79,8 +110,12 @@ func normalizeDir(dir string) (string, error) {
 		}
 
 		homeDir := usr.HomeDir
-		return path.Join(homeDir, defaultDirName), nil
+		return filepath.Join(homeDir, defaultDirName), nil
 	}
 
 	return dir, nil
+}
+
+func formatEntry(entry scoring.Entry) []byte {
+	return []byte(fmt.Sprintf("%f %s\n", entry.CalculateScore(), entry.Path))
 }
