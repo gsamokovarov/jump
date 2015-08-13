@@ -12,13 +12,16 @@ const helpUsage = `Usage: jump [COMMAND ...]
 
 Jump to a fuzzy-matched directory passed as an argument.
 
-Commands:{{range .}}
-  {{.Name}} {{.Desc}}{{end}}
+Commands:{{range .Commands}}
+  {{printf "%-12s %s" .Name .Desc}}{{end}}
+
+Options:{{range .Options}}
+  {{printf "%-12s %s" .Name .Desc}}{{end}}
 `
 
 func helpCmd(cli.Args, *config.Config) {
 	tmpl := template.Must(template.New("--help").Parse(helpUsage))
-	tmpl.Execute(os.Stderr, cli.Commands)
+	tmpl.Execute(os.Stderr, cli.Registry)
 }
 
 func init() {
