@@ -8,7 +8,7 @@ import (
 )
 
 // Every registered command gets saved in this global commands registry.
-var Commands = map[string]Command{}
+var Registry = make(commandRegistry)
 
 type CommandFn func(Args, *config.Config)
 
@@ -29,7 +29,7 @@ func (c *Command) IsOption() bool {
 // Register a command in the global command registry. ParseArguments looks into
 // it to decide which command to dispatch.
 func RegisterCommand(name, desc string, action CommandFn) {
-	Commands[name] = Command{name, desc, action}
+	Registry[name] = Command{name, desc, action}
 }
 
 // Used when the default default command isn't registered.
@@ -41,12 +41,12 @@ var ErrNoDefaultCommand = errors.New("default command is not registered")
 // registered, the dispatch will fall-back to the default command specified. It
 // is expected that it is always registered. It is an error if its not.
 func DispatchCommand(args Args, defaultCommand string) (*Command, error) {
-	command, ok := Commands[defaultCommand]
+	command, ok := Registry[defaultCommand]
 	if !ok {
 		return nil, ErrNoDefaultCommand
 	}
 
-	if command, ok := Commands[args.CommandName()]; ok {
+	if command, ok := Registry[args.CommandName()]; ok {
 		return &command, nil
 	}
 
