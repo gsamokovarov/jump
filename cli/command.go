@@ -7,9 +7,6 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
-// Every registered command gets saved in this global commands registry.
-var Registry = make(commandRegistry)
-
 type CommandFn func(Args, *config.Config)
 
 // Represents a command line action.

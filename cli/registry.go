@@ -2,6 +2,9 @@ package cli
 
 import "sort"
 
+// Every registered command gets saved in this global commands registry.
+var Registry = make(commandRegistry)
+
 // A command registry can be queried for the available commands and options.
 type CommandRegistry interface {
 	Commands() []Command
