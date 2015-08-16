@@ -12,20 +12,17 @@ import (
 func updateCmd(args cli.Args, conf *config.Config) {
 	dir, err := os.Getwd()
 	if len(args) == 0 && err != nil {
-		cli.Errf("err: %s\n", err)
-		os.Exit(1)
+		cli.Exitf(1, "err: %s\n", err)
 	} else {
 		dir, err = filepath.Abs(args.CommandName())
 		if err != nil {
-			cli.Errf("err: %s\n", err)
-			os.Exit(1)
+			cli.Exitf(1, "err: %s\n", err)
 		}
 	}
 
 	entries, err := conf.ReadEntries()
 	if err != nil {
-		cli.Errf("err: %s\n", err)
-		os.Exit(1)
+		cli.Exitf(1, "err: %s\n", err)
 	}
 
 	println("Finding")
@@ -38,7 +35,7 @@ func updateCmd(args cli.Args, conf *config.Config) {
 	}
 
 	if err := conf.WriteEntries(entries); err != nil {
-		cli.Errf("err: %s\n", err)
+		cli.Exitf(1, "err: %s\n", err)
 	}
 }
 
