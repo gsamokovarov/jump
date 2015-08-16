@@ -6,7 +6,7 @@ import (
 	"github.com/gsamokovarov/jump/shell"
 )
 
-func shellCmd(_ cli.Args, conf *config.Config) {
+func shellCmd(cli.Args, *config.Config) {
 	sh := shell.Guess()
 
 	cli.Outf("%s", sh)
