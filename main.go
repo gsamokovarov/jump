@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gsamokovarov/jump/cli"
@@ -14,12 +13,12 @@ func main() {
 
 	config, err := config.SetupDefault(os.Getenv("JUMP_HOME"))
 	if err != nil {
-		panic(fmt.Sprintf("bug: %s", err.Error()))
+		cli.Exitf("bug: %s", err.Error())
 	}
 
 	command, err := cli.DispatchCommand(args, "--help")
 	if err != nil {
-		panic(fmt.Sprintf("bug: %s", err.Error()))
+		cli.Exitf("bug: %s", err.Error())
 	}
 
 	command.Action(args.Rest(), config)
