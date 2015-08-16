@@ -6,8 +6,10 @@ Like [autojump] or [z], but fuzzy.
 
 Jump keeps track of the visited directories in bash, zsh and fish. After a
 while, the `j` command can be used to jump to one of your most recently visited
-directories. Say, you visit `/Users/developer/Projects/rails` often. Typing `j
-rls` will take you straight to it. Yes, it is fuzzy.
+directories. Say, you visit `/Projects/rails` often. Typing `j rls` will take
+you straight to it.
+
+Yes, it is fuzzy.
 
 ## Installation
 
@@ -23,8 +25,9 @@ mv jump ~/bin # Or /usr/local/bin, if ~/bin isn't in $PATH.
 ## Shell
 
 To get full advantage of jump, you wanna integrate it with you shell. The
-integration will track the directories entered through cd, pushdir, popdir and
-the likes. It will also provide the `j` command, so you can jump around easier.
+integration will track the directories entered through `cd`, `pushdir`,
+`popdir` and the likes. It will also provide the `j` command, so you can jump
+around easier.
 
 ### bash
 
@@ -53,7 +56,9 @@ status --is-interactive; and . (jump shell | psub)
 ## Progress
 
 This is still a work in progress. The concept is there, but a lot of things
-will change. Hope you find jump useful.
+will change.
+
+Hope you find jump useful.
 
 [autojump]: https://github.com/wting/autojump
 [z]: https://github.com/rupa/z
