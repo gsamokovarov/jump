@@ -25,13 +25,13 @@ func (s *Score) Update() {
 
 // Relevance of a score is the difference between the current time and when the
 // score was last updated.
-func (s *Score) Relevance() time.Duration {
-	return Now.Sub(s.Age)
+func (s *Score) Relevance() float64 {
+	return float64(s.Age.Unix()) / float64(Now.Unix())
 }
 
 // Calculate the final score from the score weight and the age.
 func (s *Score) Calculate() float64 {
-	return float64(s.Weight) * math.Log(float64(s.Relevance()))
+	return float64(s.Weight) * math.Log(s.Relevance())
 }
 
 // Calculate the final score from the score weight and the age.
