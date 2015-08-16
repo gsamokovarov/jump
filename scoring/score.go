@@ -23,8 +23,10 @@ func (s *Score) Update() {
 	s.Age = Now
 }
 
-// Relevance of a score is the difference between the current time and when the
-// score was last updated.
+// Relevance of a score is the quotient of the score age and the current time.
+//
+// It is expected to be between 0 and 1. It can be more, though, if the age of
+// the score is in the future.
 func (s *Score) Relevance() float64 {
 	return float64(s.Age.Unix()) / float64(Now.Unix())
 }
