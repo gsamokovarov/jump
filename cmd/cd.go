@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"path/filepath"
 	"sort"
 
 	"github.com/gsamokovarov/jump/cli"
@@ -24,8 +23,8 @@ func (fe fuzzyEntries) Swap(i, j int) {
 }
 
 func (fe fuzzyEntries) Less(i, j int) bool {
-	iPath := filepath.Base(fe.entries[i].Path)
-	jPath := filepath.Base(fe.entries[j].Path)
+	iPath := fe.entries[i].BasePath()
+	jPath := fe.entries[j].BasePath()
 
 	return lcs.Length(iPath, fe.target) >= lcs.Length(jPath, fe.target)
 }

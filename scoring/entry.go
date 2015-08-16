@@ -1,6 +1,9 @@
 package scoring
 
-import "fmt"
+import (
+	"fmt"
+	"path/filepath"
+)
 
 // An entry represents a path and a score.
 type Entry struct {
@@ -16,6 +19,12 @@ func (e *Entry) UpdateScore() {
 // Calculates the score for an entry.
 func (e *Entry) CalculateScore() float64 {
 	return e.Score.Calculate()
+}
+
+// BasePath returns the Base path (the part after the last separator) of the
+// current Entry path.
+func (e *Entry) BasePath() string {
+	return filepath.Base(e.Path)
 }
 
 func (e *Entry) String() string {
