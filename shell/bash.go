@@ -10,7 +10,7 @@ __jump_prompt_command() {
   jump update
 }
 
-test "$PROMPT_COMMAND" =~ __jump_prompt_command || {
+[[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
 }
 
