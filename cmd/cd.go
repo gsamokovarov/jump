@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -23,8 +24,8 @@ func (fe fuzzyEntries) Swap(i, j int) {
 }
 
 func (fe fuzzyEntries) Less(i, j int) bool {
-	iPath := fe.entries[i].BasePath()
-	jPath := fe.entries[j].BasePath()
+	iPath := strings.ToLower(fe.entries[i].BasePath())
+	jPath := strings.ToLower(fe.entries[j].BasePath())
 
 	return lcs.Length(iPath, fe.target) >= lcs.Length(jPath, fe.target)
 }
