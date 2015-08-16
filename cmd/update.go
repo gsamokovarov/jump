@@ -22,7 +22,13 @@ func updateCmd(args cli.Args, conf *config.Config) {
 		}
 	}
 
-	entries := conf.ReadEntries()
+	entries, err := conf.ReadEntries()
+	if err != nil {
+		cli.Errf("err: %s\n", err)
+		os.Exit(1)
+	}
+
+	println("Finding")
 	entry, found := entries.Find(dir)
 
 	if found {

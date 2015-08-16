@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -26,24 +27,27 @@ type Config struct {
 // Read entries returns the current entries for the config.
 //
 // If the scores file is empty, the returned entries are empty.
-func (c *Config) ReadEntries() scoring.Entries {
+func (c *Config) ReadEntries() (scoring.Entries, error) {
 	var entries scoring.Entries
 
 	scoresFile, err := c.scoresFile()
 	if err != nil {
-		return entries
+		return entries, nil
 	}
 
 	defer scoresFile.Close()
 
 	decoder := json.NewDecoder(scoresFile)
 	for {
-		if err := decoder.Decode(&entries); err != nil {
+		if err := decoder.Decode(&entries); err == io.EOF {
+			printEntries(entries)
 			break
+		} else if err != nil {
+			return entries, err
 		}
 	}
 
-	return entries
+	return entries, nil
 }
 
 // Write the input scoring entries to a file.
