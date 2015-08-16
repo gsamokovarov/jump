@@ -6,8 +6,6 @@ end
 
 # Shortcut to j for the autojump folks.
 function j
-  set -l output (jump cd $argv)
-  if test -d "$output"
-	  cd $output
-  end
+  set -l dir (jump cd $argv)
+  test -d "$dir"; and cd "$dir"
 end
