@@ -2,28 +2,35 @@ package cmd
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func updateCmd(_ cli.Args, conf *config.Config) {
-	cwd, err := os.Getwd()
-	if err != nil {
+func updateCmd(args cli.Args, conf *config.Config) {
+	dir, err := os.Getwd()
+	if len(args) == 0 && err != nil {
 		cli.Errf("err: %s\n", err)
 		os.Exit(1)
+	} else {
+		dir, err = filepath.Abs(args.CommandName())
+		if err != nil {
+			cli.Errf("err: %s\n", err)
+			os.Exit(1)
+		}
 	}
 
 	entries := conf.ReadEntries()
 	entry, found := entries.Find(func(i int) bool {
-		return entries[i].Path == cwd
+		return entries[i].Path == dir
 	})
 
 	if found {
 		entry.UpdateScore()
 	} else {
-		entries = append(entries, *scoring.NewEntry(cwd))
+		entries = append(entries, *scoring.NewEntry(dir))
 	}
 
 	if err := conf.WriteEntries(entries); err != nil {
@@ -32,5 +39,5 @@ func updateCmd(_ cli.Args, conf *config.Config) {
 }
 
 func init() {
-	cli.RegisterCommand("update", "Updates the score of the working directory.", updateCmd)
+	cli.RegisterCommand("update", "Updates the score of a directory.", updateCmd)
 }
