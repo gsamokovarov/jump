@@ -23,17 +23,16 @@ func (e Entries) Less(i, j int) bool {
 	return e[i].CalculateScore() >= e[j].CalculateScore()
 }
 
-// Find finds an entry by a given function.
-//
-// The function is given an index which it can use to match the entry in the
-// entries type.
+// Find finds an entry by a given path.
 //
 // If the entry isn't found, (nil, false) is returned.
-func (e Entries) Find(fn func(i int) bool) (*Entry, bool) {
+func (e Entries) Find(path string) (*Entry, bool) {
 	length := len(e)
-	index := sort.Search(length, fn)
+	index := sort.Search(length, func(i int) bool {
+		return e[i].Path == path
+	})
 
-	if index != length {
+	if index < length && e[index].Path == path {
 		return &e[index], true
 	}
 

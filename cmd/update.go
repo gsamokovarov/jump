@@ -23,9 +23,7 @@ func updateCmd(args cli.Args, conf *config.Config) {
 	}
 
 	entries := conf.ReadEntries()
-	entry, found := entries.Find(func(i int) bool {
-		return entries[i].Path == dir
-	})
+	entry, found := entries.Find(dir)
 
 	if found {
 		entry.UpdateScore()
