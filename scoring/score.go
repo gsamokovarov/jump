@@ -31,7 +31,7 @@ func (s *Score) Relevance() time.Duration {
 
 // Calculate the final score from the score weight and the age.
 func (s *Score) Calculate() float64 {
-	return float64(s.Weight) * math.Sqrt(float64(s.Relevance()))
+	return float64(s.Weight) * math.Log(float64(s.Relevance()))
 }
 
 // Calculate the final score from the score weight and the age.
