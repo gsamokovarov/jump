@@ -45,7 +45,12 @@ func cdCmd(args cli.Args, conf *config.Config) {
 		return
 	}
 
-	entries := fuzzyEntries{conf.ReadEntries(), args.CommandName()}
+	rawEntries, err := conf.ReadEntries()
+	if err != nil {
+		cli.Exitf(1, "%s\n", err)
+	}
+
+	entries := fuzzyEntries{rawEntries, args.CommandName()}
 	if entry, empty := entries.Choose(); !empty {
 		cli.Outf("%s\n", entry.Path)
 	}
