@@ -1,7 +1,5 @@
 package scoring
 
-import "sort"
-
 // An entries slice that supports sort.Interface.
 type Entries []Entry
 
@@ -27,13 +25,10 @@ func (e Entries) Less(i, j int) bool {
 //
 // If the entry isn't found, (nil, false) is returned.
 func (e Entries) Find(path string) (*Entry, bool) {
-	length := len(e)
-	index := sort.Search(length, func(i int) bool {
-		return e[i].Path == path
-	})
-
-	if index < length && e[index].Path == path {
-		return &e[index], true
+	for _, entry := range e {
+		if entry.Path == path {
+			return &entry, true
+		}
 	}
 
 	return nil, false
