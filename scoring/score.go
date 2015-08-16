@@ -19,7 +19,7 @@ type Score struct {
 
 // Update the weight and age of the current score.
 func (s *Score) Update() {
-	s.Weight <<= 1
+	s.Weight++
 	s.Age = Now
 }
 
