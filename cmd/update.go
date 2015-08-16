@@ -25,7 +25,6 @@ func updateCmd(args cli.Args, conf *config.Config) {
 		cli.Exitf(1, "err: %s\n", err)
 	}
 
-	println("Finding")
 	entry, found := entries.Find(dir)
 
 	if found {

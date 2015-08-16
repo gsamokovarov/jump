@@ -40,7 +40,6 @@ func (c *Config) ReadEntries() (scoring.Entries, error) {
 	decoder := json.NewDecoder(scoresFile)
 	for {
 		if err := decoder.Decode(&entries); err == io.EOF {
-			printEntries(entries)
 			break
 		} else if err != nil {
 			return entries, err
@@ -60,9 +59,14 @@ func (c *Config) WriteEntries(entries scoring.Entries) error {
 	}
 
 	defer scoresFile.Close()
-	sort.Sort(entries)
 
+	if err := scoresFile.Truncate(0); err != nil {
+		return err
+	}
+
+	sort.Sort(entries)
 	encoder := json.NewEncoder(scoresFile)
+
 	return encoder.Encode(&entries)
 }
 
