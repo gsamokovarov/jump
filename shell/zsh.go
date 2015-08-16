@@ -1,4 +1,6 @@
-# A chpwd hook for zsh.
+package shell
+
+var Zsh = Shell(`# A chpwd hook for zsh.
 __jump_chpwd() {
   jump update
 }
@@ -12,3 +14,4 @@ j() {
   local dir="$(jump cd $@)"
   test -d "$dir" && cd "$dir"
 }
+`)

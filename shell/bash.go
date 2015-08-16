@@ -1,4 +1,6 @@
-# A PROMPT_COMMAND hook for bash.
+package shell
+
+var Bash = Shell(`# A PROMPT_COMMAND hook for bash.
 __jump_prompt_command() {
   jump update
 }
@@ -14,3 +16,4 @@ j() {
   local dir="$(jump cd $@)"
   test -d "$dir"  && cd "$dir"
 }
+`)

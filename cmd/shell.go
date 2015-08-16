@@ -9,12 +9,7 @@ import (
 func shellCmd(_ cli.Args, conf *config.Config) {
 	sh := shell.Guess()
 
-	integration, err := sh.Integration()
-	if err != nil {
-		cli.Exitf(1, "%s\n", err)
-	}
-
-	cli.Outf("%s", integration)
+	cli.Outf("%s", sh)
 }
 
 func init() {
