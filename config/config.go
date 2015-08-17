@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"os/user"
@@ -122,8 +121,4 @@ func normalizeDir(dir string) (string, error) {
 	}
 
 	return dir, nil
-}
-
-func formatEntry(entry scoring.Entry) []byte {
-	return []byte(fmt.Sprintf("%f %s\n", entry.CalculateScore(), entry.Path))
 }
