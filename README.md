@@ -47,7 +47,7 @@ eval "$(jump shell)"
 
 ### fish
 
-var Fish = Shell(`# Put the line below in ~/.config/fish/config.fish:
+Put the line below in `~/.config/fish/config.fish`:
 
 ```fish
 status --is-interactive; and . (jump shell | psub)
