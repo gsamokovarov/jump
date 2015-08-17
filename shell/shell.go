@@ -1,15 +1,12 @@
 package shell
 
-import (
-	"os"
-	"path/filepath"
-)
+import "path/filepath"
 
 type Shell string
 
 // Guess tries to guess the current shell session.
-func Guess() Shell {
-	shell := filepath.Base(os.Getenv("SHELL"))
+func Guess(hint string) Shell {
+	shell := filepath.Base(hint)
 
 	switch shell {
 	case "fish":
