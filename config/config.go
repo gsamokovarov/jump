@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"sort"
 
 	"github.com/gsamokovarov/jump/scoring"
 )
@@ -63,7 +62,7 @@ func (c *Config) WriteEntries(entries scoring.Entries) error {
 		return err
 	}
 
-	sort.Sort(entries)
+	entries.Sort()
 	encoder := json.NewEncoder(scoresFile)
 
 	return encoder.Encode(&entries)

@@ -1,5 +1,7 @@
 package scoring
 
+import "sort"
+
 // An entries slice that supports sort.Interface.
 type Entries []Entry
 
@@ -32,4 +34,9 @@ func (e Entries) Find(path string) (*Entry, bool) {
 	}
 
 	return nil, false
+}
+
+// Sorts the entries collection.
+func (e Entries) Sort() {
+	sort.Sort(e)
 }
