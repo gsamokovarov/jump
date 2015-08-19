@@ -36,7 +36,7 @@ func (s *Score) Calculate() float64 {
 	return float64(s.Weight) * math.Log(s.Relevance())
 }
 
-// Calculate the final score from the score weight and the age.
+// String gives a string representation to Score. Useful for debugging.
 func (s *Score) String() string {
 	return fmt.Sprintf("{%s %s}", s.Weight, s.Age)
 }
