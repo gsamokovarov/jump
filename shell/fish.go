@@ -8,7 +8,7 @@ var Fish = Shell(`# Put the line below in ~/.config/fish/config.fish:
 
 function __jump_add --on-variable PWD
   status --is-command-substitution; and return
-  jump update
+  jump chdir
 end
 
 function j
