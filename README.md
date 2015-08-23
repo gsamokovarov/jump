@@ -34,7 +34,7 @@ around easier.
 Put the line below in `~/.bashrc` or `~/bash_profile`:
 
 ```bash
-eval "$(jump shell)"
+eval "$(jump shell bash)"
 ```
 
 ### zsh
@@ -42,7 +42,7 @@ eval "$(jump shell)"
 Put the line below in `~/.zshrc`:
 
 ```zsh
-eval "$(jump shell)"
+eval "$(jump shell zsh)"
 ```
 
 ### fish
@@ -50,7 +50,7 @@ eval "$(jump shell)"
 Put the line below in `~/.config/fish/config.fish`:
 
 ```fish
-status --is-interactive; and . (jump shell | psub)
+status --is-interactive; and . (jump shell fish | psub)
 ```
 
 ## Progress
