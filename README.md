@@ -1,6 +1,6 @@
 # jump
 
-Like [autojump] or [z], but fuzzy.
+A fuzzy quick-directory jumper. Kinda Like [autojump] or [z], but you know, fuzzy.
 
 ## Overview
 
@@ -15,7 +15,23 @@ Yes, it is fuzzy.
 
 Right now, you can only install it through source:
 
+### OSX
+
 ```shell
+brew tap gsamokovarov/jump
+brew install jump --HEAD
+```
+
+### Source
+
+On Linux other UNIX-like systems, that can compile Go code, you can install
+jump from source.
+
+You need a working [Go workspace] for the compilation. See [this][Go workspace]
+for more details.
+
+```bash
+go get github.com/gsamokovarov/jump
 git clone https://github.com/gsamokovarov/jump
 cd jump
 make
@@ -62,3 +78,4 @@ Hope you find jump useful.
 
 [autojump]: https://github.com/wting/autojump
 [z]: https://github.com/rupa/z
+[Go workspace]: https://golang.org/doc/code.html#Workspaces
