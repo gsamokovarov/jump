@@ -22,9 +22,10 @@ func (fe FuzzyEntries) Less(i, j int) bool {
 }
 
 func (fe FuzzyEntries) Sort() {
-	// Leaving this, when fe.Sort() is called, the Entries.Sort method will be
-	// call. In its context, the receiver is Entries, therefore, Entries.Less
-	// and not FuzzyEntries.Less will be called during sorting.
+	// If this method is left undefined, when fe.Sort() is called, the
+	// Entries.Sort method will be called. In its context, the receiver is
+	// Entries, therefore, Entries.Less, and not FuzzyEntries.Less, will be
+	// called during sorting.
 	sort.Sort(fe)
 }
 
