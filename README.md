@@ -1,6 +1,6 @@
 # jump
 
-A fuzzy quick-directory jumper. Kinda Like [autojump] or [z], but you know, fuzzy.
+A fuzzy quick-directory jumper. Kinda like [autojump] or [z], but you know, fuzzy.
 
 ## Overview
 
@@ -27,8 +27,7 @@ brew install jump --HEAD
 On Linux other UNIX-like systems, that can compile Go code, you can install
 jump from source.
 
-You need a working [Go workspace] for the compilation. See [this][Go workspace]
-for more details.
+You need a working [Go workspace] for the compilation.
 
 ```bash
 go get github.com/gsamokovarov/jump
