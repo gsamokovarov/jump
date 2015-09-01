@@ -46,5 +46,6 @@ func (fe FuzzyEntries) Select() (entry *Entry, empty bool) {
 // Entries is expected to be sorted before creating the FuzzyEntries. This
 // gives us the best match. This is not enforced, however.
 func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
+	sort.Sort(sort.Reverse(entries))
 	return &FuzzyEntries{entries, target}
 }
