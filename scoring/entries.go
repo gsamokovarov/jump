@@ -40,3 +40,8 @@ func (e Entries) Find(path string) (*Entry, bool) {
 func (e Entries) Sort() {
 	sort.Sort(e)
 }
+
+// Reverse sorts the entries collection.
+func (e Entries) Reverse() {
+	sort.Sort(sort.Reverse(e))
+}
