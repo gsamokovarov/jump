@@ -26,7 +26,7 @@ func (fe FuzzyEntries) Sort() {
 	// Entries.Sort method will be called. In its context, the receiver is
 	// Entries, therefore, Entries.Less, and not FuzzyEntries.Less, will be
 	// called during sorting.
-	sort.Sort(fe)
+	sort.Stable(fe)
 }
 
 // Select selects the entry with greatest LCS score.
