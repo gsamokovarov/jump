@@ -11,7 +11,7 @@ func TestEntriesSort(t *testing.T) {
 	e2 := Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries([]Entry{e1, e2})
-	expectedEntries := Entries([]Entry{e2, e1})
+	expectedEntries := Entries([]Entry{e1, e2})
 
 	sort.Sort(entries)
 

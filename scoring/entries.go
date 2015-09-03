@@ -16,11 +16,9 @@ func (e Entries) Swap(i, j int) {
 }
 
 // Less compares two indexes in the entries and returns true if the value at i
-// is greater than the value at j.
-//
-// This is to ensure a descending order as we want the bigger elements on top.
+// is less than the value at j.
 func (e Entries) Less(i, j int) bool {
-	return e[i].CalculateScore() >= e[j].CalculateScore()
+	return e[i].CalculateScore() < e[j].CalculateScore()
 }
 
 // Find finds an entry by a given path.
@@ -39,9 +37,4 @@ func (e Entries) Find(path string) (*Entry, bool) {
 // Sorts the entries collection.
 func (e Entries) Sort() {
 	sort.Sort(e)
-}
-
-// Reverse sorts the entries collection.
-func (e Entries) Reverse() {
-	sort.Sort(sort.Reverse(e))
 }

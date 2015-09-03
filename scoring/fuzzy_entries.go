@@ -46,7 +46,7 @@ func (fe FuzzyEntries) Select() (entry *Entry, empty bool) {
 // Entries is expected to be sorted before creating the FuzzyEntries. This
 // gives us the best match. This is not enforced, however.
 func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
-	// Given that the entires are sorted, reverse them. This will make the
+	// Given that the entires are sorted in ASC order. This will make the
 	// directories with higher score pop, as they will come later on in the
 	// FuzzyEntries sort and get pushed to the beginning of the list.
 	//
@@ -56,7 +56,5 @@ func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
 	// /Users/genadi/Development/homebrew-jump, because it has the same
 	// lcs.Length, but came after the proper directory we want in initial
 	// entries, so it got pushed to the beginning of slice.
-	entries.Reverse()
-
 	return &FuzzyEntries{entries, target}
 }
