@@ -1,16 +1,14 @@
 # jump
 
-A fuzzy quick-directory jumper. Kinda like [autojump] or [z], but you know, fuzzy.
+A fuzzy quick-directory jumper. Kinda like [autojump] or [z], but  fuzzy.
 
-Jump works its magic by keeping track of the directories you visit, scoring
-them, and then trying to find the best directory for your input.
+Jump works its magic by keeping track of the directories you visit. It scores
+to give you the best match for tour input. When integrated with your shell, the
+`j` function is available. It let's you jump across directories with ease.
 
-Jump integrates with your shell and gives you the `j` function. It let's you
-jump across directories with ease. Gone are the manual aliases for frequent
-project directories.
-
-If you visit `/Users/bob/Projects/moneymaker` often, type `j mk` or `j mmk` and
-be done. Fuzzy matching makes everything better. :-)
+If you visit `/Users/bob/Projects/moneymaker` often, type `j mk` and jump
+straight to it. Gone are the days of manual aliases for frequent project
+directories.
 
 ## Installation
 
@@ -38,12 +36,12 @@ mv jump ~/bin # Or /usr/local/bin, if ~/bin isn't in $PATH.
 
 ## Shell
 
-Jump supports the most popular shells out there, right out of the box. If your
-favourite shell isn't in the list below, why not contribute an integration for
-it?
+Jump supports bash, zsh and fish out of the box. If your favourite shell isn't
+in the list below, give a heads up in the [issue tracker].
 
-The `j` shell function and the automatic directories score comes from those
-integrations, so make sure you have set them up.
+To get the most out of jump, you have to integrate it with your shell. The
+integration gives you the `j` shell function and the automatic tracking and
+scoring.
 
 ### bash
 
@@ -69,14 +67,19 @@ Put the line below in `~/.config/fish/config.fish`:
 status --is-interactive; and . (jump shell fish | psub)
 ```
 
-## P.S.
+## Issues
 
-This is still a work in progress, but its getting close to `0.1`. Jump _should_
-behave reasonable, and if it doesn't for you, please consider leaving an issue.
-It will help me make it better.
+If you find any problems with jump, please, consider reporting them to the
+[issue tracker].
+
+## License
+
+Jump is licensed under the [MIT license].
 
 Hope you find jump useful! :sparkles:
 
 [autojump]: https://github.com/wting/autojump
 [z]: https://github.com/rupa/z
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
+[issue tracker]: https://github.com/gsamokovarov/jump/issues
+[MIT license]: https://github.com/gsamokovarov/jump/blob/master/LICENSE.txt
