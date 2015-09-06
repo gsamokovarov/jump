@@ -16,15 +16,26 @@ directories.
 
 ```shell
 brew tap gsamokovarov/jump
-brew install jump --HEAD
+brew install jump
+```
+
+### Debian
+
+```shell
+wget https://github.com/gsamokovarov/jump/releases/download/0.1.0/jump_0.1.0_amd64.deb
+sudo dpkg -i jump_0.1.0_amd64.deb
+```
+
+### Red Hat
+
+```shell
+wget https://github.com/gsamokovarov/jump/releases/download/0.1.0/jump-0.1.0-1.x86_64.rpm
+sudo rpm -i jump-0.1.0-1.x86_64.rpm
 ```
 
 ### Source
 
-On Linux and other UNIX-like systems, that can compile Go code, you can install
-jump from source.
-
-You need a working [Go workspace] for the compilation.
+You need a working [Go workspace].
 
 ```bash
 go get github.com/gsamokovarov/jump
