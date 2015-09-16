@@ -3,8 +3,9 @@
 A fuzzy quick-directory jumper. Kinda like [autojump] or [z], but  fuzzy.
 
 Jump works its magic by keeping track of the directories you visit. It scores
-to give you the best match for tour input. When integrated with your shell, the
-`j` function is available. It let's you jump across directories with ease.
+them to give you the best match for tour input. When integrated with your
+shell, the `j` function is available. It let's you jump across directories with
+ease.
 
 If you visit `/Users/bob/Projects/moneymaker` often, type `j mk` and jump
 straight to it. Gone are the days of manual aliases for frequent project
