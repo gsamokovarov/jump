@@ -3,7 +3,7 @@ package scoring
 import (
 	"sort"
 
-	"github.com/gsamokovarov/jump/match"
+	"github.com/gsamokovarov/jump/fuzzy"
 )
 
 type FuzzyEntries struct {
@@ -14,10 +14,13 @@ type FuzzyEntries struct {
 // Less compares the Longest Subsequence Length between the term string and
 // every entry. The entries with greater LCS come first.
 func (fe FuzzyEntries) Less(i, j int) bool {
-	matcher := match.NewMatcher(fe.Term)
-	left, right := fe.Entries[i].Path, fe.Entries[j].Path
+	norm := fuzzy.NewNormalizer(fe.Term)
+	term := norm.NormalizeTerm()
 
-	return matcher.Match(left, right)
+	pathI := norm.NormalizePath(fe.Entries[i].Path)
+	pathJ := norm.NormalizePath(fe.Entries[j].Path)
+
+	return fuzzy.Length(pathI, term) >= fuzzy.Length(pathJ, term)
 }
 
 func (fe FuzzyEntries) Sort() {

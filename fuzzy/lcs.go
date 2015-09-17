@@ -1,4 +1,4 @@
-package lcs
+package fuzzy
 
 // Computes the LCS length of two string using an altered (and memoized)
 // version of the algorithm described at http://bit.ly/1ICdGss.
