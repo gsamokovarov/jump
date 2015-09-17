@@ -1,6 +1,8 @@
 package scoring
 
 import (
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -15,10 +17,19 @@ type FuzzyEntries struct {
 // Less compares the Longest Subsequence Length between the Target string and
 // every entry. The entries with greater LCS come first.
 func (fe FuzzyEntries) Less(i, j int) bool {
-	iPath := strings.ToLower(fe.Entries[i].BasePath())
-	jPath := strings.ToLower(fe.Entries[j].BasePath())
+	target := fe.Target
+	left, right := fe.Entries[i].Path, fe.Entries[j].Path
 
-	return lcs.Length(iPath, fe.Target) >= lcs.Length(jPath, fe.Target)
+	if isSameCase(target) {
+		target = strings.ToLower(target)
+		left, right = strings.ToLower(left), strings.ToLower(right)
+	}
+
+	if isInterestingSearch(target) {
+		left, right = extractInterestingPath(left), extractInterestingPath(right)
+	}
+
+	return lcs.Length(left, target) >= lcs.Length(right, target)
 }
 
 func (fe FuzzyEntries) Sort() {
@@ -47,4 +58,17 @@ func (fe FuzzyEntries) Select() (entry *Entry, empty bool) {
 // This gives us the best match. This is not enforced, however.
 func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
 	return &FuzzyEntries{entries, target}
+}
+
+func isSameCase(str string) bool {
+	return strings.ToLower(str) == str || str == strings.ToUpper(str)
+}
+
+func isInterestingSearch(str string) bool {
+	return strings.ContainsAny(str, string(os.PathSeparator))
+}
+
+func extractInterestingPath(path string) string {
+	dir, file := filepath.Split(path)
+	return filepath.Base(dir) + file
 }
