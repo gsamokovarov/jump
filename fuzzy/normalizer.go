@@ -73,7 +73,7 @@ func containsOsSeparators(str string) bool {
 func finalChunks(path string, sepCount int) string {
 	var chunk string
 
-	for i := 0; i < sepCount; i++ {
+	for i := 0; i <= sepCount; i++ {
 		dir, file := filepath.Split(path)
 		chunk = file + chunk
 		path = strings.TrimSuffix(dir, osSeparator)
