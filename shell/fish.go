@@ -15,4 +15,6 @@ function j
   set -l dir (jump cd $argv)
   test -d "$dir"; and cd "$dir"
 end
+
+complete --command j --exclusive --arguments '(jump hint)'
 `)
