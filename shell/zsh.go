@@ -17,4 +17,10 @@ j() {
   local dir="$(jump cd $@)"
   test -d "$dir" && cd "$dir"
 }
+
+jump_completion() {
+  reply=($(jump hint $1 | head -3))
+}
+
+compctl -U -K jump_completion j
 `)
