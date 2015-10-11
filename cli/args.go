@@ -1,6 +1,6 @@
 package cli
 
-import "math"
+import "strings"
 
 // Represents an ordered collection of command line argument.
 type Args []string
@@ -14,30 +14,30 @@ func ParseArgs(args []string) Args {
 }
 
 // CommandName extracts a command name out of all the arguments.
+//
+// A command cannot start with --. We think of those arguments as options.
 func (a Args) CommandName() string {
-	if len(a) >= 1 {
-		return a[0]
+	for i := 0; i < len(a); i++ {
+		if !strings.HasPrefix(a[i], "--") {
+			return a[i]
+		}
 	}
 
 	return ""
 }
 
-// Value gets the value for an --option.
+// Has tells whether the arguments contains a specific argument.
 //
-// The value can be specified by `--count 3`. Currently, no `--count=3` is
-// supported.
-//
-// A default value should be given and will be returned if no value is found.
-func (a Args) Value(option, defaultValue string) string {
-	stopIndex := int(math.Max(float64(len(a)-1), 0))
-
-	for i := 0; i < stopIndex; i++ {
+// No distinction is made between arguments or options. Everything is matched
+// as is.
+func (a Args) Has(option string) bool {
+	for i := 0; i < len(a); i++ {
 		if a[i] == option {
-			return a[i+1]
+			return true
 		}
 	}
 
-	return defaultValue
+	return false
 }
 
 // Rest extracts the arguments after the command name.

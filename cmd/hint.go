@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"sort"
-	"strconv"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -12,26 +11,24 @@ import (
 func hintCmd(args cli.Args, conf *config.Config) {
 	var hints scoring.Entries
 
-	count, err := strconv.Atoi(args.Value("--count", "0"))
-	if err != nil {
-		count = 0
-	}
+	term := args.CommandName()
+	smart := args.Has("--smart")
 
 	entries, err := conf.ReadEntries()
 	if err != nil {
 		cli.Exitf(1, "%s\n", err)
 	}
 
-	if len(args) == 0 {
+	if len(term) == 0 {
 		// We usually keep them reversely sort to optimize the fuzzy search.
 		sort.Sort(sort.Reverse(entries))
 
-		hints = hintSliceEntries(entries, count)
+		hints = hintSmartSelect(entries, term, smart)
 	} else {
-		fuzzyEntries := scoring.NewFuzzyEntries(entries, args.CommandName())
+		fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 		fuzzyEntries.Sort()
 
-		hints = hintSliceEntries(fuzzyEntries.Entries, count)
+		hints = hintSmartSelect(fuzzyEntries.Entries, term, smart)
 	}
 
 	for _, entry := range hints {
@@ -39,8 +36,27 @@ func hintCmd(args cli.Args, conf *config.Config) {
 	}
 }
 
+func hintSmartSelect(entries scoring.Entries, term string, smart bool) scoring.Entries {
+	if !smart {
+		return entries
+	}
+
+	termLength := len(term)
+
+	switch {
+	case termLength == 0:
+		return hintSliceEntries(entries, 5)
+	case termLength < 4:
+		return hintSliceEntries(entries, 1)
+	case termLength < 7:
+		return hintSliceEntries(entries, 3)
+	default:
+		return hintSliceEntries(entries, 1)
+	}
+}
+
 func hintSliceEntries(entries scoring.Entries, limit int) scoring.Entries {
-	if limit > 0 && limit < len(entries) {
+	if limit < len(entries) {
 		return entries[0:limit]
 	} else {
 		return entries

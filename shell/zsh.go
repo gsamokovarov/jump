@@ -19,7 +19,7 @@ j() {
 }
 
 jump_completion() {
-  reply=($(jump hint "$1" --count 3))
+  reply=($(jump hint "$1" --smart))
 }
 
 compctl -U -K jump_completion j
