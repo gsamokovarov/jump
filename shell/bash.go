@@ -18,4 +18,6 @@ j() {
   local dir="$(jump cd $@)"
   test -d "$dir"  && cd "$dir"
 }
+
+complete -o filenames -C 'jump hint "${COMP_LINE/#j /}" --smart' j
 `)
