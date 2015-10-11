@@ -19,7 +19,7 @@ j() {
 }
 
 jump_completion() {
-  reply=($(jump hint $1 | head -3))
+  reply=($(jump hint $1))
 }
 
 compctl -U -K jump_completion j
