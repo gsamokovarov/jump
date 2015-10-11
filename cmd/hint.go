@@ -12,9 +12,9 @@ import (
 func hintCmd(args cli.Args, conf *config.Config) {
 	var hints scoring.Entries
 
-	count, err := strconv.Atoi(args.Value("--count", "3"))
-	if err != nil || count == 0 {
-		count = 3
+	count, err := strconv.Atoi(args.Value("--count", "0"))
+	if err != nil {
+		count = 0
 	}
 
 	entries, err := conf.ReadEntries()
@@ -26,12 +26,12 @@ func hintCmd(args cli.Args, conf *config.Config) {
 		// We usually keep them reversely sort to optimize the fuzzy search.
 		sort.Sort(sort.Reverse(entries))
 
-		hints = upmost(entries, count)
+		hints = hintSliceEntries(entries, count)
 	} else {
 		fuzzyEntries := scoring.NewFuzzyEntries(entries, args.CommandName())
 		fuzzyEntries.Sort()
 
-		hints = upmost(fuzzyEntries.Entries, count)
+		hints = hintSliceEntries(fuzzyEntries.Entries, count)
 	}
 
 	for _, entry := range hints {
@@ -39,8 +39,8 @@ func hintCmd(args cli.Args, conf *config.Config) {
 	}
 }
 
-func upmost(entries scoring.Entries, limit int) scoring.Entries {
-	if limit < len(entries) {
+func hintSliceEntries(entries scoring.Entries, limit int) scoring.Entries {
+	if limit > 0 && limit < len(entries) {
 		return entries[0:limit]
 	} else {
 		return entries
