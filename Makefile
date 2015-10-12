@@ -18,6 +18,7 @@ deb: build
 		--description $(DESCRITPTION) \
 		--vendor $(AUTHOR) \
 		--license $(LICENSE) \
+		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
 		./jump=/usr/bin/jump \
 		./man/jump.1=/usr/share/man/man1/jump.1
 
@@ -28,6 +29,7 @@ rpm: build
 		--description $(DESCRITPTION) \
 		--vendor $(AUTHOR) \
 		--license $(LICENSE) \
+		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
 		./jump=/usr/bin/jump \
 		./man/jump.1=/usr/share/man/man1/jump.1
 
