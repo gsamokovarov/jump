@@ -96,7 +96,7 @@ Hope you find jump useful! :sparkles:
 
 [autojump]: https://github.com/wting/autojump
 [z]: https://github.com/rupa/z
-[man]: https://gsamokovarov.com/jump
+[man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
 [issue tracker]: https://github.com/gsamokovarov/jump/issues
 [MIT license]: https://github.com/gsamokovarov/jump/blob/master/LICENSE.txt
