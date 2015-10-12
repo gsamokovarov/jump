@@ -4,7 +4,7 @@ HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
 
-VERSION = 0.2.0
+VERSION = 0.3.0
 
 build:
 	@go build -o jump
@@ -18,7 +18,8 @@ deb: build
 		--description $(DESCRITPTION) \
 		--vendor $(AUTHOR) \
 		--license $(LICENSE) \
-		./jump=/usr/bin/jump
+		./jump=/usr/bin/jump \
+		./man/jump.1=/usr/share/man/man1/jump.1
 
 rpm: build
 	@fpm -s dir -t rpm -n $(NAME) -v $(VERSION) -a amd64 \
@@ -27,7 +28,8 @@ rpm: build
 		--description $(DESCRITPTION) \
 		--vendor $(AUTHOR) \
 		--license $(LICENSE) \
-		./jump=/usr/bin/jump
+		./jump=/usr/bin/jump \
+		./man/jump.1=/usr/share/man/man1/jump.1
 
 test:
 	@go test ./...
