@@ -1,0 +1,88 @@
+jump -- a quick and fuzzy directory jumper
+==========================================
+
+## SYNOPSIS
+
+`j <term>`
+
+## DESCRIPTION
+
+**Jump** lets you jump quickly across directories on you filesystem.
+
+Jump works its magic by keeping track of the directories you visit. It scores
+them to give the best match for the input term. The term is fuzzily matched.
+
+## USAGE
+
+**j** is a convenience short-hand for jump. To get that function and automatic
+directory scoring, jump has to be integrated with the current shell.
+
+Run `jump shell` for shell integration instructions.
+
+## EXAMPLES
+
+**Regular Jump**
+
+The default search behavior of `jump` is to match case insensitively only the
+base path (only the last directory name of the full absolute path) of the
+scored directories.
+
+This is because absolute directory paths are long and short terms can fuzzy
+match them easily, which can lead to bad matches. One of the goals of
+**jump** is to type less. This assumption helps with that.
+
+**Case Sensitive Jump**
+
+To trigger a case-sensitive search, use a term that has different casing, at
+least in one of the letters.
+
+    $ j Dev
+	$ pwd
+    /Users/foo/Development
+
+Even if there is `/Users/foo/Development/dev-tools` that scores better.
+
+**Deeper Directory Jump**
+
+Jump normalized all search terms to the base names of the scored
+directories, because absolute paths are long and short terms can fuzzy match
+them easily.
+
+Given the following filesystem structure:
+
+    /Users/foo/Development/society/
+    |-- artwork
+    |-- interview
+    +-- website
+
+    /Users/foo/Development/chaos/
+    +-- website
+
+To ensure a match of `/Users/foo/Development/chaos/website`:
+
+    $ j ch/web
+	$ pwd
+    /Users/foo/Development/chaos/website
+
+
+The search is normalized only on the last two parts of the target paths. This
+will ensure a better match, because the shorter path to fuzzy match on.
+
+There can be many separators in the term.
+
+    $ j dev/ch/web
+	$ pwd
+    /Users/foo/Development/chaos/website
+
+The term above will match the last three directories of the path, yielding
+`/Users/foo/Development/chaos/website`.
+
+## COPYRIGHT
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Genadi Samokovarov
+
+## SEE ALSO
+
+autojump(1), z(1), pushd(1), popd(1)
