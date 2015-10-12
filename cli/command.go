@@ -43,7 +43,7 @@ func DispatchCommand(args Args, defaultCommand string) (*Command, error) {
 		return nil, ErrNoDefaultCommand
 	}
 
-	if command, ok := Registry[args.CommandName()]; ok {
+	if command, ok := Registry[args.First()]; ok {
 		return &command, nil
 	}
 

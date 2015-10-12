@@ -13,6 +13,15 @@ func ParseArgs(args []string) Args {
 	return Args(args[1:])
 }
 
+// Head extracts the first argument, no matter if command or option.
+func (a Args) First() string {
+	if len(a) > 0 {
+		return a[0]
+	}
+
+	return ""
+}
+
 // CommandName extracts a command name out of all the arguments.
 //
 // A command cannot start with --. We think of those arguments as options.
