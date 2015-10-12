@@ -1,5 +1,5 @@
 NAME = jump
-DESCRITPTION = "A fuzzy quick-directory jumper."
+DESCRITPTION = "A quick and fuzzy directory jumper."
 HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
@@ -9,7 +9,7 @@ VERSION = 0.3.0
 build:
 	@go build -o jump
 
-# Package dep and rpm inside of a Linux virtual machine, because of the
+# Package deb and rpm inside of a Linux virtual machine, because of the
 # user.Current() usage we have. It doesn't work cross-compiled from OSX.
 deb: build
 	@fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a amd64 \
