@@ -3,7 +3,7 @@
 A quick and fuzzy directory jumper. Kinda like [autojump] or [z], but fuzzy.
 
 Jump works its magic by keeping track of the directories you visit. It scores
-them to give you the best match for tour input. When integrated with your
+them to give you the best match for your input. When integrated with your
 shell, the `j` function is available. It let's you jump across directories with
 ease.
 
