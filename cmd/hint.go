@@ -26,7 +26,6 @@ func hintCmd(args cli.Args, conf *config.Config) {
 		hints = hintSmartSelect(entries, term, smart)
 	} else {
 		fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
-		fuzzyEntries.Sort()
 
 		hints = hintSmartSelect(fuzzyEntries.Entries, term, smart)
 	}

@@ -33,8 +33,6 @@ func (fe FuzzyEntries) Sort() {
 
 // Select selects the entry with greatest LCS score.
 func (fe FuzzyEntries) Select() (entry *Entry, empty bool) {
-	fe.Sort()
-
 	if fe.Len() == 0 {
 		return nil, true
 	}
@@ -48,5 +46,8 @@ func (fe FuzzyEntries) Select() (entry *Entry, empty bool) {
 // Entries is expected to be sorted in ASC before creating the FuzzyEntries.
 // This gives us the best match. This is not enforced, however.
 func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
-	return &FuzzyEntries{entries, target}
+	fuzzyEntries := &FuzzyEntries{entries, target}
+	fuzzyEntries.Sort()
+
+	return fuzzyEntries
 }
