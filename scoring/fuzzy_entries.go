@@ -31,7 +31,7 @@ func (fe FuzzyEntries) Sort() {
 	sort.Stable(fe)
 }
 
-// Select selects the entry with greatest LCS score.
+// Select selects the entry with greatest LCS score at index.
 func (fe FuzzyEntries) Select(index int) (entry *Entry, empty bool) {
 	if length := fe.Len(); length == 0 || index >= length {
 		return nil, true
