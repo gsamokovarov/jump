@@ -11,15 +11,17 @@ import (
 )
 
 const (
-	defaultScoreFile = "scores.json"
-	defaultDirName   = ".jump"
+	defaultScoreFile  = "scores.json"
+	defaultSearchFile = "last.json"
+	defaultDirName    = ".jump"
 )
 
-// A config represents the config directory and the file that stores the score
-// values.
+// A config represents the config directory and all the misc.
+// configuration files we can have in there.
 type Config struct {
 	Dir    string
 	Scores string
+	Search string
 }
 
 // Read entries returns the current entries for the config.
@@ -73,6 +75,11 @@ func (c *Config) scoresFile() (*os.File, error) {
 	return createOrOpenFile(c.Scores)
 }
 
+// Returns a file object for the saved term path.
+func (c *Config) searchFile() (*os.File, error) {
+	return createOrOpenFile(c.Search)
+}
+
 // Setups the config folder from a directory path.
 //
 // If the directories don't already exists, they are created and if the score
@@ -84,8 +91,9 @@ func Setup(dir string) (*Config, error) {
 	}
 
 	scores := filepath.Join(dir, defaultScoreFile)
+	search := filepath.Join(dir, defaultSearchFile)
 
-	return &Config{dir, scores}, nil
+	return &Config{dir, scores, search}, nil
 }
 
 // Setups the config folder from a directory path.
