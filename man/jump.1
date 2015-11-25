@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JUMP" "1" "October 2015" "" ""
+.TH "JUMP" "1" "November 2015" "" ""
 .
 .SH "NAME"
 \fBjump\fR \- a quick and fuzzy directory jumper
@@ -52,7 +52,7 @@ $ pwd
 Even if there is \fB/Users/foo/Development/dev\-tools\fR that scores better\.
 .
 .P
-\fBDeeper Directory Jump\fR
+\fBDeep Jump\fR
 .
 .P
 Jump normalized all search terms to the base names of the scored directories, because absolute paths are long and short terms can fuzzy match them easily\.
@@ -111,6 +111,49 @@ $ pwd
 .
 .P
 The term above will match the last three directories of the path, yielding \fB/Users/foo/Development/chaos/website\fR\.
+.
+.P
+\fBReverse Jump\fR
+.
+.P
+Given the following filesystem structure:
+.
+.IP "" 4
+.
+.nf
+
+/Users/foo/Development/society/
+|\-\- artwork
+|\-\- interview
++\-\- website
+
+/Users/foo/Development/chaos/
++\-\- website
+
+/Users/foo/Development/hack/
++\-\- website
+.
+.fi
+.
+.IP "" 0
+.
+.P
+This mode is useful, if the first invocation of \fBj\fR didn\'t yield a proper result and it gives you the ability to jump to the less scored matches\. Say the desired destination is /Users/foo/Development/chaos/website, but the /Users/foo/Development/hack/website is with the highest score\.
+.
+.IP "" 4
+.
+.nf
+
+$ j web
+$ pwd
+/Users/foo/Development/hack/website
+$ j
+$ pwd
+/Users/foo/Development/society/website
+.
+.fi
+.
+.IP "" 0
 .
 .SH "COPYRIGHT"
 The MIT License (MIT)

@@ -37,12 +37,12 @@ To trigger a case-sensitive search, use a term that has different casing, at
 least in one of the letters.
 
     $ j Dev
-	$ pwd
+    $ pwd
     /Users/foo/Development
 
 Even if there is `/Users/foo/Development/dev-tools` that scores better.
 
-**Deeper Directory Jump**
+**Deep Jump**
 
 Jump normalized all search terms to the base names of the scored
 directories, because absolute paths are long and short terms can fuzzy match
@@ -61,7 +61,7 @@ Given the following filesystem structure:
 To ensure a match of `/Users/foo/Development/chaos/website`:
 
     $ j ch/web
-	$ pwd
+    $ pwd
     /Users/foo/Development/chaos/website
 
 
@@ -71,11 +71,39 @@ will ensure a better match, because the shorter path to fuzzy match on.
 There can be many separators in the term.
 
     $ j dev/ch/web
-	$ pwd
+    $ pwd
     /Users/foo/Development/chaos/website
 
 The term above will match the last three directories of the path, yielding
 `/Users/foo/Development/chaos/website`.
+
+**Reverse Jump**
+
+Given the following filesystem structure:
+
+    /Users/foo/Development/society/
+    |-- artwork
+    |-- interview
+    +-- website
+
+    /Users/foo/Development/chaos/
+    +-- website
+
+    /Users/foo/Development/hack/
+    +-- website
+
+This mode is useful, if the first invocation of **j** didn't yield a proper
+result and it gives you the ability to jump to the less scored matches. Say the
+desired destination is /Users/foo/Development/chaos/website, but the
+/Users/foo/Development/hack/website is with the highest score.
+
+    $ j web
+    $ pwd
+    /Users/foo/Development/hack/website
+    $ j
+    $ pwd
+    /Users/foo/Development/society/website
+
 
 ## COPYRIGHT
 
