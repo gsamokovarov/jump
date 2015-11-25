@@ -57,9 +57,9 @@ func hintSmartSelect(entries scoring.Entries, term string, smart bool) scoring.E
 func hintSliceEntries(entries scoring.Entries, limit int) scoring.Entries {
 	if limit < len(entries) {
 		return entries[0:limit]
-	} else {
-		return entries
 	}
+
+	return entries
 }
 
 func init() {
