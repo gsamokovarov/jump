@@ -50,7 +50,6 @@
   .man-navigation should be used instead.
 -->
 <body id='manpage'>
-  <a href="https://github.com/gsamokovarov/jump"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
   <div class='mp' id='man'>
 
   <div class='man-navigation' style='display:none'>
@@ -116,7 +115,7 @@ $ pwd
 
 <p>Even if there is <code>/Users/foo/Development/dev-tools</code> that scores better.</p>
 
-<p><strong>Deeper Directory Jump</strong></p>
+<p><strong>Deep Jump</strong></p>
 
 <p>Jump normalized all search terms to the base names of the scored
 directories, because absolute paths are long and short terms can fuzzy match
@@ -153,6 +152,35 @@ $ pwd
 <p>The term above will match the last three directories of the path, yielding
 <code>/Users/foo/Development/chaos/website</code>.</p>
 
+<p><strong>Reverse Jump</strong></p>
+
+<p>Given the following filesystem structure:</p>
+
+<pre><code>/Users/foo/Development/society/
+|-- artwork
+|-- interview
++-- website
+
+/Users/foo/Development/chaos/
++-- website
+
+/Users/foo/Development/hack/
++-- website
+</code></pre>
+
+<p>This mode is useful, if the first invocation of <strong>j</strong> didn't yield a proper
+result and it gives you the ability to jump to the less scored matches. Say the
+desired destination is /Users/foo/Development/chaos/website, but the
+/Users/foo/Development/hack/website is with the highest score.</p>
+
+<pre><code>$ j web
+$ pwd
+/Users/foo/Development/hack/website
+$ j
+$ pwd
+/Users/foo/Development/society/website
+</code></pre>
+
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
 <p>The MIT License (MIT)</p>
@@ -166,7 +194,7 @@ $ pwd
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>October 2015</li>
+    <li class='tc'>November 2015</li>
     <li class='tr'>jump(1)</li>
   </ol>
 
