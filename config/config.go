@@ -8,7 +8,7 @@ import (
 
 const (
 	defaultScoreFile  = "scores.json"
-	defaultSearchFile = "last.json"
+	defaultSearchFile = "search.json"
 	defaultDirName    = ".jump"
 )
 
