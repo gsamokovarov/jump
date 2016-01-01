@@ -6,12 +6,12 @@ import (
 	"time"
 )
 
-// A point of reference Score.Update and Score.Relevance use to reference the
-// current time. It is used in testing, so we always have the same current
+// Now is point of reference Score.Update and Score.Relevance use to reference
+// the current time. It is used in testing, so we always have the same current
 // time. This is okay for this programs as it won't run for long.
 var Now time.Time
 
-// Represents a weight of a score and the age of it.
+// Score represents a weight of a score and the age of it.
 type Score struct {
 	Weight int64
 	Age    time.Time
@@ -41,7 +41,8 @@ func (s *Score) String() string {
 	return fmt.Sprintf("{%d %s}", s.Weight, s.Age)
 }
 
-// Create a new score object with default weight of 1 and age set to now.
+// NewScore creates a new score object with default weight of 1 and age set to
+// now.
 func NewScore() *Score {
 	return &Score{1, Now}
 }

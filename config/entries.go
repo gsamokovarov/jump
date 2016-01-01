@@ -7,7 +7,7 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-// Read entries returns the current entries for the config.
+// ReadEntries returns the current entries for the config.
 //
 // If the scores file is empty, the returned entries are empty.
 func (c *Config) ReadEntries() (scoring.Entries, error) {
@@ -32,7 +32,7 @@ func (c *Config) ReadEntries() (scoring.Entries, error) {
 	return entries, nil
 }
 
-// Write the input scoring entries to a file.
+// WriteEntries the input scoring entries to a file.
 //
 // Sorts the entries before writing them to disk.
 func (c *Config) WriteEntries(entries scoring.Entries) error {

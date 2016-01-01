@@ -8,11 +8,12 @@ import (
 
 const osSeparator = string(os.PathSeparator)
 
+// Normalizer holds utilities for search term transformation.
 type Normalizer struct {
 	term string
 }
 
-// Normalize a path for fuzzy searching.
+// NormalizePath normalizes a path for fuzzy searching.
 //
 // We wanna do this because paths are long and a small fuzzy term is quite
 // likely to match almost any path. Most of the times we are either looking for
@@ -45,7 +46,7 @@ func (m Normalizer) NormalizePath(path string) string {
 	return path
 }
 
-// Normalizes the search term.
+// NormalizeTerm normalizes the search term.
 //
 // The normalization consists only of returning a case insensitive (lowered) or
 // sensitive string.
@@ -57,7 +58,7 @@ func (m Normalizer) NormalizeTerm() string {
 	return m.term
 }
 
-// Create a new normalizer from a stringy term.
+// NewNormalizer create a new normalizer from a stringy term.
 func NewNormalizer(term string) *Normalizer {
 	return &Normalizer{term}
 }

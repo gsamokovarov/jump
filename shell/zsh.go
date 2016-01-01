@@ -1,5 +1,6 @@
 package shell
 
+// Zsh is the zsh shell integration.
 var Zsh = Shell(`# Put the line below in ~/.zshrc:
 #
 #   eval "$(jump shell zsh)"	

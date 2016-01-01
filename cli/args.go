@@ -2,10 +2,10 @@ package cli
 
 import "strings"
 
-// Represents an ordered collection of command line argument.
+// Args represents an ordered collection of command line argument.
 type Args []string
 
-// Parse an OS-like arguments.
+// ParseArgs parses an OS-like command line input arguments.
 //
 // If you need to create an arguments object out of a plain []string use
 // Args{args}.
@@ -13,7 +13,7 @@ func ParseArgs(args []string) Args {
 	return Args(args[1:])
 }
 
-// Head extracts the first argument, no matter if command or option.
+// First extracts the first argument, no matter if command or option.
 func (a Args) First() string {
 	if len(a) > 0 {
 		return a[0]

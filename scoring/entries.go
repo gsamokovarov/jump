@@ -2,7 +2,7 @@ package scoring
 
 import "sort"
 
-// An entries slice that supports sort.Interface.
+// Entries represents entries slice that supports sort.Interface.
 type Entries []Entry
 
 // Len returns the length of the entries slice.
@@ -10,7 +10,7 @@ func (e Entries) Len() int {
 	return len(e)
 }
 
-// Swaps the values at two indexes in the entries slice.
+// Swap swaps the values at two indexes in the entries slice.
 func (e Entries) Swap(i, j int) {
 	e[i], e[j] = e[j], e[i]
 }
@@ -34,7 +34,7 @@ func (e Entries) Find(path string) (*Entry, bool) {
 	return nil, false
 }
 
-// Sorts the entries collection.
+// Sort sorts the entries collection.
 func (e Entries) Sort() {
 	sort.Sort(e)
 }

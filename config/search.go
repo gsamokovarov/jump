@@ -12,7 +12,7 @@ type Search struct {
 	Index int
 }
 
-// Reads the last saved search entry.
+// ReadSearch reads the last saved search entry.
 //
 // If the last search doesn't exist, a zero value Search is returned.
 func (c *Config) ReadSearch() Search {
@@ -31,7 +31,7 @@ func (c *Config) ReadSearch() Search {
 	return search
 }
 
-// Writes the last search entry to the current search entry.
+// WriteSearch writes the last search entry to the current search entry.
 func (c *Config) WriteSearch(term string, index int) error {
 	jsonContent, err := json.Marshal(&Search{term, index})
 	if err != nil {

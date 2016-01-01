@@ -12,8 +12,8 @@ const (
 	defaultDirName    = ".jump"
 )
 
-// A config represents the config directory and all the misc.
-// configuration files we can have in there.
+// Config represents the config directory and all the misc. configuration files
+// we can have in there.
 type Config struct {
 	Dir    string
 	Scores string
@@ -30,7 +30,7 @@ func (c *Config) searchFile() (*os.File, error) {
 	return createOrOpenFile(c.Search)
 }
 
-// Setups the config folder from a directory path.
+// Setup setups the config folder from a directory path.
 //
 // If the directories don't already exists, they are created and if the score
 // file is present, it is loaded.
@@ -46,7 +46,7 @@ func Setup(dir string) (*Config, error) {
 	return &Config{dir, scores, search}, nil
 }
 
-// Setups the config folder from a directory path.
+// SetupDefault setups the config folder from a directory path.
 //
 // If the directory path is an empty string, the path is automatically guessed.
 func SetupDefault(dir string) (*Config, error) {

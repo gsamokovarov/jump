@@ -2,10 +2,11 @@ package cli
 
 import "sort"
 
-// Every registered command gets saved in this global commands registry.
+// Registry holds every command that gets saved in this global commands
+// registry.
 var Registry = make(commandRegistry)
 
-// A command registry can be queried for the available commands and options.
+// CommandRegistry can be queried for the available commands and options.
 type CommandRegistry interface {
 	Commands() []Command
 	Options() []Command
@@ -28,7 +29,7 @@ func (c commandRegistry) Commands() []Command {
 	return commands
 }
 
-// Commands returns all of the registered options, sorted alphabetically.
+// Options returns all of the registered options, sorted alphabetically.
 func (c commandRegistry) Options() []Command {
 	options := []Command{}
 

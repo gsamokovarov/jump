@@ -1,5 +1,6 @@
 package shell
 
+// Bash is the bash shell integration.
 var Bash = Shell(`# Put the line below in ~/.bashrc or ~/bash_profile:
 #
 #   eval "$(jump shell bash)"	

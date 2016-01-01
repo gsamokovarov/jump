@@ -1,6 +1,6 @@
 package fuzzy
 
-// Computes the LCS length of two string using an altered (and memoized)
+// Length computes the LCS length of two string using an altered (and memoized)
 // version of the algorithm described at http://bit.ly/1ICdGss.
 func Length(left, right string) uint64 {
 	var shorter, longer string
@@ -36,7 +36,7 @@ func Length(left, right string) uint64 {
 func max(left, right uint64) uint64 {
 	if left > right {
 		return left
-	} else {
-		return right
 	}
+
+	return right
 }

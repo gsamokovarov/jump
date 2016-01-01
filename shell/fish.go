@@ -1,5 +1,6 @@
 package shell
 
+// Fish is the fish shell integration.
 var Fish = Shell(`# Put the line below in ~/.config/fish/config.fish:
 #
 #   status --is-interactive; and . (jump shell fish | psub)

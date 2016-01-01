@@ -6,6 +6,8 @@ import (
 	"github.com/gsamokovarov/jump/fuzzy"
 )
 
+// FuzzyEntries represents entries slice that supports sort.Interface which can
+// be sorted by a fuzzy search term.
 type FuzzyEntries struct {
 	Entries
 	Term string
@@ -23,6 +25,7 @@ func (fe FuzzyEntries) Less(i, j int) bool {
 	return fuzzy.Length(pathI, term) >= fuzzy.Length(pathJ, term)
 }
 
+// Sort sorts the entries collection.
 func (fe FuzzyEntries) Sort() {
 	// If this method is left undefined, when fe.Sort() is called, the
 	// Entries.Sort method will be called. In its context, the receiver is

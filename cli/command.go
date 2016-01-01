@@ -7,9 +7,10 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
+// CommandFn represents a command handler function.
 type CommandFn func(Args, *config.Config)
 
-// Represents a command line action.
+// Command represents a command line action.
 type Command struct {
 	Name   string
 	Desc   string
@@ -23,16 +24,18 @@ func (c *Command) IsOption() bool {
 	return strings.HasPrefix(c.Name, "--")
 }
 
-// Register a command in the global command registry. ParseArguments looks into
-// it to decide which command to dispatch.
+// RegisterCommand registers a command in the global command registry.
+// ParseArguments looks into it to decide which command to dispatch.
 func RegisterCommand(name, desc string, action CommandFn) {
 	Registry[name] = Command{name, desc, action}
 }
 
-// Used when the default default command isn't registered.
+// ErrNoDefaultCommand is used when the default default command isn't
+// registered.
 var ErrNoDefaultCommand = errors.New("default command is not registered")
 
-// Dispatches the control to an registered command, if possible.
+// DispatchCommand dispatches the control to an registered command, if
+// possible.
 //
 // A command name is guessed out of the arguments. If the guessed name isn't
 // registered, the dispatch will fall-back to the default command specified. It
