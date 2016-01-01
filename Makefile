@@ -9,6 +9,9 @@ VERSION = 0.4.0
 build:
 	@go build -o jump
 
+lint:
+	@go vet ./... && golint ./...
+
 # Package deb and rpm inside of a Linux virtual machine, because of the
 # user.Current() usage we have. It doesn't work cross-compiled from OSX.
 deb: build
