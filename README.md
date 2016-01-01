@@ -1,5 +1,7 @@
 # jump
 
+![intro](https://raw.githubusercontent.com/gsamokovarov/jump/master/.intro.gif)
+
 A quick and fuzzy directory jumper. Kinda like [autojump] or [z], but fuzzy.
 
 Jump works its magic by keeping track of the directories you visit. It scores
