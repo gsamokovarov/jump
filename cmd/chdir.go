@@ -14,8 +14,7 @@ func updateCmd(args cli.Args, conf *config.Config) {
 	if len(args) == 0 && err != nil {
 		cli.Exitf(1, "err: %s\n", err)
 	} else {
-		dir, err = filepath.Abs(args.CommandName())
-		if err != nil {
+		if dir, err = filepath.Abs(args.CommandName()); err != nil {
 			cli.Exitf(1, "err: %s\n", err)
 		}
 	}
@@ -25,9 +24,7 @@ func updateCmd(args cli.Args, conf *config.Config) {
 		cli.Exitf(1, "err: %s\n", err)
 	}
 
-	entry, found := entries.Find(dir)
-
-	if found {
+	if entry, found := entries.Find(dir); found {
 		entry.UpdateScore()
 	} else {
 		entries = append(entries, *scoring.NewEntry(dir))

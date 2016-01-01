@@ -38,7 +38,7 @@ func (s *Score) Calculate() float64 {
 
 // String gives a string representation to Score. Useful for debugging.
 func (s *Score) String() string {
-	return fmt.Sprintf("{%s %s}", s.Weight, s.Age)
+	return fmt.Sprintf("{%d %s}", s.Weight, s.Age)
 }
 
 // Create a new score object with default weight of 1 and age set to now.
