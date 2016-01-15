@@ -34,6 +34,18 @@ func (e Entries) Find(path string) (*Entry, bool) {
 	return nil, false
 }
 
+// Remove and entry by it's path.
+func (e *Entries) Remove(path string) bool {
+	for i, entry := range *e {
+		if entry.Path == path {
+			*e = append((*e)[:i], (*e)[i+1:]...)
+			return true
+		}
+	}
+
+	return false
+}
+
 // Sort sorts the entries collection.
 func (e Entries) Sort() {
 	sort.Sort(e)
