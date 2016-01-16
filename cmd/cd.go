@@ -19,7 +19,8 @@ func cdCmd(args cli.Args, conf *config.Config) {
 
 	// If an auto-completion triggered a full path, just go there.
 	if filepath.IsAbs(term) {
-		cli.Exitf(0, "%s\n", term)
+		cli.Outf("%s\n", term)
+		return
 	}
 
 	index, search := 0, conf.ReadSearch()
