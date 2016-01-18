@@ -1,5 +1,5 @@
 NAME = jump
-DESCRITPTION = "A quick and fuzzy directory jumper."
+DESCRITPTION = "Quick and fuzzy directory jumper."
 HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
