@@ -36,5 +36,5 @@ func updateCmd(args cli.Args, conf *config.Config) {
 }
 
 func init() {
-	cli.RegisterCommand("chdir", "Update the scrore of directory during chdir.", updateCmd)
+	cli.RegisterCommand("chdir", "Update the score of directory during chdir.", updateCmd)
 }
