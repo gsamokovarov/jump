@@ -22,7 +22,6 @@ See [`man jump`][man].
 ### OSX
 
 ```bash
-brew tap gsamokovarov/jump
 brew install jump
 ```
 
