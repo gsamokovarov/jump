@@ -54,7 +54,7 @@ mv jump ~/bin # Or /usr/local/bin, if ~/bin isn't in $PATH.
 ## Shell
 
 Jump supports bash, zsh and fish out of the box. If your favourite shell isn't
-in the list below, give a heads up in the [issue tracker].
+in the list below, give us a heads up in the [issue tracker].
 
 To get the most out of jump, you have to integrate it with your shell. The
 integration gives you the `j` shell function and the automatic tracking and
