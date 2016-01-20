@@ -15,20 +15,18 @@ type Search struct {
 // ReadSearch reads the last saved search entry.
 //
 // If the last search doesn't exist, a zero value Search is returned.
-func (c *Config) ReadSearch() Search {
-	var search Search
-
+func (c *Config) ReadSearch() (search Search) {
 	if searchFile, err := c.searchFile(); err == nil {
 		defer searchFile.Close()
 
 		if content, err := ioutil.ReadAll(searchFile); err == nil {
 			if err := json.Unmarshal(content, &search); err == nil {
-				return search
+				return
 			}
 		}
 	}
 
-	return search
+	return
 }
 
 // WriteSearch writes the last search entry to the current search entry.
