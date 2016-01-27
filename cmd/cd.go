@@ -31,15 +31,22 @@ func cdCmd(args cli.Args, conf *config.Config) {
 		term, index = search.Term, search.Index+1
 	}
 
+	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 	for {
-		fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
-
 		if entry, empty := fuzzyEntries.Select(index); !empty {
 			// Remove the entries that no longer exists.
 			if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
 				entries.Remove(entry.Path)
 				conf.WriteEntries(entries)
 
+				index += 1
+				continue
+			}
+
+			// Jump to the next entry, if the jump is going to land on the
+			// current directory.
+			if cwd, err := os.Getwd(); err == nil && entry.Path == cwd {
+				index += 1
 				continue
 			}
 
