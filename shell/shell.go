@@ -2,7 +2,7 @@ package shell
 
 import "path/filepath"
 
-// Shell is a small wraper around string that can pretty print the shell
+// Shell is a small wrapper around string that can pretty print the shell
 // integration scripts.
 type Shell string
 
