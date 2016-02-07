@@ -39,14 +39,14 @@ func cdCmd(args cli.Args, conf *config.Config) {
 				entries.Remove(entry.Path)
 				conf.WriteEntries(entries)
 
-				index += 1
+				index++
 				continue
 			}
 
 			// Jump to the next entry, if the jump is going to land on the
 			// current directory.
 			if cwd, err := os.Getwd(); err == nil && entry.Path == cwd {
-				index += 1
+				index++
 				continue
 			}
 
