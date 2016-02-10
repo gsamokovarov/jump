@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"io"
+	"syscall"
 
 	"github.com/gsamokovarov/jump/scoring"
 )
@@ -18,7 +19,10 @@ func (c *Config) ReadEntries() (scoring.Entries, error) {
 		return entries, nil
 	}
 
+	syscall.Flock(int(scoresFile.Fd()), syscall.LOCK_EX)
+
 	defer scoresFile.Close()
+	defer syscall.Flock(int(scoresFile.Fd()), syscall.LOCK_UN)
 
 	decoder := json.NewDecoder(scoresFile)
 	for {
@@ -41,7 +45,10 @@ func (c *Config) WriteEntries(entries scoring.Entries) error {
 		return err
 	}
 
+	syscall.Flock(int(scoresFile.Fd()), syscall.LOCK_EX)
+
 	defer scoresFile.Close()
+	defer syscall.Flock(int(scoresFile.Fd()), syscall.LOCK_UN)
 
 	if err := scoresFile.Truncate(0); err != nil {
 		return err

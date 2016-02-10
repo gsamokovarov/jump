@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"syscall"
 )
 
 // Search represents a search term used for advancing through the entries of the same
@@ -17,7 +18,10 @@ type Search struct {
 // If the last search doesn't exist, a zero value Search is returned.
 func (c *Config) ReadSearch() (search Search) {
 	if searchFile, err := c.searchFile(); err == nil {
+		syscall.Flock(int(searchFile.Fd()), syscall.LOCK_EX)
+
 		defer searchFile.Close()
+		defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
 
 		if content, err := ioutil.ReadAll(searchFile); err == nil {
 			if err := json.Unmarshal(content, &search); err == nil {
@@ -36,5 +40,16 @@ func (c *Config) WriteSearch(term string, index int) error {
 		return err
 	}
 
-	return ioutil.WriteFile(c.Search, jsonContent, 0644)
+	searchFile, err := c.searchFile()
+	if err != nil {
+		return err
+	}
+
+	syscall.Flock(int(searchFile.Fd()), syscall.LOCK_EX)
+
+	defer searchFile.Close()
+	defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
+
+	_, ferr := searchFile.Write(jsonContent)
+	return ferr
 }
