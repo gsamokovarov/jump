@@ -17,16 +17,19 @@ type Search struct {
 //
 // If the last search doesn't exist, a zero value Search is returned.
 func (c *Config) ReadSearch() (search Search) {
-	if searchFile, err := c.searchFile(); err == nil {
-		syscall.Flock(int(searchFile.Fd()), syscall.LOCK_EX)
+	searchFile, err := c.searchFile()
+	if err != nil {
+		return
+	}
 
-		defer searchFile.Close()
-		defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
+	syscall.Flock(int(searchFile.Fd()), syscall.LOCK_EX)
 
-		if content, err := ioutil.ReadAll(searchFile); err == nil {
-			if err := json.Unmarshal(content, &search); err == nil {
-				return
-			}
+	defer searchFile.Close()
+	defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
+
+	if content, err := ioutil.ReadAll(searchFile); err == nil {
+		if err := json.Unmarshal(content, &search); err == nil {
+			return
 		}
 	}
 
@@ -35,11 +38,6 @@ func (c *Config) ReadSearch() (search Search) {
 
 // WriteSearch writes the last search entry to the current search entry.
 func (c *Config) WriteSearch(term string, index int) error {
-	jsonContent, err := json.Marshal(&Search{term, index})
-	if err != nil {
-		return err
-	}
-
 	searchFile, err := c.searchFile()
 	if err != nil {
 		return err
@@ -49,6 +47,11 @@ func (c *Config) WriteSearch(term string, index int) error {
 
 	defer searchFile.Close()
 	defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
+
+	jsonContent, err := json.Marshal(&Search{term, index})
+	if err != nil {
+		return err
+	}
 
 	_, ferr := searchFile.Write(jsonContent)
 	return ferr
