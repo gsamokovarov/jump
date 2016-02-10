@@ -1,9 +1,32 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"syscall"
 )
+
+type closedError struct {
+	flockErr error
+	fileErr  error
+}
+
+func (ce closedError) Error() string {
+	return fmt.Sprintf("%s, %s", ce.fileErr.Error(), ce.flockErr.Error())
+}
+
+func newClosedError(flockErr, fileErr error) error {
+	if fileErr == nil {
+		fileErr = errors.New("no file errors")
+	}
+
+	if flockErr == nil {
+		flockErr = errors.New("no lock errors")
+	}
+
+	return closedError{flockErr, fileErr}
+}
 
 func createOrOpenLockedFile(name string) (file *os.File, err error) {
 	if _, err := os.Stat(name); os.IsNotExist(err) {
@@ -16,14 +39,20 @@ func createOrOpenLockedFile(name string) (file *os.File, err error) {
 		return
 	}
 
-	if flerr := syscall.Flock(int(file.Fd()), syscall.LOCK_EX); flerr != nil {
-		return file, flerr
+	if flockErr := syscall.Flock(int(file.Fd()), syscall.LOCK_EX); flockErr != nil {
+		err = flockErr
 	}
 
 	return
 }
 
 func closeLockedFile(file *os.File) error {
-	syscall.Flock(int(file.Fd()), syscall.LOCK_UN)
-	return file.Close()
+	flockErr := syscall.Flock(int(file.Fd()), syscall.LOCK_UN)
+	fileErr := file.Close()
+
+	if flockErr != nil || fileErr != nil {
+		return newClosedError(flockErr, fileErr)
+	}
+
+	return nil
 }
