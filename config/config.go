@@ -22,12 +22,12 @@ type Config struct {
 
 // Returns a file object for the saved scores path.
 func (c *Config) scoresFile() (*os.File, error) {
-	return createOrOpenFile(c.Scores)
+	return createOrOpenLockedFile(c.Scores)
 }
 
 // Returns a file object for the saved term path.
 func (c *Config) searchFile() (*os.File, error) {
-	return createOrOpenFile(c.Search)
+	return createOrOpenLockedFile(c.Search)
 }
 
 // Setup setups the config folder from a directory path.
@@ -56,14 +56,6 @@ func SetupDefault(dir string) (*Config, error) {
 	}
 
 	return Setup(dir)
-}
-
-func createOrOpenFile(name string) (file *os.File, err error) {
-	if _, err := os.Stat(name); os.IsNotExist(err) {
-		return os.Create(name)
-	}
-
-	return os.OpenFile(name, os.O_RDWR, 0644)
 }
 
 func normalizeDir(dir string) (string, error) {

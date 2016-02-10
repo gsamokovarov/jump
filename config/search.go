@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
-	"syscall"
 )
 
 // Search represents a search term used for advancing through the entries of the same
@@ -22,10 +21,7 @@ func (c *Config) ReadSearch() (search Search) {
 		return
 	}
 
-	syscall.Flock(int(searchFile.Fd()), syscall.LOCK_EX)
-
-	defer searchFile.Close()
-	defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
+	defer closeLockedFile(searchFile)
 
 	if content, err := ioutil.ReadAll(searchFile); err == nil {
 		if err := json.Unmarshal(content, &search); err == nil {
@@ -43,10 +39,7 @@ func (c *Config) WriteSearch(term string, index int) error {
 		return err
 	}
 
-	syscall.Flock(int(searchFile.Fd()), syscall.LOCK_EX)
-
-	defer searchFile.Close()
-	defer syscall.Flock(int(searchFile.Fd()), syscall.LOCK_UN)
+	defer closeLockedFile(searchFile)
 
 	jsonContent, err := json.Marshal(&Search{term, index})
 	if err != nil {
