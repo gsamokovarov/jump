@@ -48,8 +48,8 @@ func (fe FuzzyEntries) Select(index int) (entry *Entry, empty bool) {
 //
 // Entries is expected to be sorted in ASC before creating the FuzzyEntries.
 // This gives us the best match. This is not enforced, however.
-func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
-	fuzzyEntries := &FuzzyEntries{entries, target}
+func NewFuzzyEntries(entries *Entries, target string) *FuzzyEntries {
+	fuzzyEntries := &FuzzyEntries{*entries, target}
 	fuzzyEntries.Sort()
 
 	return fuzzyEntries

@@ -27,7 +27,7 @@ func hintCmd(args cli.Args, conf *config.Config) {
 	} else {
 		fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 
-		hints = hintSmartSelect(fuzzyEntries.Entries, term, smart)
+		hints = hintSmartSelect(&fuzzyEntries.Entries, term, smart)
 	}
 
 	for _, entry := range hints {
@@ -35,9 +35,9 @@ func hintCmd(args cli.Args, conf *config.Config) {
 	}
 }
 
-func hintSmartSelect(entries scoring.Entries, term string, smart bool) scoring.Entries {
+func hintSmartSelect(entries *scoring.Entries, term string, smart bool) scoring.Entries {
 	if !smart {
-		return entries
+		return *entries
 	}
 
 	termLength := len(term)
@@ -54,12 +54,12 @@ func hintSmartSelect(entries scoring.Entries, term string, smart bool) scoring.E
 	}
 }
 
-func hintSliceEntries(entries scoring.Entries, limit int) scoring.Entries {
-	if limit < len(entries) {
-		return entries[0:limit]
+func hintSliceEntries(entries *scoring.Entries, limit int) scoring.Entries {
+	if limit < len(*entries) {
+		return (*entries)[0:limit]
 	}
 
-	return entries
+	return *entries
 }
 
 func init() {

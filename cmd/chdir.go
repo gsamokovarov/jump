@@ -27,7 +27,7 @@ func updateCmd(args cli.Args, conf *config.Config) {
 	if entry, found := entries.Find(dir); found {
 		entry.UpdateScore()
 	} else {
-		entries = append(entries, *scoring.NewEntry(dir))
+		*entries = append(*entries, *scoring.NewEntry(dir))
 	}
 
 	if err := conf.WriteEntries(entries); err != nil {

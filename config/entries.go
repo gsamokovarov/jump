@@ -10,8 +10,8 @@ import (
 // ReadEntries returns the current entries for the config.
 //
 // If the scores file is empty, the returned entries are empty.
-func (c *Config) ReadEntries() (scoring.Entries, error) {
-	var entries scoring.Entries
+func (c *Config) ReadEntries() (*scoring.Entries, error) {
+	var entries *scoring.Entries
 
 	scoresFile, err := c.scoresFile()
 	if err != nil {
@@ -35,7 +35,7 @@ func (c *Config) ReadEntries() (scoring.Entries, error) {
 // WriteEntries the input scoring entries to a file.
 //
 // Sorts the entries before writing them to disk.
-func (c *Config) WriteEntries(entries scoring.Entries) error {
+func (c *Config) WriteEntries(entries *scoring.Entries) error {
 	scoresFile, err := c.scoresFile()
 	if err != nil {
 		return err
@@ -50,5 +50,5 @@ func (c *Config) WriteEntries(entries scoring.Entries) error {
 	entries.Sort()
 	encoder := json.NewEncoder(scoresFile)
 
-	return encoder.Encode(&entries)
+	return encoder.Encode(entries)
 }
