@@ -25,7 +25,7 @@ func newClosedError(flockErr, fileErr error) error {
 		flockErr = errors.New("no lock errors")
 	}
 
-	return closedError{flockErr, fileErr}
+	return &closedError{flockErr, fileErr}
 }
 
 func createOrOpenLockedFile(name string) (file *os.File, err error) {
