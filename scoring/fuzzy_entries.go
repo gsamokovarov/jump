@@ -15,18 +15,18 @@ type FuzzyEntries struct {
 
 // Less compares the Longest Subsequence Length between the term string and
 // every entry. The entries with greater LCS come first.
-func (fe FuzzyEntries) Less(i, j int) bool {
+func (fe *FuzzyEntries) Less(i, j int) bool {
 	norm := fuzzy.NewNormalizer(fe.Term)
 	term := norm.NormalizeTerm()
 
-	pathI := norm.NormalizePath(fe.Entries[i].Path)
-	pathJ := norm.NormalizePath(fe.Entries[j].Path)
+	pathI := norm.NormalizePath((*fe).Entries[i].Path)
+	pathJ := norm.NormalizePath((*fe).Entries[j].Path)
 
 	return fuzzy.Length(pathI, term) >= fuzzy.Length(pathJ, term)
 }
 
 // Sort sorts the entries collection.
-func (fe FuzzyEntries) Sort() {
+func (fe *FuzzyEntries) Sort() {
 	// If this method is left undefined, when fe.Sort() is called, the
 	// Entries.Sort method will be called. In its context, the receiver is
 	// Entries, therefore, Entries.Less, and not FuzzyEntries.Less, will be
@@ -35,7 +35,7 @@ func (fe FuzzyEntries) Sort() {
 }
 
 // Select selects the entry with greatest LCS score at index.
-func (fe FuzzyEntries) Select(index int) (entry *Entry, empty bool) {
+func (fe *FuzzyEntries) Select(index int) (entry *Entry, empty bool) {
 	if length := fe.Len(); length == 0 || index >= length {
 		return nil, true
 	}
