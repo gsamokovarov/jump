@@ -46,6 +46,10 @@ func (c *Config) WriteSearch(term string, index int) error {
 		return err
 	}
 
-	_, ferr := searchFile.Write(jsonContent)
-	return ferr
+	if err := searchFile.Truncate(0); err != nil {
+		return err
+	}
+
+	_, err = searchFile.Write(jsonContent)
+	return err
 }
