@@ -11,11 +11,11 @@ import (
 //
 // If the scores file is empty, the returned entries are empty.
 func (c *Config) ReadEntries() (*scoring.Entries, error) {
-	var entries *scoring.Entries
+	var entries scoring.Entries
 
 	scoresFile, err := c.scoresFile()
 	if err != nil {
-		return entries, nil
+		return &entries, nil
 	}
 
 	defer closeLockedFile(scoresFile)
@@ -25,11 +25,11 @@ func (c *Config) ReadEntries() (*scoring.Entries, error) {
 		if err := decoder.Decode(&entries); err == io.EOF {
 			break
 		} else if err != nil {
-			return entries, err
+			return &entries, err
 		}
 	}
 
-	return entries, nil
+	return &entries, nil
 }
 
 // WriteEntries the input scoring entries to a file.
