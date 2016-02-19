@@ -4,7 +4,7 @@ HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
 
-VERSION = 0.6.1
+VERSION = 0.7.0
 
 build:
 	@go build -o jump
