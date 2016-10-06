@@ -21,5 +21,5 @@ j() {
   test -d "$dir"  && cd "$dir"
 }
 
-complete -o filenames -C 'jump hint "${COMP_LINE/#j /}" --smart' j
+complete -o dirnames -C 'jump hint "${COMP_LINE/#j /}" --smart' j
 `)
