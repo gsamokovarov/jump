@@ -20,7 +20,7 @@ func cleanCmd(args cli.Args, conf *config.Config) {
 	for _, entry := range *entries {
 		// Remove the entries that no longer exists.
 		if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
-			cli.Outf("Removing %s\n", entry.Path)
+			cli.Outf("Cleaning %s\n", entry.Path)
 			cleanEntries.Remove(entry.Path)
 		}
 
