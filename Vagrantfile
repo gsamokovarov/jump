@@ -3,9 +3,13 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
-    sudo apt-get install -y golang rpm gccgo build-essential ruby-dev
+    sudo apt-get install -y rpm build-essential ruby-dev
 
     sudo gem install fpm
+
+    cd /tmp
+    wget https://storage.googleapis.com/golang/go1.7.5.linux-amd64.tar.gz
+    tar -C /usr/local -xzf go1.7.5.linux-amd64.tar.gz
 
     mkdir -p /home/vagrant/.go/src/github.com/gsamokovarov
     chown -hR vagrant:vagrant /home/vagrant/.go
@@ -13,5 +17,6 @@ Vagrant.configure(2) do |config|
     ln -nsf /vagrant /home/vagrant/.go/src/github.com/gsamokovarov/jump
 
     echo "export GOPATH=/home/vagrant/.go" >> /home/vagrant/.bashrc
+    echo "export PATH=/usr/local/go/bin:$PATH" >> /home/vagrant/.bashrc
   SHELL
 end
