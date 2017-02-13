@@ -2,7 +2,6 @@ package scoring
 
 import (
 	"reflect"
-	"sort"
 	"testing"
 )
 
@@ -13,7 +12,7 @@ func TestEntriesSort(t *testing.T) {
 	entries := Entries([]Entry{e1, e2})
 	expectedEntries := Entries([]Entry{e1, e2})
 
-	sort.Sort(entries)
+	entries.Sort()
 
 	if !reflect.DeepEqual(expectedEntries, entries) {
 		t.Errorf("Expected entries to be %v, got %v", expectedEntries, entries)
