@@ -6,8 +6,11 @@ import (
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
+	"github.com/gsamokovarov/jump/fuzzy"
 	"github.com/gsamokovarov/jump/scoring"
 )
+
+const proximity = 5
 
 func cdCmd(args cli.Args, conf *config.Config) {
 	term := args.CommandName()
@@ -33,6 +36,11 @@ func cdCmd(args cli.Args, conf *config.Config) {
 
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 	for {
+		// Prefer an exact match if it's in a reasonable proximity of the best
+		// match. Useful for jumping to 2 to 4 letter directories, which you
+		// may just type anyway.
+		index = exactMatchInProximity(fuzzyEntries, term, index)
+
 		if entry, empty := fuzzyEntries.Select(index); !empty {
 			// Remove the entries that no longer exists.
 			if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
@@ -56,6 +64,20 @@ func cdCmd(args cli.Args, conf *config.Config) {
 
 		break
 	}
+}
+
+func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
+	for index := offset; index <= offset+proximity; index++ {
+		if entry, empty := entries.Select(index); !empty {
+			norm := fuzzy.NewNormalizer(term)
+
+			if norm.NormalizePath(entry.Path) == term {
+				return index
+			}
+		}
+	}
+
+	return offset
 }
 
 func init() {
