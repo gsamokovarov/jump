@@ -11,6 +11,7 @@ import (
 )
 
 const proximity = 5
+const osSeparator = string(os.PathSeparator)
 
 func cdCmd(args cli.Args, conf *config.Config) {
 	term := args.CommandName()
@@ -67,11 +68,16 @@ func cdCmd(args cli.Args, conf *config.Config) {
 }
 
 func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
+	norm := fuzzy.NewNormalizer(filepath.Base(term))
+	normalizedTerm := norm.NormalizeTerm()
+
 	for index := offset; index <= offset+proximity; index++ {
 		if entry, empty := entries.Select(index); !empty {
-			norm := fuzzy.NewNormalizer(term)
 
-			if norm.NormalizePath(entry.Path) == term {
+			// Take only the base part, if you wanna do a deep search
+			// like Dev/nes.
+			basePath := filepath.Base(norm.NormalizePath(entry.Path))
+			if basePath == normalizedTerm {
 				return index
 			}
 		}
