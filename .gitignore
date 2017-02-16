@@ -1,3 +1,4 @@
 jump*
 .tags
 .vagrant/
+.DS_Store
