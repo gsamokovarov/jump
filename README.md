@@ -1,21 +1,54 @@
-# jump
+# JUMP 🏃
 
-![intro](https://raw.githubusercontent.com/gsamokovarov/jump/master/.intro.gif)
+Jump helps you navigate your file system faster by learning your
+habits.
 
-A quick and fuzzy directory jumper. Kinda like [autojump] or [z], but fuzzy.
+Say you visit `/Users/genadi/Development/web-console` a lot. Jump can
+get you there with `j wc` or `j web` or `j webc`. You name it,
+loosely, and jump will figure it out for you.
 
-Jump works its magic by keeping track of the directories you visit. It scores
-them to give you the best match for your input. When integrated with your
-shell, the `j` function is available. It let's you jump across directories with
-ease.
+This comes with zero configuration! Install jump, integrate it to your
+shell and let it learn your habits for a while – cd to your
+directories like you always do. After a while, jump would know how to
+get you when you type `j somewhere` or just `j some`.
 
-If you visit `/Users/bob/Projects/website` often, type `j ws` and jump
-straight to it. Gone are the days of manual aliases for frequent project
-directories.
+Maybe you made a typo like `j ssome`? No problem, jump uses fuzzy
+searching, so you can type tiny search terms (mostly 2 or 3 characters
+are enough) and be tolerated even when you have typos.
 
 ## Usage
 
-See [`man jump`][man].
+To get the most out of jump, you have to integrate it with your shell. The
+integration gives you the `j` shell function and the automatic tracking and
+scoring.
+
+### bash
+
+Put the line below in `~/.bashrc` or `~/bash_profile`:
+
+```bash
+eval "$(jump shell bash)"
+```
+
+### zsh
+
+Put the line below in `~/.zshrc`:
+
+```zsh
+eval "$(jump shell zsh)"
+```
+
+### fish
+
+Put the line below in `~/.config/fish/config.fish`:
+
+```fish
+status --is-interactive; and . (jump shell fish | psub)
+```
+
+Once the integration is done, work like you always do. In a while you
+can just `j` to your projects from everywhere. See [`man jump`][man]
+for more usage patterns.
 
 ## Installation
 
@@ -49,39 +82,6 @@ git clone https://github.com/gsamokovarov/jump
 cd jump
 make
 mv jump ~/bin # Or /usr/local/bin, if ~/bin isn't in $PATH.
-```
-
-## Shell
-
-Jump supports bash, zsh and fish out of the box. If your favourite shell isn't
-in the list below, give us a heads up in the [issue tracker].
-
-To get the most out of jump, you have to integrate it with your shell. The
-integration gives you the `j` shell function and the automatic tracking and
-scoring.
-
-### bash
-
-Put the line below in `~/.bashrc` or `~/bash_profile`:
-
-```bash
-eval "$(jump shell bash)"
-```
-
-### zsh
-
-Put the line below in `~/.zshrc`:
-
-```zsh
-eval "$(jump shell zsh)"
-```
-
-### fish
-
-Put the line below in `~/.config/fish/config.fish`:
-
-```fish
-status --is-interactive; and . (jump shell fish | psub)
 ```
 
 ## Issues
