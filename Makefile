@@ -36,6 +36,9 @@ rpm: build
 		./jump=/usr/bin/jump \
 		./man/jump.1=/usr/share/man/man1/jump.1
 
+clean:
+	@rm jump*
+
 test:
 	@go test ./...
 
