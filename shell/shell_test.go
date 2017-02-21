@@ -10,10 +10,30 @@ func TestGuessFish(t *testing.T) {
 	}
 }
 
+func TestFishCompiles(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("Expected Fish to be a valid template: \n%s", r)
+		}
+	}()
+
+	Fish.MustCompile("j")
+}
+
 func TestGuessZsh(t *testing.T) {
 	if Guess("/bin/zsh") != Zsh {
 		t.Errorf("Expected /bin/zsh to match the zsh shell")
 	}
+}
+
+func TestZshCompiles(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("Expected Zsh to be a valid template: \n%s", r)
+		}
+	}()
+
+	Zsh.MustCompile("j")
 }
 
 func TestGuessBash(t *testing.T) {
@@ -25,4 +45,14 @@ func TestGuessBash(t *testing.T) {
 		// Its the most common one so fullback to it.
 		t.Errorf("Expected unknown shells to match the bash shell")
 	}
+}
+
+func TestBashCompiles(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("Expected Bash to be a valid template: \n%s", r)
+		}
+	}()
+
+	Bash.MustCompile("j")
 }
