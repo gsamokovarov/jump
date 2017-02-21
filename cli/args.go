@@ -49,6 +49,30 @@ func (a Args) Has(option string) bool {
 	return false
 }
 
+// Get checks if an --option has a value given.
+//
+// If the option is not given, the default value is returned. There is
+// currently no concept of optional arguments, as we haven't got the need.
+func (a Args) Get(option, defaultValue string) string {
+	for i := 0; i < len(a); i++ {
+		name, value := nameValue(a[i])
+
+		if name == option {
+			if value == "" {
+				if i+1 < len(a) {
+					return a[i+1]
+				} else {
+					return defaultValue
+				}
+			}
+
+			return value
+		}
+	}
+
+	return defaultValue
+}
+
 // Rest extracts the arguments after the command name.
 func (a Args) Rest() Args {
 	if len(a) >= 1 {
@@ -56,4 +80,14 @@ func (a Args) Rest() Args {
 	}
 
 	return a
+}
+
+func nameValue(arg string) (name string, value string) {
+	parts := strings.SplitN(arg, "=", 2)
+
+	if len(parts) == 1 {
+		return parts[0], ""
+	}
+
+	return parts[0], parts[1]
 }

@@ -20,3 +20,27 @@ func TestArgsRest(t *testing.T) {
 		t.Errorf("Expected args.Rest() to be %v, got %v", want, got)
 	}
 }
+
+func TestGetWithEquals(t *testing.T) {
+	args := ParseArgs([]string{"program", "--option=val"})
+
+	if value := args.Get("--option", "none"); value != "val" {
+		t.Errorf("Expected val, got: %s", value)
+	}
+}
+
+func TestGetWithSpace(t *testing.T) {
+	args := ParseArgs([]string{"program", "--option", "val"})
+
+	if value := args.Get("--option", "none"); value != "val" {
+		t.Errorf("Expected val, got: %s", value)
+	}
+}
+
+func TestGetHittingDefaultValue(t *testing.T) {
+	args := ParseArgs([]string{"program", "--option"})
+
+	if value := args.Get("--option", "none"); value != "none" {
+		t.Errorf("Expected none, got: %s", value)
+	}
+}
