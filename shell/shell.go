@@ -14,8 +14,8 @@ type Shell string
 // Compile compiles the shell template script to ready to execute (read copy
 // and paste) shell integration.
 func (s Shell) MustCompile(shortcut string) string {
-	var context struct{ Shortcut string }
-	context.Shortcut = shortcut
+	var context struct{ Bind string }
+	context.Bind = shortcut
 
 	outputBuffer := &bytes.Buffer{}
 
