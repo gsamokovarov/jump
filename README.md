@@ -45,7 +45,7 @@ But hey, `j` is not my favourite word, you may say. This is fine,
 you can bind jump to `z`, with this:
 
 ```bash
-eval "$(jump shell --shortcut=z)"
+eval "$(jump shell --bind=z)"
 ```
 
 And now, you can use `jump` like `z dir` and it would work! This is
@@ -53,7 +53,7 @@ just an example, you can bind it to _anything_. If you are one of
 those persons that likes to type, with their fingers:
 
 ```bash
-eval "$(jump shell --shortcut=goto)"
+eval "$(jump shell --bind=goto)"
 ```
 
 Voila! `goto dir` becomes a thing. The possibilities are endless!
