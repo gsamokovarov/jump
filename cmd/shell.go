@@ -16,7 +16,7 @@ func shellCmd(args cli.Args, _ *config.Config) {
 
 	sh := shell.Guess(hint)
 
-	cli.Outf("%s", sh)
+	cli.Outf("%s", sh.MustCompile("j"))
 }
 
 func init() {

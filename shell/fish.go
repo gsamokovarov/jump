@@ -12,10 +12,10 @@ function __jump_add --on-variable PWD
   jump chdir
 end
 
-function j
+function {{.Shortcut}}
   set -l dir (jump cd $argv)
   test -d "$dir"; and cd "$dir"
 end
 
-complete --command j --exclusive --arguments '(jump hint)'
+complete --command {{.Shortcut}} --exclusive --arguments '(jump hint)'
 `)

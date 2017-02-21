@@ -16,10 +16,10 @@ __jump_prompt_command() {
   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
 }
 
-j() {
+{{.Shortcut}}() {
   local dir="$(jump cd $@)"
   test -d "$dir"  && cd "$dir"
 }
 
-complete -o dirnames -C 'jump hint "${COMP_LINE/#j /}" --smart' j
+complete -o dirnames -C 'jump hint "${COMP_LINE/#{{.Shortcut}} /}" --smart' {{.Shortcut}}
 `)
