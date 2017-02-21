@@ -22,33 +22,41 @@ To get the most out of jump, you have to integrate it with your shell. The
 integration gives you the `j` shell function and the automatic tracking and
 scoring.
 
-### bash
+### Shell Integration
 
-Put the line below in `~/.bashrc` or `~/bash_profile`:
+Put the line below in `~/.bashrc`,  `~/bash_profile` or `.zshrc` for
+zshell:
 
 ```bash
-eval "$(jump shell bash)"
+eval "$(jump shell)"
 ```
 
-### zsh
-
-Put the line below in `~/.zshrc`:
-
-```zsh
-eval "$(jump shell zsh)"
-```
-
-### fish
-
-Put the line below in `~/.config/fish/config.fish`:
+Put the line below in `~/.config/fish/config.fish` for fish shell:
 
 ```fish
-status --is-interactive; and . (jump shell fish | psub)
+status --is-interactive; and . (jump shell | psub)
 ```
 
 Once the integration is done, work like you always do. In a while you
 can just `j` to your projects from everywhere. See [`man jump`][man]
 for more usage patterns.
+
+But hey, `j` is not my favourite word, you may say. This is fine,
+you can bind jump to `z`, with this:
+
+```bash
+eval "$(jump shell --shortcut=z)"
+```
+
+And now, you can use `jump` like `z dir` and it would work! This is
+just an example, you can bind it to _anything_. If you are one of
+those persons that likes to type, with their fingers:
+
+```bash
+eval "$(jump shell --shortcut=goto)"
+```
+
+Voila! `goto dir` becomes a thing. The possibilities are endless!
 
 ## Installation
 
