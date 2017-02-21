@@ -5,7 +5,7 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
-const version = "0.9.0"
+const version = "0.10.0"
 
 func versionCmd(cli.Args, *config.Config) {
 	cli.Errf("%s\n", version)
