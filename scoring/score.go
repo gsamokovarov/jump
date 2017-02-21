@@ -8,7 +8,7 @@ import (
 
 // Now is point of reference Score.Update and Score.Relevance use to reference
 // the current time. It is used in testing, so we always have the same current
-// time. This is okay for this programs as it won't run for long.
+// time. This is okay for this program as it won't run for long.
 var Now time.Time
 
 // Score represents a weight of a score and the age of it.
