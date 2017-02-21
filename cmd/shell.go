@@ -15,7 +15,7 @@ func shellCmd(args cli.Args, _ *config.Config) {
 	}
 
 	sh := shell.Guess(hint)
-	shortcut := args.Get("--shortcut", "j")
+	shortcut := args.Get("--bind", "j")
 
 	cli.Outf("%s", sh.MustCompile(shortcut))
 }
