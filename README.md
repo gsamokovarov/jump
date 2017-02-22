@@ -103,8 +103,6 @@ Jump is licensed under the [MIT license].
 
 Hope you find jump useful! :sparkles:
 
-[autojump]: https://github.com/wting/autojump
-[z]: https://github.com/rupa/z
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
 [issue tracker]: https://github.com/gsamokovarov/jump/issues
