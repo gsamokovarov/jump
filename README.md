@@ -69,14 +69,14 @@ brew install jump
 ### Debian
 
 ```bash
-wget https://github.com/gsamokovarov/jump/releases/download/v0.9.0/jump_0.9.0_amd64.deb
-sudo dpkg -i jump_0.9.0_amd64.deb
+wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump_0.10.0_amd64.deb
+sudo dpkg -i jump_0.10.0_amd64.deb
 ```
 
 ### Red Hat
 
 ```bash
-wget https://github.com/gsamokovarov/jump/releases/download/v0.9.0/jump-0.9.0-1.x86_64.rpm
+wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump-0.10.0-1.x86_64.rpm
 sudo rpm -i jump-0.9.0-1.x86_64.rpm
 ```
 
