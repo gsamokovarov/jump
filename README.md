@@ -77,7 +77,7 @@ sudo dpkg -i jump_0.10.0_amd64.deb
 
 ```bash
 wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump-0.10.0-1.x86_64.rpm
-sudo rpm -i jump-0.9.0-1.x86_64.rpm
+sudo rpm -i jump-0.10.0-1.x86_64.rpm
 ```
 
 ### Source
