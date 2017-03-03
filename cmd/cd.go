@@ -27,13 +27,11 @@ func cdCmd(args cli.Args, conf *config.Config) {
 		return
 	}
 
-	index := 0
+	index, search := 0, conf.ReadSearch()
 
 	// If we happen to match the last term, e.g. j is called with no
 	// arguments then jump to the previous search.
-	if term == "" {
-		search := conf.ReadSearch()
-
+	if len(term) == 0 {
 		term, index = search.Term, search.Index+1
 	}
 
