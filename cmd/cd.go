@@ -31,8 +31,19 @@ func cdCmd(args cli.Args, conf *config.Config) {
 
 	// If we happen to match the last term, e.g. j is called with no
 	// arguments then jump to the previous search.
-	if len(term) == 0 {
+	if term == "" {
 		term, index = search.Term, search.Index+1
+	} else {
+		// If there is a term given, first see if there is a bin for
+		// it and if so, always follow it.
+		if dir, found := conf.FindPin(term); found {
+			// Except if we land on the current directory again. Then
+			// ignore the term.
+			if cwd, err := os.Getwd(); err == nil && dir != cwd {
+				cli.Outf("%s\n", dir)
+				return
+			}
+		}
 	}
 
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)

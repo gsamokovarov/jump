@@ -9,6 +9,7 @@ import (
 const (
 	defaultScoreFile  = "scores.json"
 	defaultSearchFile = "search.json"
+	defaultPinsFile   = "pins.json"
 	defaultDirName    = ".jump"
 )
 
@@ -18,6 +19,7 @@ type Config struct {
 	Dir    string
 	Scores string
 	Search string
+	Pins   string
 }
 
 // Returns a file object for the saved scores path.
@@ -28,6 +30,11 @@ func (c *Config) scoresFile() (*os.File, error) {
 // Returns a file object for the saved term path.
 func (c *Config) searchFile() (*os.File, error) {
 	return createOrOpenLockedFile(c.Search)
+}
+
+// Returns a file object for the saved pins path.
+func (c *Config) pinsFile() (*os.File, error) {
+	return createOrOpenLockedFile(c.Pins)
 }
 
 // Setup setups the config folder from a directory path.
@@ -42,8 +49,9 @@ func Setup(dir string) (*Config, error) {
 
 	scores := filepath.Join(dir, defaultScoreFile)
 	search := filepath.Join(dir, defaultSearchFile)
+	pins := filepath.Join(dir, defaultPinsFile)
 
-	return &Config{dir, scores, search}, nil
+	return &Config{dir, scores, search, pins}, nil
 }
 
 // SetupDefault setups the config folder from a directory path.
