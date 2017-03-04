@@ -1,5 +1,3 @@
-# JUMP 🏃
-
 <img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
 
 Jump helps you navigate your file system faster by learning your
@@ -103,7 +101,7 @@ If you find any problems with jump, please, consider reporting them to the
 
 Jump is licensed under the [MIT license].
 
-Hope you find jump useful! :sparkles:
+Hope you find jump useful! 🏃
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
