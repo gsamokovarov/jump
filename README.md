@@ -1,5 +1,7 @@
 # JUMP 🏃
 
+<img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
+
 Jump helps you navigate your file system faster by learning your
 habits.
 
