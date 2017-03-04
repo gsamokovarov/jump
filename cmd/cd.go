@@ -47,12 +47,13 @@ func cdCmd(args cli.Args, conf *config.Config) {
 	}
 
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
-	for {
-		// Prefer an exact match if it's in a reasonable proximity of the best
-		// match. Useful for jumping to (2...4) letter directories, which you
-		// may just type in their exact form anyway.
-		index = exactMatchInProximity(fuzzyEntries, term, index)
 
+	// Prefer an exact match if it's in a reasonable proximity of the best
+	// match. Useful for jumping to (2...4) letter directories, which you
+	// may just type in their exact form anyway.
+	index = exactMatchInProximity(fuzzyEntries, term, index)
+
+	for {
 		if entry, empty := fuzzyEntries.Select(index); !empty {
 			// Remove the entries that no longer exists.
 			if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
