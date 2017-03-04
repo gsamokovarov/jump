@@ -39,7 +39,7 @@ func cdCmd(args cli.Args, conf *config.Config) {
 		if dir, found := conf.FindPin(term); found {
 			// Except if we land on the current directory again. Then
 			// ignore the term.
-			if cwd, err := os.Getwd(); err == nil && dir != cwd {
+			if !fwdPathIsCwd(dir) {
 				cli.Outf("%s\n", dir)
 				return
 			}
@@ -49,8 +49,8 @@ func cdCmd(args cli.Args, conf *config.Config) {
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 	for {
 		// Prefer an exact match if it's in a reasonable proximity of the best
-		// match. Useful for jumping to 2 to 4 letter directories, which you
-		// may just type anyway.
+		// match. Useful for jumping to (2...4) letter directories, which you
+		// may just type in their exact form anyway.
 		index = exactMatchInProximity(fuzzyEntries, term, index)
 
 		if entry, empty := fuzzyEntries.Select(index); !empty {
@@ -65,7 +65,7 @@ func cdCmd(args cli.Args, conf *config.Config) {
 
 			// Jump to the next entry, if the jump is going to land on the
 			// current directory.
-			if cwd, err := os.Getwd(); err == nil && entry.Path == cwd {
+			if fwdPathIsCwd(entry.Path) {
 				index++
 				continue
 			}
@@ -95,6 +95,20 @@ func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset in
 	}
 
 	return offset
+}
+
+func fwdPathIsCwd(path string) bool {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return false
+	}
+
+	fwdPath, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		return false
+	}
+
+	return fwdPath == cwd
 }
 
 func init() {
