@@ -1,9 +1,7 @@
 package config
 
 import (
-	"encoding/json"
-	"io"
-
+	"github.com/gsamokovarov/jump/config/jsonio"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
@@ -20,13 +18,8 @@ func (c *Config) ReadEntries() (*scoring.Entries, error) {
 
 	defer closeLockedFile(scoresFile)
 
-	decoder := json.NewDecoder(scoresFile)
-	for {
-		if err := decoder.Decode(&entries); err == io.EOF {
-			break
-		} else if err != nil {
-			return &entries, err
-		}
+	if err := jsonio.Decode(scoresFile, &entries); err != nil {
+		return nil, err
 	}
 
 	return &entries, nil
@@ -43,12 +36,7 @@ func (c *Config) WriteEntries(entries *scoring.Entries) error {
 
 	defer closeLockedFile(scoresFile)
 
-	if err := scoresFile.Truncate(0); err != nil {
-		return err
-	}
-
 	entries.Sort()
-	encoder := json.NewEncoder(scoresFile)
 
-	return encoder.Encode(entries)
+	return jsonio.Encode(scoresFile, entries)
 }

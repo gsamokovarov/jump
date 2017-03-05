@@ -1,8 +1,7 @@
 package config
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"github.com/gsamokovarov/jump/config/jsonio"
 )
 
 // Search represents a search term used for advancing through the entries of the same
@@ -23,11 +22,7 @@ func (c *Config) ReadSearch() (search Search) {
 
 	defer closeLockedFile(searchFile)
 
-	if content, err := ioutil.ReadAll(searchFile); err == nil {
-		if err := json.Unmarshal(content, &search); err == nil {
-			return
-		}
-	}
+	jsonio.Decode(searchFile, &search)
 
 	return
 }
@@ -41,15 +36,5 @@ func (c *Config) WriteSearch(term string, index int) error {
 
 	defer closeLockedFile(searchFile)
 
-	jsonContent, err := json.Marshal(&Search{term, index})
-	if err != nil {
-		return err
-	}
-
-	if err := searchFile.Truncate(0); err != nil {
-		return err
-	}
-
-	_, err = searchFile.Write(jsonContent)
-	return err
+	return jsonio.Encode(searchFile, Search{term, index})
 }

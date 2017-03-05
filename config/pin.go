@@ -1,8 +1,7 @@
 package config
 
 import (
-	"encoding/json"
-	"io"
+	"github.com/gsamokovarov/jump/config/jsonio"
 )
 
 // FindPin tries to the directory from a pinned search term.
@@ -17,13 +16,10 @@ func (c *Config) FindPin(term string) (dir string, found bool) {
 	defer closeLockedFile(pinsFile)
 
 	pins := map[string]string{}
-
-	decoder := json.NewDecoder(pinsFile)
-	if err := decoder.Decode(&pins); err != nil && err != io.EOF {
-		return
+	if err := jsonio.Decode(pinsFile, &pins); err == nil {
+		dir, found = pins[term]
 	}
 
-	dir, found = pins[term]
 	return
 }
 
@@ -37,24 +33,11 @@ func (c *Config) WritePin(pin, value string) error {
 	defer closeLockedFile(pinsFile)
 
 	pins := map[string]string{}
-
-	decoder := json.NewDecoder(pinsFile)
-	if err := decoder.Decode(&pins); err != nil && err != io.EOF {
+	if err := jsonio.Decode(pinsFile, &pins); err != nil {
 		return err
 	}
 
 	pins[pin] = value
 
-	if _, err := pinsFile.Seek(0, io.SeekStart); err != nil {
-		return err
-	}
-
-	if err := pinsFile.Truncate(0); err != nil {
-		return err
-	}
-
-	// Seeking to the beginning is important here, so we don't end up writing zero by
-	encoder := json.NewEncoder(pinsFile)
-
-	return encoder.Encode(pins)
+	return jsonio.Encode(pinsFile, pins)
 }
