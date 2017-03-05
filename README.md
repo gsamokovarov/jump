@@ -24,25 +24,38 @@ scoring.
 
 ### Shell Integration
 
+Jump needs to be integrated into your shell to observe your `cd` habits. The integrations also provides the `j` helper, which you would use to interact with jump.
+
+<details>
+<summary>bash/zsh</summary>
+
 Put the line below in `~/.bashrc`,  `~/bash_profile` or `.zshrc` for
 zshell:
 
 ```bash
 eval "$(jump shell)"
 ```
+</details>
 
+<details>
+<summary>fish</summary>
 Put the line below in `~/.config/fish/config.fish` for fish shell:
 
 ```fish
 status --is-interactive; and . (jump shell | psub)
 ```
+</details>
 
 Once the integration is done, work like you always do. In a while you
-can just `j` to your projects from everywhere. See [`man jump`][man]
-for more usage patterns.
+can just `j` to your projects from everywhere. Type
+`j a_couple_project_directory_letters` and watch it go!
 
-But hey, `j` is not my favourite word, you may say. This is fine,
-you can bind jump to `z`, with this:
+See [`man jump`][man] for more usage patterns.
+
+<details>
+<summary>But hey, `j` is not my favourite letter...</summary>
+
+This is fine,you can bind jump to `z`, with this:
 
 ```bash
 eval "$(jump shell --bind=z)"
@@ -57,30 +70,43 @@ eval "$(jump shell --bind=goto)"
 ```
 
 Voila! `goto dir` becomes a thing. The possibilities are endless!
+</details>
 
 ## Installation
 
-### OSX
+Jump comes in packages for macOS, Debian and Red Hat.
+
+<details>
+<summary>macOS</summary>
 
 ```bash
 brew install jump
 ```
+</details>
 
-### Debian
+<details>
+<summary>Debian</summary>
 
 ```bash
 wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump_0.10.0_amd64.deb
 sudo dpkg -i jump_0.10.0_amd64.deb
 ```
+</details>
 
-### Red Hat
+<details>
+<summary>Red Hat</summary>
 
 ```bash
 wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump-0.10.0-1.x86_64.rpm
 sudo rpm -i jump-0.10.0-1.x86_64.rpm
 ```
+</details>
 
-### Source
+But hey, jump is open source! You can always build it by yourself or hack on it, if you like
+cool projects, Go and unix stuff. 💻
+
+<details>
+<summary>Source</summary>
 
 You need a working [Go workspace].
 
@@ -91,6 +117,7 @@ cd jump
 make
 mv jump ~/bin # Or /usr/local/bin, if ~/bin isn't in $PATH.
 ```
+</details>
 
 ## Issues
 
@@ -101,7 +128,7 @@ If you find any problems with jump, please, consider reporting them to the
 
 Jump is licensed under the [MIT license].
 
-Hope you find jump useful! 🏃
+Hope you find jump useful! ✌️
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
