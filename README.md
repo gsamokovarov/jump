@@ -26,19 +26,15 @@ scoring.
 
 Jump needs to be integrated into your shell to observe your `cd` habits. The integrations also provides the `j` helper, which you would use to interact with jump.
 
-<details>
-<summary>bash/zsh</summary>
-
 Put the line below in `~/.bashrc`,  `~/bash_profile` or `.zshrc` for
 zshell:
 
 ```bash
 eval "$(jump shell)"
 ```
-</details>
 
 <details>
-<summary>fish</summary>
+<summary>Maybe you like fish shell shell...</summary>
 Put the line below in `~/.config/fish/config.fish` for fish shell:
 
 ```fish
@@ -47,10 +43,9 @@ status --is-interactive; and . (jump shell | psub)
 </details>
 
 Once the integration is done, work like you always do. In a while you
-can just `j` to your projects from everywhere. Type
-`j a_couple_project_directory_letters` and watch it go!
+can just `j` to your projects from everywhere.
 
-See [`man jump`][man] for more usage patterns.
+![demo]("https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif">)
 
 <details>
 <summary>But hey, `j` is not my favourite letter...</summary>
@@ -72,29 +67,28 @@ eval "$(jump shell --bind=goto)"
 Voila! `goto dir` becomes a thing. The possibilities are endless!
 </details>
 
+See [`man jump`][man] for more usage patterns.
+
 ## Installation
 
-Jump comes in packages for macOS, Debian and Red Hat.
-
-<details>
-<summary>macOS</summary>
+Jump comes in packages for macOS (homebrew) and Linux.
 
 ```bash
 brew install jump
 ```
-</details>
 
 <details>
-<summary>Debian</summary>
+<summary>Linux</summary>
+
+### Ubuntu/Debian
 
 ```bash
 wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump_0.10.0_amd64.deb
 sudo dpkg -i jump_0.10.0_amd64.deb
 ```
-</details>
 
-<details>
-<summary>Red Hat</summary>
+
+### Red Hat/Fedora
 
 ```bash
 wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump-0.10.0-1.x86_64.rpm
