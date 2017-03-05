@@ -22,21 +22,6 @@ type Config struct {
 	Pins   string
 }
 
-// Returns a file object for the saved scores path.
-func (c *Config) scoresFile() (*os.File, error) {
-	return createOrOpenLockedFile(c.Scores)
-}
-
-// Returns a file object for the saved term path.
-func (c *Config) searchFile() (*os.File, error) {
-	return createOrOpenLockedFile(c.Search)
-}
-
-// Returns a file object for the saved pins path.
-func (c *Config) pinsFile() (*os.File, error) {
-	return createOrOpenLockedFile(c.Pins)
-}
-
 // Setup setups the config folder from a directory path.
 //
 // If the directories don't already exists, they are created and if the score

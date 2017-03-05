@@ -11,7 +11,7 @@ import (
 func (c *Config) ReadEntries() (*scoring.Entries, error) {
 	var entries scoring.Entries
 
-	scoresFile, err := c.scoresFile()
+	scoresFile, err := createOrOpenLockedFile(c.Scores)
 	if err != nil {
 		return &entries, nil
 	}
@@ -29,7 +29,7 @@ func (c *Config) ReadEntries() (*scoring.Entries, error) {
 //
 // Sorts the entries before writing them to disk.
 func (c *Config) WriteEntries(entries *scoring.Entries) error {
-	scoresFile, err := c.scoresFile()
+	scoresFile, err := createOrOpenLockedFile(c.Scores)
 	if err != nil {
 		return err
 	}

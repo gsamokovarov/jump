@@ -8,7 +8,7 @@ import (
 //
 // If no search pinned search term is found.
 func (c *Config) FindPin(term string) (dir string, found bool) {
-	pinsFile, err := c.pinsFile()
+	pinsFile, err := createOrOpenLockedFile(c.Pins)
 	if err != nil {
 		return
 	}
@@ -25,7 +25,7 @@ func (c *Config) FindPin(term string) (dir string, found bool) {
 
 // WritePin saves a pinned search term into a file.
 func (c *Config) WritePin(pin, value string) error {
-	pinsFile, err := c.pinsFile()
+	pinsFile, err := createOrOpenLockedFile(c.Pins)
 	if err != nil {
 		return err
 	}

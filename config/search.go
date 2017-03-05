@@ -15,7 +15,7 @@ type Search struct {
 //
 // If the last search doesn't exist, a zero value Search is returned.
 func (c *Config) ReadSearch() (search Search) {
-	searchFile, err := c.searchFile()
+	searchFile, err := createOrOpenLockedFile(c.Search)
 	if err != nil {
 		return
 	}
@@ -29,7 +29,7 @@ func (c *Config) ReadSearch() (search Search) {
 
 // WriteSearch writes the last search entry to the current search entry.
 func (c *Config) WriteSearch(term string, index int) error {
-	searchFile, err := c.searchFile()
+	searchFile, err := createOrOpenLockedFile(c.Search)
 	if err != nil {
 		return err
 	}

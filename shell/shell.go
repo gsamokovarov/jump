@@ -23,7 +23,6 @@ func (s Shell) MustCompile(shortcut string) string {
 	tmpl.Execute(outputBuffer, context)
 
 	outputBytes, err := ioutil.ReadAll(outputBuffer)
-
 	if err != nil {
 		panic(err)
 	}
