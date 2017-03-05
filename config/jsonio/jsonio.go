@@ -41,7 +41,8 @@ func Decode(r io.Reader, v interface{}) error {
 // beginning, so you can safely decode and encode without manipulating the
 // writable.
 //
-// Technically, the writable needs to implement WriterSeekerTruncater, but you'll most
+// Technically, the writable needs to implement WriterSeekerTruncater, but
+// you'll most likely use an os.File.
 func Encode(w WriteSeekerTruncater, v interface{}) error {
 	if _, err := w.Seek(0, io.SeekStart); err != nil {
 		return err

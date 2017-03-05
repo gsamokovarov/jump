@@ -19,7 +19,8 @@ type Command struct {
 
 // IsOption returns whether the current command starts with --.
 //
-// We consider commands starting with -- options, so we can display them as such.
+// We consider commands starting with -- options, so we can display them as
+// such.
 func (c *Command) IsOption() bool {
 	return strings.HasPrefix(c.Name, "--")
 }

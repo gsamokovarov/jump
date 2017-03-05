@@ -4,8 +4,8 @@ import (
 	"github.com/gsamokovarov/jump/config/jsonio"
 )
 
-// Search represents a search term used for advancing through the entries of the same
-// term.
+// Search represents a search term used for advancing through the entries of
+// the same term.
 type Search struct {
 	Term  string
 	Index int

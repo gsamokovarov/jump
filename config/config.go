@@ -13,8 +13,8 @@ const (
 	defaultDirName    = ".jump"
 )
 
-// Config represents the config directory and all the misc. configuration files
-// we can have in there.
+// Config represents the config directory and all the miscellaneous
+// configuration files we can have in there.
 type Config struct {
 	Dir    string
 	Scores string
