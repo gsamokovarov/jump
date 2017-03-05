@@ -61,9 +61,8 @@ func (a Args) Get(option, defaultValue string) string {
 			if value == "" {
 				if i+1 < len(a) {
 					return a[i+1]
-				} else {
-					return defaultValue
 				}
+				return defaultValue
 			}
 
 			return value
