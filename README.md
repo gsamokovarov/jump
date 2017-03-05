@@ -34,7 +34,7 @@ eval "$(jump shell)"
 ```
 
 <details>
-<summary>Maybe you like fish shell shell...</summary>
+<summary>Maybe you like fish shell...</summary>
 Put the line below in `~/.config/fish/config.fish` for fish shell:
 
 ```fish
@@ -43,35 +43,33 @@ status --is-interactive; and . (jump shell | psub)
 </details>
 
 Once the integration is done, work like you always do. In a while you
-can just `j` to your projects from everywhere.
+can just `j` to your projects from everywhere. 👀
 
 ![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
 
-<details>
-<summary>But hey, `j` is not my favourite letter...</summary>
+### `j` is not my favourite letter
 
-This is fine,you can bind jump to `z`, with this:
+This is fine, you can bind jump to `z`, with this:
 
 ```bash
 eval "$(jump shell --bind=z)"
 ```
 
-And now, you can use `jump` like `z dir` and it would work! This is
-just an example, you can bind it to _anything_. If you are one of
-those persons that likes to type, with their fingers:
+And now, you can use `jump` like `z dir` and it would just work! This is only
+an example, you can bind it to _anything_. If you are one of those persons that
+likes to type a lot with their fingers, you can do:
 
 ```bash
 eval "$(jump shell --bind=goto)"
 ```
 
 Voila! `goto dir` becomes a thing. The possibilities are endless!
-</details>
-
-See [`man jump`][man] for more usage patterns.
 
 ## Installation
 
 Jump comes in packages for macOS (homebrew) and Linux.
+
+## macOS
 
 ```bash
 brew install jump
@@ -96,8 +94,8 @@ sudo rpm -i jump-0.10.0-1.x86_64.rpm
 ```
 </details>
 
-But hey, jump is open source! You can always build it by yourself or hack on it, if you like
-cool projects, Go and unix stuff. 💻
+You can also build jump by yourself. Or hack on it, you know, if you like Go
+and unix stuff. 💻
 
 <details>
 <summary>Source</summary>
