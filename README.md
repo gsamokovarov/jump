@@ -45,7 +45,7 @@ status --is-interactive; and . (jump shell | psub)
 Once the integration is done, work like you always do. In a while you
 can just `j` to your projects from everywhere.
 
-![demo]("https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif">)
+![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
 
 <details>
 <summary>But hey, `j` is not my favourite letter...</summary>
