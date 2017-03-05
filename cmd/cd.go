@@ -54,7 +54,7 @@ func cdCmd(args cli.Args, conf *config.Config) {
 	index = exactMatchInProximity(fuzzyEntries, term, index)
 
 	for {
-		if entry, empty := fuzzyEntries.Select(index); !empty {
+		if entry, ok := fuzzyEntries.Select(index); ok {
 			// Remove the entries that no longer exists.
 			if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
 				entries.Remove(entry.Path)
@@ -84,7 +84,7 @@ func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset in
 	normalizedTerm := norm.NormalizeTerm()
 
 	for index := offset; index <= offset+proximity; index++ {
-		if entry, empty := entries.Select(index); !empty {
+		if entry, ok := entries.Select(index); ok {
 
 			// Take only the base part, if you wanna do a deep search
 			// like Dev/nes.

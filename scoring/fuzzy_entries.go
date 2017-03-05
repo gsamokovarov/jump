@@ -35,12 +35,12 @@ func (fe *FuzzyEntries) Sort() {
 }
 
 // Select selects the entry with greatest LCS score at index.
-func (fe *FuzzyEntries) Select(index int) (entry *Entry, empty bool) {
+func (fe *FuzzyEntries) Select(index int) (entry *Entry, ok bool) {
 	if length := fe.Len(); length == 0 || index >= length {
-		return nil, true
+		return nil, false
 	}
 
-	return &fe.Entries[index], false
+	return &fe.Entries[index], true
 }
 
 // NewFuzzyEntries converts a FuzzyEntries and a target string to a
