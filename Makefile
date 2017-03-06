@@ -40,7 +40,7 @@ clean:
 	@rm -f jump*
 
 test:
-	@go test ./...
+	@go test ./... -cover
 
 man:
 	@ronn ./man/jump.1.ronn
