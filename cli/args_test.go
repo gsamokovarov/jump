@@ -5,19 +5,47 @@ import (
 	"testing"
 )
 
-func TestArgsCommandName(t *testing.T) {
-	args := ParseArgs([]string{"program", "command-name"})
+func TestParseArgs(t *testing.T) {
+	args := ParseArgs([]string{"program", "command"})
 
-	if command := args.CommandName(); command != "command-name" {
-		t.Errorf("Expected args.CommandName() to be command-name, got %v", command)
+	if args[0] != "command" {
+		t.Errorf("Expected args[0] to be command, got %v", args[0])
 	}
 }
 
-func TestArgsRest(t *testing.T) {
-	args := ParseArgs([]string{"program", "command-name"})
+func TestFirst(t *testing.T) {
+	args := ParseArgs([]string{"program", "command"})
 
-	if got, want := args.Rest(), []string{"command-name"}; reflect.DeepEqual(got, want) {
-		t.Errorf("Expected args.Rest() to be %v, got %v", want, got)
+	if args.First() != "command" {
+		t.Error("Expected args.First() to be command, got %v", args.First())
+	}
+}
+
+func TestFirstWithEmptyArgs(t *testing.T) {
+	args := ParseArgs([]string{"program"})
+
+	if args.First() != "" {
+		t.Error("Expected args.First() to be empty")
+	}
+}
+
+func TestArgsCommandName(t *testing.T) {
+	args := ParseArgs([]string{"program", "command"})
+
+	if command := args.CommandName(); command != "command" {
+		t.Errorf("Expected args.CommandName() to be command, got %v", command)
+	}
+}
+
+func TestArgsHas(t *testing.T) {
+	args := ParseArgs([]string{"program", "command", "--foo"})
+
+	if !args.Has("--foo") {
+		t.Errorf("Expected %v to have --foo", args)
+	}
+
+	if args.Has("--bar") {
+		t.Errorf("Expected %v to not have --bar", args)
 	}
 }
 
@@ -42,5 +70,13 @@ func TestGetHittingDefaultValue(t *testing.T) {
 
 	if value := args.Get("--option", "none"); value != "none" {
 		t.Errorf("Expected none, got: %s", value)
+	}
+}
+
+func TestArgsRest(t *testing.T) {
+	args := ParseArgs([]string{"program", "command"})
+
+	if got, want := args.Rest(), []string{"command"}; reflect.DeepEqual(got, want) {
+		t.Errorf("Expected args.Rest() to be %v, got %v", want, got)
 	}
 }
