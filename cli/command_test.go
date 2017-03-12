@@ -21,7 +21,7 @@ func TestDispatchCommand(t *testing.T) {
 	}
 }
 
-func TestCommand(t *testing.T) {
+func TestCommandIsOption(t *testing.T) {
 	command := &Command{"--test", "Testing command.", func(Args, *config.Config) {}}
 
 	if !command.IsOption() {
