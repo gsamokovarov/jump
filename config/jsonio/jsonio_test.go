@@ -48,6 +48,15 @@ func TestDecode(t *testing.T) {
 	}
 }
 
+func TestBadDecode(t *testing.T) {
+	var value struct{ Ok bool }
+
+	r := newTestIO(`{"Ok":true`)
+	if err := Decode(r, &value); err == nil {
+		t.Errorf("Expected error, got %v", err)
+	}
+}
+
 func TestEncode(t *testing.T) {
 	var value struct{ Ok bool }
 	value.Ok = true
