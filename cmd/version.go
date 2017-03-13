@@ -8,7 +8,7 @@ import (
 const version = "0.11.0"
 
 func versionCmd(cli.Args, *config.Config) {
-	cli.Errf("%s\n", version)
+	cli.Outf("%s\n", version)
 }
 
 func init() {
