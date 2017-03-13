@@ -8,7 +8,7 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func cleanCmd(args cli.Args, conf *config.Config) {
+func cleanCmd(args cli.Args, conf config.Config) {
 	entries, err := conf.ReadEntries()
 	if err != nil {
 		cli.Exitf(1, "%s\n", err)

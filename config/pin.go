@@ -7,7 +7,7 @@ import (
 // FindPin tries to the directory from a pinned search term.
 //
 // If no search pinned search term is found.
-func (c *Config) FindPin(term string) (dir string, found bool) {
+func (c *fileConfig) FindPin(term string) (dir string, found bool) {
 	pinsFile, err := createOrOpenLockedFile(c.Pins)
 	if err != nil {
 		return
@@ -24,7 +24,7 @@ func (c *Config) FindPin(term string) (dir string, found bool) {
 }
 
 // WritePin saves a pinned search term into a file.
-func (c *Config) WritePin(pin, value string) error {
+func (c *fileConfig) WritePin(pin, value string) error {
 	pinsFile, err := createOrOpenLockedFile(c.Pins)
 	if err != nil {
 		return err

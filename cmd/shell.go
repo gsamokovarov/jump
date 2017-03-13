@@ -8,7 +8,7 @@ import (
 	"github.com/gsamokovarov/jump/shell"
 )
 
-func shellCmd(args cli.Args, _ *config.Config) {
+func shellCmd(args cli.Args, _ config.Config) {
 	hint := args.CommandName()
 	if len(hint) == 0 {
 		hint = os.Getenv("SHELL")

@@ -13,7 +13,7 @@ import (
 const proximity = 5
 const osSeparator = string(os.PathSeparator)
 
-func cdCmd(args cli.Args, conf *config.Config) {
+func cdCmd(args cli.Args, conf config.Config) {
 	term := args.CommandName()
 	entries, err := conf.ReadEntries()
 

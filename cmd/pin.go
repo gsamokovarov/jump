@@ -13,7 +13,7 @@ var pinUsageMsg = `jump pin term [directory]
   No term specified. See the signature of the pin call above.
 `
 
-func pinCmd(args cli.Args, conf *config.Config) {
+func pinCmd(args cli.Args, conf config.Config) {
 	var err error
 
 	term := args.CommandName()

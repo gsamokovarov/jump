@@ -8,7 +8,7 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func hintCmd(args cli.Args, conf *config.Config) {
+func hintCmd(args cli.Args, conf config.Config) {
 	var hints scoring.Entries
 
 	term := args.CommandName()

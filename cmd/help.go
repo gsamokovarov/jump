@@ -19,7 +19,7 @@ Options:{{range .Options}}
   {{printf "%-12s %s" .Name .Desc}}{{end}}
 `
 
-func helpCmd(cli.Args, *config.Config) {
+func helpCmd(cli.Args, config.Config) {
 	tmpl := template.Must(template.New("--help").Parse(helpUsage))
 	tmpl.Execute(os.Stderr, cli.Registry)
 }

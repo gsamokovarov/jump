@@ -7,7 +7,7 @@ import (
 
 const version = "0.11.0"
 
-func versionCmd(cli.Args, *config.Config) {
+func versionCmd(cli.Args, config.Config) {
 	cli.Outf("%s\n", version)
 }
 

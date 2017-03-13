@@ -8,7 +8,7 @@ import (
 // ReadEntries returns the current entries for the config.
 //
 // If the scores file is empty, the returned entries are empty.
-func (c *Config) ReadEntries() (*scoring.Entries, error) {
+func (c *fileConfig) ReadEntries() (*scoring.Entries, error) {
 	var entries scoring.Entries
 
 	scoresFile, err := createOrOpenLockedFile(c.Scores)
@@ -28,7 +28,7 @@ func (c *Config) ReadEntries() (*scoring.Entries, error) {
 // WriteEntries the input scoring entries to a file.
 //
 // Sorts the entries before writing them to disk.
-func (c *Config) WriteEntries(entries *scoring.Entries) error {
+func (c *fileConfig) WriteEntries(entries *scoring.Entries) error {
 	scoresFile, err := createOrOpenLockedFile(c.Scores)
 	if err != nil {
 		return err

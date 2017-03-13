@@ -7,7 +7,7 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
-func topCmd(args cli.Args, conf *config.Config) {
+func topCmd(args cli.Args, conf config.Config) {
 	entries, err := conf.ReadEntries()
 	if err != nil {
 		cli.Exitf(1, "%s\n", err)
