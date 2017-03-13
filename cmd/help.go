@@ -21,7 +21,7 @@ Options:{{range .Options}}
 
 func helpCmd(cli.Args, config.Config) {
 	tmpl := template.Must(template.New("--help").Parse(helpUsage))
-	tmpl.Execute(os.Stderr, cli.Registry)
+	tmpl.Execute(os.Stdout, cli.Registry)
 }
 
 func init() {
