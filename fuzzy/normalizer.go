@@ -21,8 +21,8 @@ type Normalizer struct {
 //
 // We apply a couple of conventions:
 //
-// - If the term has different letter casing in it, do a case sensitive search.
-//   By default we do a case insensitive one.
+// - If the term has capital letter , do a case sensitive search. By default
+//   we do a case insensitive one to save keystrokes.
 //
 // - If the term contains an OS separator, we extract the very last bits of the
 //   path that contains that many separators. This helps us to keep the
@@ -32,7 +32,7 @@ type Normalizer struct {
 // - If the term doesn't contain any OS separators, match on the base name of
 //   the path.
 func (m Normalizer) NormalizePath(path string) string {
-	if caseSensitiveSearch(m.term) {
+	if caseInsensitiveSearch(m.term) {
 		path = strings.ToLower(path)
 	}
 
@@ -51,7 +51,7 @@ func (m Normalizer) NormalizePath(path string) string {
 // The normalization consists only of returning a case insensitive (lowered) or
 // sensitive string.
 func (m Normalizer) NormalizeTerm() string {
-	if caseSensitiveSearch(m.term) {
+	if caseInsensitiveSearch(m.term) {
 		return strings.ToLower(m.term)
 	}
 
@@ -63,8 +63,8 @@ func NewNormalizer(term string) *Normalizer {
 	return &Normalizer{term}
 }
 
-func caseSensitiveSearch(str string) bool {
-	return strings.ToLower(str) == str || str == strings.ToUpper(str)
+func caseInsensitiveSearch(str string) bool {
+	return strings.ToLower(str) == str
 }
 
 func containsOsSeparators(str string) bool {
