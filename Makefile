@@ -1,5 +1,5 @@
 NAME = jump
-DESCRITPTION = "Quick and fuzzy directory jumper."
+DESCRITPTION = "Jump helps you navigate your file system faster by learning your habits."
 HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
