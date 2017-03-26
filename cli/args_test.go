@@ -17,7 +17,7 @@ func TestFirst(t *testing.T) {
 	args := ParseArgs([]string{"program", "command"})
 
 	if args.First() != "command" {
-		t.Error("Expected args.First() to be command, got %v", args.First())
+		t.Errorf("Expected args.First() to be command, got %v", args.First())
 	}
 }
 

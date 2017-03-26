@@ -4,7 +4,7 @@ import (
 	"github.com/gsamokovarov/jump/cli"
 )
 
-func ExampleHelpCmd() {
+func Example_helpCmd() {
 	helpCmd(cli.Args{}, nil)
 
 	// Output:

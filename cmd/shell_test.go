@@ -4,7 +4,7 @@ import (
 	"github.com/gsamokovarov/jump/cli"
 )
 
-func ExampleShellCmd_Bash() {
+func Example_shellCmd_Bash() {
 	shellCmd(cli.Args{"bash"}, nil)
 
 	// Output:
@@ -31,7 +31,7 @@ func ExampleShellCmd_Bash() {
 	// complete -o dirnames -C 'jump hint "${COMP_LINE/#j /}" --smart' j
 }
 
-func ExampleShellCmd_Zsh() {
+func Example_shellCmd_Zsh() {
 	shellCmd(cli.Args{"zsh"}, nil)
 
 	// Output:
@@ -60,7 +60,7 @@ func ExampleShellCmd_Zsh() {
 	// compctl -U -K jump_completion j
 }
 
-func ExampleShellCmd_Fish() {
+func Example_shellCmd_Fish() {
 	shellCmd(cli.Args{"fish"}, nil)
 
 	// Output:
@@ -83,7 +83,7 @@ func ExampleShellCmd_Fish() {
 	// complete --command j --exclusive --arguments '(jump hint)'
 }
 
-func ExampleShellCmd_Bind() {
+func Example_shellCmd_Bind() {
 	shellCmd(cli.Args{"bash", "--bind=z"}, nil)
 
 	// Output:

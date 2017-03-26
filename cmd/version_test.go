@@ -4,7 +4,7 @@ import (
 	"github.com/gsamokovarov/jump/cli"
 )
 
-func ExampleVersionCmd() {
+func Example_versionCmd() {
 	versionCmd(cli.Args{}, nil)
 
 	// Output:
