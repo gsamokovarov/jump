@@ -1,5 +1,5 @@
 NAME = jump
-DESCRITPTION = "Jump helps you navigate your file system faster by learning your habits."
+DESCRIPTION = "Jump helps you navigate your file system faster by learning your habits."
 HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
@@ -18,7 +18,7 @@ deb: build
 	@fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a amd64 \
 		--deb-compression bzip2 \
 		--url $(HOMEPAGE) \
-		--description $(DESCRITPTION) \
+		--description $(DESCRIPTION) \
 		--vendor $(AUTHOR) \
 		--license $(LICENSE) \
 		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
@@ -29,7 +29,7 @@ rpm: build
 	@fpm -s dir -t rpm -n $(NAME) -v $(VERSION) -a amd64 \
 		--rpm-compression bzip2 \
 		--url $(HOMEPAGE) \
-		--description $(DESCRITPTION) \
+		--description $(DESCRIPTION) \
 		--vendor $(AUTHOR) \
 		--license $(LICENSE) \
 		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
