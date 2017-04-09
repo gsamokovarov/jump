@@ -18,7 +18,7 @@ func cdCmd(args cli.Args, conf config.Config) {
 	entries, err := conf.ReadEntries()
 
 	if err != nil {
-		cli.Exitf(1, "%s\n", err)
+		cli.Exitf(1, "%v\n", err)
 	}
 
 	// If an auto-completion triggered a full path, just go there.
