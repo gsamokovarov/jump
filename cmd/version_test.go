@@ -8,5 +8,5 @@ func Example_versionCmd() {
 	versionCmd(cli.Args{}, nil)
 
 	// Output:
-	// 0.11.0
+	// 0.13.0
 }
