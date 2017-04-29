@@ -100,15 +100,12 @@ Over the time I have tweaked the ranking and matching algorithm to fit my
 needs, so I thing it may fit yours as well. Here is a [conversation] about
 little tips and tricks using jump.
 
-## License
+## Build
 
-Jump is licensed under the [MIT license].
-
-✌️ <a href="https://travis-ci.org/gsamokovarov/jump">
+<a href="https://travis-ci.org/gsamokovarov/jump">
   <img src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master" alt="Build Status" data-canonical-src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master">
 </a>
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
 [conversation]: https://twitter.com/hkdobrev/status/838398833419767808
-[MIT license]: https://github.com/gsamokovarov/jump/blob/master/LICENSE.txt
