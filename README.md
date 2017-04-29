@@ -1,7 +1,4 @@
 <p align="right">
-  <a href="https://travis-ci.org/gsamokovarov/jump">
-    <img src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master" alt="Build Status" data-canonical-src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master">
-  </a>
   <a href="https://github.com/gsamokovarov/jump/releases">[releases]</a>
 </p>
 
@@ -107,7 +104,9 @@ little tips and tricks using jump.
 
 Jump is licensed under the [MIT license].
 
-✌️
+✌️ <a href="https://travis-ci.org/gsamokovarov/jump">
+  <img src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master" alt="Build Status" data-canonical-src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master">
+</a>
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
