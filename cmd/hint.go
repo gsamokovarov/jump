@@ -45,9 +45,9 @@ func hintSmartSelect(entries *scoring.Entries, term string, smart bool) scoring.
 	switch {
 	case termLength == 0:
 		return hintSliceEntries(entries, 5)
-	case termLength < 4:
+	case termLength < 7:
 		return hintSliceEntries(entries, 1)
-	case termLength >= 4 && termLength < 8:
+	case termLength >= 7 && termLength < 10:
 		return hintSliceEntries(entries, 3)
 	default:
 		return hintSliceEntries(entries, 1)

@@ -61,26 +61,26 @@ func Test_hintCmd_smart(t *testing.T) {
 		t.Fatalf("Expected line to be %s, got %s", p1, lines[0])
 	}
 
-	// If you write more than 3 chars, maybe you need more options.
+	// If you write more than 6 chars, maybe you need more options.
 	lines = strings.Fields(capture(&os.Stdout, func() {
-		hintCmd(cli.Args{"webs", "--smart"}, conf)
+		hintCmd(cli.Args{"webonos", "--smart"}, conf)
 	}))
 
 	if len(lines) != 3 {
 		t.Fatalf("Expected to get exactly 3 lines, got %v", lines)
 	}
 
-	// If you wrote more than 7 chars, well, we tried.
+	// If you wrote more than 9 chars, well, we tried.
 	lines = strings.Fields(capture(&os.Stdout, func() {
-		hintCmd(cli.Args{"web-conso", "--smart"}, conf)
+		hintCmd(cli.Args{"client/webs", "--smart"}, conf)
 	}))
 
 	if len(lines) != 1 {
 		t.Fatalf("Expected to get exactly one line, got %v", lines)
 	}
 
-	if lines[0] != p1 {
-		t.Fatalf("Expected line to be %s, got %s", p1, lines[0])
+	if lines[0] != p2 {
+		t.Fatalf("Expected line to be %s, got %s", p2, lines[0])
 	}
 
 }
