@@ -47,3 +47,30 @@ func Test_cdCmd_absolutePath(t *testing.T) {
 		t.Fatalf("Expected path to be %s, got %s", expectedPath, output)
 	}
 }
+
+func Test_cdCmd_exactMatch(t *testing.T) {
+	p1 := p.Join(td, "web-console")
+	p2 := p.Join(td, "/client/website")
+	p3 := p.Join(td, "web")
+
+	conf := &testConfig{
+		Entries: s.Entries{
+			s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
+			s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
+		},
+	}
+
+	output := capture(&os.Stdout, func() {
+		cdCmd(cli.Args{"web"}, conf)
+	})
+
+	// If someone typed a dir exactly, jump straight to it. Not good for short
+	// names like this test here, but pretty useful for most of the catch-all
+	// directories.
+	expectedPath := p3 + "\n"
+
+	if output != expectedPath {
+		t.Fatalf("Expected path to be %s, got %s", expectedPath, output)
+	}
+}
