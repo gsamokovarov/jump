@@ -19,9 +19,8 @@ and let it learn your habits for a while. Simply `cd` to your directories like
 you always do. After a while, jump would know how to get you when you type
 `j somewhere` or just `j some`.
 
-Maybe you made a typo like `j ssome`? No problem, jump uses fuzzy
-searching, so you can type tiny search terms (mostly 2 or 3 characters
-are enough) and be tolerated even when you have typos.
+Maybe you made a typo like `j ssome`? No problem, jump uses fuzzy searching, so
+you can type tiny, loose search term and be tolerated for your typos.
 
 ### Integration
 
@@ -36,7 +35,6 @@ zshell:
 eval "$(jump shell)"
 ```
 
-Maybe you like fish shell...
 Put the line below in `~/.config/fish/config.fish` for fish shell:
 
 ```fish
