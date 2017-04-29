@@ -1,4 +1,7 @@
 <p align="right">
+  <a href="https://travis-ci.org/gsamokovarov/jump">
+    <img src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master" alt="Build Status" data-canonical-src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master">
+  </a>
   <a href="https://github.com/gsamokovarov/jump/releases">[releases]</a>
 </p>
 
@@ -33,14 +36,12 @@ zshell:
 eval "$(jump shell)"
 ```
 
-<details>
-<summary>Maybe you like fish shell...</summary>
+Maybe you like fish shell...
 Put the line below in `~/.config/fish/config.fish` for fish shell:
 
 ```fish
 status --is-interactive; and . (jump shell | psub)
 ```
-</details>
 
 Once the integration is done, work like you always do. In a while you
 can just `j` to your projects from everywhere. 👀
@@ -74,8 +75,6 @@ Jump comes in packages for macOS (homebrew) and Linux.
 brew install jump
 ```
 
-<details>
-<summary>Linux</summary>
 ### Ubuntu/Debian
 
 ```bash
@@ -89,23 +88,9 @@ sudo dpkg -i jump_0.10.0_amd64.deb
 wget https://github.com/gsamokovarov/jump/releases/download/v0.10.0/jump-0.10.0-1.x86_64.rpm
 sudo rpm -i jump-0.10.0-1.x86_64.rpm
 ```
-</details>
 
 You can also build jump by yourself. Or hack on it, you know, if you like Go
-and unix stuff. 💻
-
-<details>
-<summary>Source</summary>
-You need a working [Go workspace].
-
-```bash
-go get github.com/gsamokovarov/jump
-git clone https://github.com/gsamokovarov/jump
-cd jump
-make
-mv jump ~/bin # Or /usr/local/bin, if ~/bin isn't in $PATH.
-```
-</details>
+and UNIX stuff. 💻
 
 ## Why
 
