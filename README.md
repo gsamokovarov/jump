@@ -90,9 +90,7 @@ and UNIX stuff. 💻
 
 ## Build
 
-<a href="https://travis-ci.org/gsamokovarov/jump">
-  <img src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master" alt="Build Status" data-canonical-src="https://travis-ci.org/gsamokovarov/jump.svg?branch=master">
-</a>
+[![Build Status](https://travis-ci.org/gsamokovarov/jump.svg?branch=master)](https://travis-ci.org/gsamokovarov/jump) [![Go Report Card](https://goreportcard.com/badge/github.com/gsamokovarov/jump)](https://goreportcard.com/report/github.com/gsamokovarov/jump)
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
