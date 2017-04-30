@@ -9,7 +9,7 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func updateCmd(args cli.Args, conf config.Config) {
+func chdirCmd(args cli.Args, conf config.Config) {
 	dir, err := os.Getwd()
 	if len(args) == 0 && err != nil {
 		cli.Exitf(1, "err: %s\n", err)
@@ -36,5 +36,5 @@ func updateCmd(args cli.Args, conf config.Config) {
 }
 
 func init() {
-	cli.RegisterCommand("chdir", "Update the score of directory during chdir.", updateCmd)
+	cli.RegisterCommand("chdir", "Update the score of directory during chdir.", chdirCmd)
 }
