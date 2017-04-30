@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"os"
 	p "path"
 	"testing"
 
@@ -45,5 +46,30 @@ func Test_chdirCmd(t *testing.T) {
 
 	if entries.Len() != 2 {
 		t.Fatalf("Expected two entries, got %v", entries)
+	}
+}
+
+func Test_chdirCmd_cwd(t *testing.T) {
+	conf := &testConfig{}
+
+	entries, _ := conf.ReadEntries()
+
+	if entries.Len() != 0 {
+		t.Fatal("Expected entries to be empty")
+	}
+
+	// Test that the current directory is added to the list.
+	chdirCmd(cli.Args{}, conf)
+
+	entries, _ = conf.ReadEntries()
+
+	if entries.Len() != 1 {
+		t.Fatalf("Expected one entry, got %v", entries)
+	}
+
+	cwd, _ := os.Getwd()
+
+	if (*entries)[0].Path != cwd {
+		t.Fatalf("Expected entry to be %s, got %v", cwd, entries)
 	}
 }
