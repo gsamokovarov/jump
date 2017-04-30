@@ -11,13 +11,13 @@ import (
 )
 
 func Test_hintCmd(t *testing.T) {
-	wc := p.Join(td, "web-console")
-	web := p.Join(td, "/client/website")
+	p1 := p.Join(td, "web-console")
+	p2 := p.Join(td, "/client/website")
 
 	conf := &testConfig{
 		Entries: s.Entries{
-			s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
-			s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
+			s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
 		},
 	}
 
@@ -27,12 +27,12 @@ func Test_hintCmd(t *testing.T) {
 
 	lines := strings.Fields(output)
 
-	if lines[0] != wc {
-		t.Fatalf("Expected first line to be %s, got %s", wc, lines[0])
+	if lines[0] != p1 {
+		t.Fatalf("Expected first line to be %s, got %s", p1, lines[0])
 	}
 
-	if lines[1] != web {
-		t.Fatalf("Expected first line to be %s, got %s", web, lines[1])
+	if lines[1] != p2 {
+		t.Fatalf("Expected first line to be %s, got %s", p2, lines[1])
 	}
 }
 
