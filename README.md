@@ -19,6 +19,8 @@ you always do. After a while, jump would know how to get you when you type
 Maybe you made a typo like `j ssome`? No problem, jump uses fuzzy searching, so
 you can type tiny, loose search term and be tolerated for your typos.
 
+![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
+
 ### Integration
 
 Jump needs to be integrated into your shell to observe your `cd` habits. The
@@ -41,10 +43,9 @@ status --is-interactive; and . (jump shell | psub)
 Once the integration is done, work like you always do. In a while you
 can just `j` to your projects from everywhere. 👀
 
-![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
+### But `j` is not my favourite letter!
 
-But `j` is not my favourite letter! This is fine, you can bind jump to `z`,
-with this:
+This is fine, you can bind jump to `z`, with this:
 
 ```bash
 eval "$(jump shell --bind=z)"
@@ -86,19 +87,6 @@ sudo rpm -i jump-0.13.0-1.x86_64.rpm
 
 You can also build jump by yourself. Or hack on it, you know, if you like Go
 and UNIX stuff. 💻
-
-## Why
-
-Why use jump over autojump, z or something else is a valid question. I was an
-avid autojump user before building jump myself. My sloppy fingers were the main
-motivation.
-
-I mistype a lot. With autojump, I was never tolerated for a typo. I also wanted
-to utilize fuzzy searching, as it saves so much effort.
-
-Over the time I have tweaked the ranking and matching algorithm to fit my
-needs, so I thing it may fit yours as well. Here is a [conversation] about
-little tips and tricks using jump.
 
 ## Build
 
