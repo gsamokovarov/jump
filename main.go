@@ -13,13 +13,15 @@ func main() {
 
 	config, err := config.SetupDefault(os.Getenv("JUMP_HOME"))
 	if err != nil {
-		cli.Exitf(1, "bug: %s", err.Error())
+		cli.Exitf(1, "bug: %v\n", err)
 	}
 
 	command, err := cli.DispatchCommand(args, "--help")
 	if err != nil {
-		cli.Exitf(1, "bug: %s", err.Error())
+		cli.Exitf(1, "bug: %v\n", err)
 	}
 
-	command.Action(args.Rest(), config)
+	if err := command.Action(args.Rest(), config); err != nil {
+		cli.Exitf(1, "err: %v\n", err)
+	}
 }

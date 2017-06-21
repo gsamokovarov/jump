@@ -13,18 +13,18 @@ import (
 const proximity = 5
 const osSeparator = string(os.PathSeparator)
 
-func cdCmd(args cli.Args, conf config.Config) {
+func cdCmd(args cli.Args, conf config.Config) error {
 	term := args.CommandName()
 	entries, err := conf.ReadEntries()
 
 	if err != nil {
-		cli.Exitf(1, "%v\n", err)
+		return err
 	}
 
 	// If an auto-completion triggered a full path, just go there.
 	if filepath.IsAbs(term) {
 		cli.Outf("%s\n", term)
-		return
+		return nil
 	}
 
 	index, search := 0, conf.ReadSearch()
@@ -41,7 +41,7 @@ func cdCmd(args cli.Args, conf config.Config) {
 			// ignore the term.
 			if !fwdPathIsCwd(dir) {
 				cli.Outf("%s\n", dir)
-				return
+				return nil
 			}
 		}
 	}
@@ -77,6 +77,8 @@ func cdCmd(args cli.Args, conf config.Config) {
 
 		break
 	}
+
+	return nil
 }
 
 func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {

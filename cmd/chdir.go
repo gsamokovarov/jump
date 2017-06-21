@@ -9,19 +9,19 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func chdirCmd(args cli.Args, conf config.Config) {
+func chdirCmd(args cli.Args, conf config.Config) error {
 	dir, err := os.Getwd()
 	if len(args) == 0 && err != nil {
-		cli.Exitf(1, "err: %s\n", err)
+		return err
 	} else {
 		if dir, err = filepath.Abs(args.CommandName()); err != nil {
-			cli.Exitf(1, "err: %s\n", err)
+			return err
 		}
 	}
 
 	entries, err := conf.ReadEntries()
 	if err != nil {
-		cli.Exitf(1, "err: %s\n", err)
+		return err
 	}
 
 	if entry, found := entries.Find(dir); found {
@@ -31,8 +31,10 @@ func chdirCmd(args cli.Args, conf config.Config) {
 	}
 
 	if err := conf.WriteEntries(entries); err != nil {
-		cli.Exitf(1, "err: %s\n", err)
+		return err
 	}
+
+	return nil
 }
 
 func init() {

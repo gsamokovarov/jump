@@ -22,7 +22,9 @@ func Test_topCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		topCmd(cli.Args{}, conf)
+		if err := topCmd(cli.Args{}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	})
 
 	lines := strings.Split(output, "\n")

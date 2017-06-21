@@ -7,8 +7,10 @@ import (
 
 const version = "0.13.0"
 
-func versionCmd(cli.Args, config.Config) {
+func versionCmd(cli.Args, config.Config) error {
 	cli.Outf("%s\n", version)
+
+	return nil
 }
 
 func init() {

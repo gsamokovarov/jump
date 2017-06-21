@@ -8,7 +8,7 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func hintCmd(args cli.Args, conf config.Config) {
+func hintCmd(args cli.Args, conf config.Config) error {
 	var hints scoring.Entries
 
 	term := args.CommandName()
@@ -16,7 +16,7 @@ func hintCmd(args cli.Args, conf config.Config) {
 
 	entries, err := conf.ReadEntries()
 	if err != nil {
-		cli.Exitf(1, "%s\n", err)
+		return err
 	}
 
 	if len(term) == 0 {
@@ -33,6 +33,8 @@ func hintCmd(args cli.Args, conf config.Config) {
 	for _, entry := range hints {
 		cli.Outf("%s\n", entry.Path)
 	}
+
+	return nil
 }
 
 func hintSmartSelect(entries *scoring.Entries, term string, smart bool) scoring.Entries {

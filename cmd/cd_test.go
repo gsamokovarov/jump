@@ -19,7 +19,9 @@ func Test_cdCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		cdCmd(cli.Args{"wc"}, conf)
+		if err := cdCmd(cli.Args{"wc"}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	})
 
 	expectedPath := p.Join(td, "web-console")
@@ -38,7 +40,9 @@ func Test_cdCmd_absolutePath(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		cdCmd(cli.Args{"/absolute/path"}, conf)
+		if err := cdCmd(cli.Args{"/absolute/path"}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	})
 
 	expectedPath := "/absolute/path\n"
@@ -62,7 +66,9 @@ func Test_cdCmd_exactMatch(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		cdCmd(cli.Args{"web"}, conf)
+		if err := cdCmd(cli.Args{"web"}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	})
 
 	// If someone typed a dir exactly, jump straight to it. Not good for short

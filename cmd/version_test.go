@@ -5,7 +5,7 @@ import (
 )
 
 func Example_versionCmd() {
-	versionCmd(cli.Args{}, nil)
+	_ = versionCmd(cli.Args{}, nil)
 
 	// Output:
 	// 0.13.0

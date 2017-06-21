@@ -5,7 +5,7 @@ import (
 )
 
 func Example_helpCmd() {
-	helpCmd(cli.Args{}, nil)
+	_ = helpCmd(cli.Args{}, nil)
 
 	// Output:
 	// Usage: jump [COMMAND ...]

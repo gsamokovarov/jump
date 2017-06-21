@@ -22,7 +22,9 @@ func Test_hintCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		hintCmd(cli.Args{}, conf)
+		if err := hintCmd(cli.Args{}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	})
 
 	lines := strings.Fields(output)
@@ -50,7 +52,9 @@ func Test_hintCmd_smart(t *testing.T) {
 	}
 
 	lines := strings.Fields(capture(&os.Stdout, func() {
-		hintCmd(cli.Args{"wc", "--smart"}, conf)
+		if err := hintCmd(cli.Args{"wc", "--smart"}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	}))
 
 	if len(lines) != 1 {
@@ -63,7 +67,9 @@ func Test_hintCmd_smart(t *testing.T) {
 
 	// If you write more than 6 chars, maybe you need more options.
 	lines = strings.Fields(capture(&os.Stdout, func() {
-		hintCmd(cli.Args{"webonos", "--smart"}, conf)
+		if err := hintCmd(cli.Args{"webonos", "--smart"}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	}))
 
 	if len(lines) != 3 {
@@ -72,7 +78,9 @@ func Test_hintCmd_smart(t *testing.T) {
 
 	// If you wrote more than 9 chars, well, we tried.
 	lines = strings.Fields(capture(&os.Stdout, func() {
-		hintCmd(cli.Args{"client/webs", "--smart"}, conf)
+		if err := hintCmd(cli.Args{"client/webs", "--smart"}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	}))
 
 	if len(lines) != 1 {

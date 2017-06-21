@@ -11,7 +11,9 @@ import (
 func Test_cleanCmd(t *testing.T) {
 	conf := &testConfig{}
 
-	chdirCmd(cli.Args{"/inexistent/dir/dh891n2kisdha"}, conf)
+	if err := chdirCmd(cli.Args{"/inexistent/dir/dh891n2kisdha"}, conf); err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
 
 	entries, _ := conf.ReadEntries()
 
@@ -20,7 +22,9 @@ func Test_cleanCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		cleanCmd(cli.Args{}, conf)
+		if err := cleanCmd(cli.Args{}, conf); err != nil {
+			t.Errorf("Unexpected error %v", err)
+		}
 	})
 
 	if !strings.Contains(output, "Cleaning") {

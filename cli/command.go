@@ -8,7 +8,7 @@ import (
 )
 
 // CommandFn represents a command handler function.
-type CommandFn func(Args, config.Config)
+type CommandFn func(Args, config.Config) error
 
 // Command represents a command line action.
 type Command struct {

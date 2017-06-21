@@ -7,10 +7,10 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
-func topCmd(_ cli.Args, conf config.Config) {
+func topCmd(_ cli.Args, conf config.Config) error {
 	entries, err := conf.ReadEntries()
 	if err != nil {
-		cli.Exitf(1, "%s\n", err)
+		return err
 	}
 
 	// We usually keep them reversely sort to optimize the fuzzy search.
@@ -19,6 +19,8 @@ func topCmd(_ cli.Args, conf config.Config) {
 	for _, entry := range *entries {
 		cli.Outf("%s\n", entry.Path)
 	}
+
+	return nil
 }
 
 func init() {

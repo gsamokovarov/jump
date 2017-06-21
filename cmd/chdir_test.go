@@ -30,7 +30,9 @@ func Test_chdirCmd(t *testing.T) {
 	}
 
 	// Test that a new entry is added to the list.
-	chdirCmd(cli.Args{p2}, conf)
+	if err := chdirCmd(cli.Args{p2}, conf); err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
 
 	entries, _ = conf.ReadEntries()
 
@@ -59,7 +61,9 @@ func Test_chdirCmd_cwd(t *testing.T) {
 	}
 
 	// Test that the current directory is added to the list.
-	chdirCmd(cli.Args{}, conf)
+	if err := chdirCmd(cli.Args{}, conf); err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
 
 	entries, _ = conf.ReadEntries()
 

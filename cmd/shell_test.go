@@ -5,7 +5,7 @@ import (
 )
 
 func Example_shellCmd_Bash() {
-	shellCmd(cli.Args{"bash"}, nil)
+	_ = shellCmd(cli.Args{"bash"}, nil)
 
 	// Output:
 	// # Put the line below in ~/.bashrc or ~/bash_profile:
@@ -32,7 +32,7 @@ func Example_shellCmd_Bash() {
 }
 
 func Example_shellCmd_Zsh() {
-	shellCmd(cli.Args{"zsh"}, nil)
+	_ = shellCmd(cli.Args{"zsh"}, nil)
 
 	// Output:
 	// # Put the line below in ~/.zshrc:
@@ -61,7 +61,7 @@ func Example_shellCmd_Zsh() {
 }
 
 func Example_shellCmd_Fish() {
-	shellCmd(cli.Args{"fish"}, nil)
+	_ = shellCmd(cli.Args{"fish"}, nil)
 
 	// Output:
 	// # Put the line below in ~/.config/fish/config.fish:
@@ -84,7 +84,7 @@ func Example_shellCmd_Fish() {
 }
 
 func Example_shellCmd_Bind() {
-	shellCmd(cli.Args{"bash", "--bind=z"}, nil)
+	_ = shellCmd(cli.Args{"bash", "--bind=z"}, nil)
 
 	// Output:
 	// # Put the line below in ~/.bashrc or ~/bash_profile:

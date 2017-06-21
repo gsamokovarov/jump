@@ -13,7 +13,7 @@ var pinUsageMsg = `jump pin term [directory]
   No term specified. See the signature of the pin call above.
 `
 
-func pinCmd(args cli.Args, conf config.Config) {
+func pinCmd(args cli.Args, conf config.Config) error {
 	var err error
 
 	term := args.CommandName()
@@ -24,18 +24,16 @@ func pinCmd(args cli.Args, conf config.Config) {
 	dir := args.Rest().CommandName()
 	if dir == "" {
 		if dir, err = os.Getwd(); err != nil {
-			cli.Exitf(1, "err: %s\n", err)
+			return err
 		}
 	}
 
 	dir, err = filepath.Abs(dir)
 	if err != nil {
-		cli.Exitf(1, "err: %s\n", err)
+		return err
 	}
 
-	if err = conf.WritePin(term, dir); err != nil {
-		cli.Exitf(1, "err: %s\n", err)
-	}
+	return conf.WritePin(term, dir)
 }
 
 func init() {

@@ -8,10 +8,10 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-func cleanCmd(args cli.Args, conf config.Config) {
+func cleanCmd(args cli.Args, conf config.Config) error {
 	entries, err := conf.ReadEntries()
 	if err != nil {
-		cli.Exitf(1, "%s\n", err)
+		return err
 	}
 
 	cleanEntries := make(scoring.Entries, len(*entries))
@@ -26,6 +26,8 @@ func cleanCmd(args cli.Args, conf config.Config) {
 
 		conf.WriteEntries(&cleanEntries)
 	}
+
+	return nil
 }
 
 func init() {

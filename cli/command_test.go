@@ -7,14 +7,14 @@ import (
 )
 
 func TestDispatchCommand(t *testing.T) {
-	RegisterCommand("test", "A testing command.", func(Args, config.Config) {})
+	RegisterCommand("test", "A testing command.", func(Args, config.Config) error { return nil })
 
 	args := Args([]string{"test"})
 	if _, err := DispatchCommand(args, "default"); err == nil {
 		t.Errorf("Expected an error on missing registered default command")
 	}
 
-	RegisterCommand("default", "A testing command.", func(Args, config.Config) {})
+	RegisterCommand("default", "A testing command.", func(Args, config.Config) error { return nil })
 
 	if command, _ := DispatchCommand(args, "default"); command.Name != "test" {
 		t.Errorf("Expected test command to be dispatched and executed")
@@ -22,7 +22,7 @@ func TestDispatchCommand(t *testing.T) {
 }
 
 func TestCommandIsOption(t *testing.T) {
-	command := &Command{"--test", "Testing command.", func(Args, config.Config) {}}
+	command := &Command{"--test", "Testing command.", func(Args, config.Config) error { return nil }}
 
 	if !command.IsOption() {
 		t.Errorf("Expected --test command to be an option")

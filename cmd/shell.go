@@ -8,7 +8,7 @@ import (
 	"github.com/gsamokovarov/jump/shell"
 )
 
-func shellCmd(args cli.Args, _ config.Config) {
+func shellCmd(args cli.Args, _ config.Config) error {
 	hint := args.CommandName()
 	if len(hint) == 0 {
 		hint = os.Getenv("SHELL")
@@ -18,6 +18,8 @@ func shellCmd(args cli.Args, _ config.Config) {
 	shortcut := args.Get("--bind", "j")
 
 	cli.Outf("%s", sh.MustCompile(shortcut))
+
+	return nil
 }
 
 func init() {
