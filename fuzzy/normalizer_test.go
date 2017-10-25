@@ -1,35 +1,35 @@
 package fuzzy
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/gsamokovarov/assert"
+)
 
 func TestNoSeparators(t *testing.T) {
-	norm := NewNormalizer("soc")
+	n := NewNormalizer("soc")
 
-	if norm.NormalizePath("/Users/foo/Development/society") != "society" {
-		t.Error("Expected soc to normalize to society")
-	}
+	assert.Equal(t, "society",
+		n.NormalizePath("/Users/foo/Development/society"))
 }
 
 func TestSingleSeparator(t *testing.T) {
-	norm := NewNormalizer("dev/soc")
+	n := NewNormalizer("dev/soc")
 
-	if norm.NormalizePath("/Users/foo/Development/society") != "developmentsociety" {
-		t.Error("Expected dev/soc to normalize to developmentsociety")
-	}
+	assert.Equal(t, "developmentsociety",
+		n.NormalizePath("/Users/foo/Development/society"))
 }
 
 func TestMultipleSeparators(t *testing.T) {
-	norm := NewNormalizer("dev/soc/website")
+	n := NewNormalizer("dev/soc/website")
 
-	if norm.NormalizePath("/Users/foo/Development/society/website") != "developmentsocietywebsite" {
-		t.Error("Expected dev/soc/web to normalize to developmentsocietywebsite")
-	}
+	assert.Equal(t, "developmentsocietywebsite",
+		n.NormalizePath("/Users/foo/Development/society/website"))
 }
 
 func TestCaseSensitivity(t *testing.T) {
-	norm := NewNormalizer("Dev")
+	n := NewNormalizer("Dev")
 
-	if norm.NormalizePath("/Users/foo/Development") != "Development" {
-		t.Error("Expected Dev to normalize to Development")
-	}
+	assert.Equal(t, "Development",
+		n.NormalizePath("/Users/foo/Development"))
 }

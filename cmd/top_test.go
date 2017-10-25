@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
 	s "github.com/gsamokovarov/jump/scoring"
 )
@@ -22,18 +23,13 @@ func Test_topCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		if err := topCmd(cli.Args{}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
+		assert.Nil(t, topCmd(cli.Args{}, conf))
 	})
 
 	lines := strings.Split(output, "\n")
+	assert.Len(t, 3, lines)
 
-	if lines[0] != wc {
-		t.Fatalf("Expected first line to be %s, got %s", wc, lines[0])
-	}
-
-	if lines[1] != web {
-		t.Fatalf("Expected first line to be %s, got %s", web, lines[1])
-	}
+	assert.Equal(t, wc, lines[0])
+	assert.Equal(t, web, lines[1])
+	assert.Equal(t, "", lines[2])
 }

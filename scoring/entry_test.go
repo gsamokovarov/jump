@@ -1,20 +1,20 @@
 package scoring
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/gsamokovarov/assert"
+)
 
 func TestEntriesCalculateScore(t *testing.T) {
 	entry := Entry{"/foo", NewScore()}
 
-	if got, expected := entry.CalculateScore(), entry.Score.Calculate(); got != expected {
-		t.Errorf("Expected entry.CalculateScore to be %f, got %f", expected, got)
-	}
+	assert.Equal(t, entry.Score.Calculate(), entry.CalculateScore())
 }
 
 func TestEntriesUpdateScore(t *testing.T) {
 	entry := Entry{"/foo", NewScore()}
 	entry.UpdateScore()
 
-	if got, expected := entry.Score.Weight, int64(2); got != expected {
-		t.Errorf("Expected entry.UpdateScore Weight to be %d, got %d", expected, got)
-	}
+	assert.Equal(t, 2, entry.Score.Weight)
 }

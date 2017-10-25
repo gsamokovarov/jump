@@ -5,29 +5,23 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
 )
 
 func Test_cleanCmd(t *testing.T) {
 	conf := &testConfig{}
 
-	if err := chdirCmd(cli.Args{"/inexistent/dir/dh891n2kisdha"}, conf); err != nil {
-		t.Errorf("Unexpected error %v", err)
-	}
+	assert.Nil(t, chdirCmd(cli.Args{"/inexistent/dir/dh891n2kisdha"}, conf))
 
-	entries, _ := conf.ReadEntries()
+	entries, err := conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 1 {
-		t.Fatalf("Expected one entry, got %v", entries)
-	}
+	assert.Len(t, 1, entries)
 
 	output := capture(&os.Stdout, func() {
-		if err := cleanCmd(cli.Args{}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
+		assert.Nil(t, cleanCmd(cli.Args{}, conf))
 	})
 
-	if !strings.Contains(output, "Cleaning") {
-		t.Fatalf("Expected to clean entries, got:\n%s", output)
-	}
+	assert.True(t, strings.Contains(output, "Cleaning"))
 }

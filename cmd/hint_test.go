@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
 	s "github.com/gsamokovarov/jump/scoring"
 )
@@ -22,20 +23,14 @@ func Test_hintCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		if err := hintCmd(cli.Args{}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
+		assert.Nil(t, hintCmd(cli.Args{}, conf))
 	})
 
 	lines := strings.Fields(output)
+	assert.Len(t, 2, lines)
 
-	if lines[0] != p1 {
-		t.Fatalf("Expected first line to be %s, got %s", p1, lines[0])
-	}
-
-	if lines[1] != p2 {
-		t.Fatalf("Expected first line to be %s, got %s", p2, lines[1])
-	}
+	assert.Equal(t, p1, lines[0])
+	assert.Equal(t, p2, lines[1])
 }
 
 func Test_hintCmd_smart(t *testing.T) {
@@ -51,44 +46,30 @@ func Test_hintCmd_smart(t *testing.T) {
 		},
 	}
 
-	lines := strings.Fields(capture(&os.Stdout, func() {
-		if err := hintCmd(cli.Args{"wc", "--smart"}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
-	}))
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, hintCmd(cli.Args{"wc", "--smart"}, conf))
+	})
 
-	if len(lines) != 1 {
-		t.Fatalf("Expected to get exactly one line, got %v", lines)
-	}
+	lines := strings.Fields(output)
+	assert.Len(t, 1, lines)
 
-	if lines[0] != p1 {
-		t.Fatalf("Expected line to be %s, got %s", p1, lines[0])
-	}
+	assert.Equal(t, p1, lines[0])
+
+	output = capture(&os.Stdout, func() {
+		assert.Nil(t, hintCmd(cli.Args{"webonos", "--smart"}, conf))
+	})
 
 	// If you write more than 6 chars, maybe you need more options.
-	lines = strings.Fields(capture(&os.Stdout, func() {
-		if err := hintCmd(cli.Args{"webonos", "--smart"}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
-	}))
+	lines = strings.Fields(output)
+	assert.Len(t, 3, lines)
 
-	if len(lines) != 3 {
-		t.Fatalf("Expected to get exactly 3 lines, got %v", lines)
-	}
+	output = capture(&os.Stdout, func() {
+		assert.Nil(t, hintCmd(cli.Args{"client/webs", "--smart"}, conf))
+	})
 
 	// If you wrote more than 9 chars, well, we tried.
-	lines = strings.Fields(capture(&os.Stdout, func() {
-		if err := hintCmd(cli.Args{"client/webs", "--smart"}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
-	}))
+	lines = strings.Fields(output)
+	assert.Len(t, 1, lines)
 
-	if len(lines) != 1 {
-		t.Fatalf("Expected to get exactly one line, got %v", lines)
-	}
-
-	if lines[0] != p2 {
-		t.Fatalf("Expected line to be %s, got %s", p2, lines[0])
-	}
-
+	assert.Equal(t, p2, lines[0])
 }

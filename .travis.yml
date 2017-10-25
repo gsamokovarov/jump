@@ -5,6 +5,7 @@ go:
   - master
 
 script:
+  - go get github.com/gsamokovarov/assert
   - make test
 
 matrix:

@@ -3,8 +3,9 @@ package jsonio
 import (
 	"bytes"
 	"io"
-	"reflect"
 	"testing"
+
+	"github.com/gsamokovarov/assert"
 )
 
 type testIO struct {
@@ -39,22 +40,16 @@ func TestDecode(t *testing.T) {
 	var value struct{ Ok bool }
 
 	r := newTestIO(`{"Ok":true}`)
-	if err := Decode(r, &value); err != nil {
-		t.Errorf("Decoding unsuccessful: %v", err)
-	}
+	assert.Nil(t, Decode(r, &value))
 
-	if !value.Ok {
-		t.Errorf("Expected value.Ok to be true, got %v", value)
-	}
+	assert.True(t, value.Ok)
 }
 
 func TestBadDecode(t *testing.T) {
 	var value struct{ Ok bool }
 
 	r := newTestIO(`{"Ok":true`)
-	if err := Decode(r, &value); err == nil {
-		t.Errorf("Expected error, got %v", err)
-	}
+	assert.NotNil(t, Decode(r, &value))
 }
 
 func TestEncode(t *testing.T) {
@@ -62,12 +57,10 @@ func TestEncode(t *testing.T) {
 	value.Ok = true
 
 	w := newTestIO("")
-	if err := Encode(w, value); err != nil {
-		t.Errorf("Encoding unsuccessful: %v", err)
-	}
+	assert.Nil(t, Encode(w, value))
 
-	want := `{"Ok":true}`
-	if got, err := w.ReadString('\n'); reflect.DeepEqual(got, want) {
-		t.Errorf("Expected %v, got %v %v", want, got, err)
-	}
+	json, err := w.ReadString('\n')
+	assert.Nil(t, err)
+
+	assert.Equal(t, "{\"Ok\":true}\n", json)
 }

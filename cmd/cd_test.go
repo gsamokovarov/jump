@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
 	s "github.com/gsamokovarov/jump/scoring"
 )
@@ -19,16 +20,10 @@ func Test_cdCmd(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		if err := cdCmd(cli.Args{"wc"}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
+		assert.Nil(t, cdCmd(cli.Args{"wc"}, conf))
 	})
 
-	expectedPath := p.Join(td, "web-console")
-
-	if !strings.Contains(output, expectedPath) {
-		t.Fatalf("Expected path to be %s, got %s", expectedPath, output)
-	}
+	assert.True(t, strings.Contains(output, p.Join(td, "web-console")))
 }
 
 func Test_cdCmd_absolutePath(t *testing.T) {
@@ -40,16 +35,10 @@ func Test_cdCmd_absolutePath(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		if err := cdCmd(cli.Args{"/absolute/path"}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
+		assert.Nil(t, cdCmd(cli.Args{"/absolute/path"}, conf))
 	})
 
-	expectedPath := "/absolute/path\n"
-
-	if output != expectedPath {
-		t.Fatalf("Expected path to be %s, got %s", expectedPath, output)
-	}
+	assert.Equal(t, "/absolute/path\n", output)
 }
 
 func Test_cdCmd_exactMatch(t *testing.T) {
@@ -66,17 +55,11 @@ func Test_cdCmd_exactMatch(t *testing.T) {
 	}
 
 	output := capture(&os.Stdout, func() {
-		if err := cdCmd(cli.Args{"web"}, conf); err != nil {
-			t.Errorf("Unexpected error %v", err)
-		}
+		assert.Nil(t, cdCmd(cli.Args{"web"}, conf))
 	})
 
 	// If someone typed a dir exactly, jump straight to it. Not good for short
 	// names like this test here, but pretty useful for most of the catch-all
 	// directories.
-	expectedPath := p3 + "\n"
-
-	if output != expectedPath {
-		t.Fatalf("Expected path to be %s, got %s", expectedPath, output)
-	}
+	assert.Equal(t, p3+"\n", output)
 }

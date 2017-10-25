@@ -1,15 +1,15 @@
 package fuzzy
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/gsamokovarov/assert"
+)
 
 func TestTwoNaiveStrings(t *testing.T) {
-	if Length("fd", "falcon-dev") != 2 {
-		t.Error("Expected fd and falcon-dev to have an LCS length of 2")
-	}
+	assert.Equal(t, 2, Length("fd", "falcon-dev"))
 }
 
 func TestLongerAfterShorter(t *testing.T) {
-	if Length("falcon-dev", "fd") != Length("fd", "falcon-dev") {
-		t.Error("Expected auto sorting of left and right")
-	}
+	assert.Equal(t, Length("falcon-dev", "fd"), Length("fd", "falcon-dev"))
 }

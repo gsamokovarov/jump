@@ -2,6 +2,8 @@ package scoring
 
 import (
 	"testing"
+
+	"github.com/gsamokovarov/assert"
 )
 
 func TestFuzzyEntriesLess(t *testing.T) {
@@ -10,9 +12,7 @@ func TestFuzzyEntriesLess(t *testing.T) {
 
 	entries := NewFuzzyEntries(Entries{e1, e2}, "wc")
 
-	if !entries.Less(0, 1) {
-		t.Errorf("Expected %v to come before %v", e1, e2)
-	}
+	assert.True(t, entries.Less(0, 1))
 }
 
 func TestFuzzyEntriesSort(t *testing.T) {
@@ -22,9 +22,10 @@ func TestFuzzyEntriesSort(t *testing.T) {
 	entries := &FuzzyEntries{Entries{e1, e2}, "wc"}
 	entries.Sort()
 
-	if e, ok := entries.Select(0); e.Path != "/Development/web-console" || !ok {
-		t.Errorf("Expected %v to be %v", e, e2)
-	}
+	e, ok := entries.Select(0)
+	assert.True(t, ok)
+
+	assert.Equal(t, e2, e)
 }
 
 func TestFuzzyEntriesSelect(t *testing.T) {
@@ -33,17 +34,17 @@ func TestFuzzyEntriesSelect(t *testing.T) {
 
 	entries := &FuzzyEntries{Entries{e1, e2}, "wc"}
 
-	if e, ok := entries.Select(0); e.Path != "/Development/web-client" || !ok {
-		t.Errorf("Expected %v to be %v", e, e1)
-	}
+	e, ok := entries.Select(0)
+	assert.True(t, ok)
+	assert.Equal(t, e1, e)
 
-	if e, ok := entries.Select(1); e.Path != "/Development/web-console" || !ok {
-		t.Errorf("Expected %v to be %v", e, e2)
-	}
+	e, ok = entries.Select(1)
+	assert.True(t, ok)
+	assert.Equal(t, e2, e)
 
-	if e, ok := entries.Select(2); e != nil || ok {
-		t.Errorf("Expected %v to be nil", e)
-	}
+	e, ok = entries.Select(2)
+	assert.False(t, ok)
+	assert.Nil(t, e)
 }
 
 func TestNewFuzzyEntries(t *testing.T) {
@@ -52,7 +53,7 @@ func TestNewFuzzyEntries(t *testing.T) {
 
 	entries := NewFuzzyEntries(Entries{e1, e2}, "wc")
 
-	if e, ok := entries.Select(0); e.Path != "/Development/web-console" || !ok {
-		t.Errorf("Expected %v to be %v", e, e2)
-	}
+	e, ok := entries.Select(0)
+	assert.True(t, ok)
+	assert.Equal(t, e2, e)
 }

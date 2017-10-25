@@ -5,6 +5,7 @@ import (
 	p "path"
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
 )
 
@@ -14,66 +15,55 @@ func Test_chdirCmd(t *testing.T) {
 
 	conf := &testConfig{}
 
-	entries, _ := conf.ReadEntries()
+	entries, err := conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 0 {
-		t.Fatal("Expected entries to be empty")
-	}
+	assert.Len(t, 0, entries)
 
 	// Test that a new entry is added to the list.
 	chdirCmd(cli.Args{p1}, conf)
 
-	entries, _ = conf.ReadEntries()
+	entries, err = conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 1 {
-		t.Fatalf("Expected one entry, got %v", entries)
-	}
+	assert.Len(t, 1, entries)
 
 	// Test that a new entry is added to the list.
-	if err := chdirCmd(cli.Args{p2}, conf); err != nil {
-		t.Errorf("Unexpected error %v", err)
-	}
+	assert.Nil(t, chdirCmd(cli.Args{p2}, conf))
 
-	entries, _ = conf.ReadEntries()
+	entries, err = conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 2 {
-		t.Fatalf("Expected two entries, got %v", entries)
-	}
+	assert.Len(t, 2, entries)
 
 	// Test that once an existing path is entered again, it's not duplicated in
 	// the entries.
-	chdirCmd(cli.Args{p2}, conf)
+	assert.Nil(t, chdirCmd(cli.Args{p2}, conf))
 
-	entries, _ = conf.ReadEntries()
+	entries, err = conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 2 {
-		t.Fatalf("Expected two entries, got %v", entries)
-	}
+	assert.Len(t, 2, entries)
 }
 
 func Test_chdirCmd_cwd(t *testing.T) {
 	conf := &testConfig{}
 
-	entries, _ := conf.ReadEntries()
+	entries, err := conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 0 {
-		t.Fatal("Expected entries to be empty")
-	}
+	assert.Len(t, 0, entries)
 
 	// Test that the current directory is added to the list.
-	if err := chdirCmd(cli.Args{}, conf); err != nil {
-		t.Errorf("Unexpected error %v", err)
-	}
+	assert.Nil(t, chdirCmd(cli.Args{}, conf))
 
-	entries, _ = conf.ReadEntries()
+	entries, err = conf.ReadEntries()
+	assert.Nil(t, err)
 
-	if entries.Len() != 1 {
-		t.Fatalf("Expected one entry, got %v", entries)
-	}
+	assert.Len(t, 1, entries)
 
-	cwd, _ := os.Getwd()
+	cwd, err := os.Getwd()
+	assert.Nil(t, err)
 
-	if entries[0].Path != cwd {
-		t.Fatalf("Expected entry to be %s, got %v", cwd, entries)
-	}
+	assert.Equal(t, entries[0].Path, cwd)
 }

@@ -1,8 +1,9 @@
 package scoring
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/gsamokovarov/assert"
 )
 
 func TestEntriesLen(t *testing.T) {
@@ -10,10 +11,7 @@ func TestEntriesLen(t *testing.T) {
 	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
-
-	if entries.Len() != 2 {
-		t.Errorf("Expected entries length to be 2, got %d", entries.Len())
-	}
+	assert.Len(t, 2, entries)
 }
 
 func TestEntriesSwap(t *testing.T) {
@@ -21,13 +19,9 @@ func TestEntriesSwap(t *testing.T) {
 	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
-	expectedEntries := Entries{e2, e1}
-
 	entries.Swap(0, 1)
 
-	if !reflect.DeepEqual(expectedEntries, entries) {
-		t.Errorf("Expected entries to be %v, got %v", expectedEntries, entries)
-	}
+	assert.Equal(t, Entries{e2, e1}, entries)
 }
 
 func TestEntriesLess(t *testing.T) {
@@ -36,9 +30,7 @@ func TestEntriesLess(t *testing.T) {
 
 	entries := Entries{e1, e2}
 
-	if !entries.Less(0, 1) {
-		t.Errorf("Expected %v to be less than %v", e1, e2)
-	}
+	assert.True(t, entries.Less(0, 1))
 }
 
 func TestEntriesFind(t *testing.T) {
@@ -47,13 +39,13 @@ func TestEntriesFind(t *testing.T) {
 
 	entries := Entries{e1, e2}
 
-	if e, ok := entries.Find("/foo"); e == nil || !ok {
-		t.Errorf("Expected %v to have /foo", entries)
-	}
+	e, ok := entries.Find("/foo")
+	assert.True(t, ok)
+	assert.Equal(t, e1, e)
 
-	if e, ok := entries.Find("/bar"); e != nil || ok {
-		t.Errorf("Expected %v to not have /bar", entries)
-	}
+	e, ok = entries.Find("/foo/bar")
+	assert.True(t, ok)
+	assert.Equal(t, e2, e)
 }
 
 func TestEntriesRemove(t *testing.T) {
@@ -62,21 +54,16 @@ func TestEntriesRemove(t *testing.T) {
 
 	entries := Entries{e1, e2}
 
-	if !entries.Remove("/foo") && entries.Len() != 1 {
-		t.Errorf("Expected %v to remove /foo", entries)
-	}
+	assert.True(t, entries.Remove("/foo"))
+	assert.Len(t, 1, entries)
 }
 
 func TestEntriesSort(t *testing.T) {
 	e1 := &Entry{"/foo", &Score{100, Now}}
 	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
-	entries := Entries{e1, e2}
-	expectedEntries := Entries{e1, e2}
-
+	entries := Entries{e2, e1}
 	entries.Sort()
 
-	if !reflect.DeepEqual(expectedEntries, entries) {
-		t.Errorf("Expected entries to be %v, got %v", expectedEntries, entries)
-	}
+	assert.Equal(t, Entries{e1, e2}, entries)
 }

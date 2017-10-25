@@ -5,6 +5,7 @@ import (
 	p "path"
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
 	s "github.com/gsamokovarov/jump/scoring"
 )
@@ -20,15 +21,11 @@ func Test_pinCmd(t *testing.T) {
 		},
 	}
 
-	pinCmd(cli.Args{"sait", p2}, conf)
+	assert.Nil(t, pinCmd(cli.Args{"sait", p2}, conf))
 
 	output := capture(&os.Stdout, func() {
 		cdCmd(cli.Args{"sait"}, conf)
 	})
 
-	expectedPath := p2 + "\n"
-
-	if output != expectedPath {
-		t.Fatalf("Expected path to be %s, got %s", expectedPath, output)
-	}
+	assert.Equal(t, p2+"\n", output)
 }
