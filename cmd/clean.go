@@ -14,17 +14,17 @@ func cleanCmd(args cli.Args, conf config.Config) error {
 		return err
 	}
 
-	cleanEntries := make(scoring.Entries, len(*entries))
-	copy(cleanEntries, *entries)
+	cleanEntries := make(scoring.Entries, len(entries))
+	copy(cleanEntries, entries)
 
-	for _, entry := range *entries {
+	for _, entry := range entries {
 		// Remove the entries that no longer exists.
 		if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
 			cli.Outf("Cleaning %s\n", entry.Path)
 			cleanEntries.Remove(entry.Path)
 		}
 
-		conf.WriteEntries(&cleanEntries)
+		conf.WriteEntries(cleanEntries)
 	}
 
 	return nil

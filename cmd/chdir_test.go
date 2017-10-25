@@ -73,7 +73,7 @@ func Test_chdirCmd_cwd(t *testing.T) {
 
 	cwd, _ := os.Getwd()
 
-	if (*entries)[0].Path != cwd {
+	if entries[0].Path != cwd {
 		t.Fatalf("Expected entry to be %s, got %v", cwd, entries)
 	}
 }

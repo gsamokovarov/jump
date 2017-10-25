@@ -16,8 +16,8 @@ func Test_topCmd(t *testing.T) {
 
 	conf := &testConfig{
 		Entries: s.Entries{
-			s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
-			s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
+			&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
+			&s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
 		},
 	}
 

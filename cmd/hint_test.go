@@ -16,8 +16,8 @@ func Test_hintCmd(t *testing.T) {
 
 	conf := &testConfig{
 		Entries: s.Entries{
-			s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
-			s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
+			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
 		},
 	}
 
@@ -45,9 +45,9 @@ func Test_hintCmd_smart(t *testing.T) {
 
 	conf := &testConfig{
 		Entries: s.Entries{
-			s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
-			s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
-			s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
+			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
+			&s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
 		},
 	}
 

@@ -14,9 +14,7 @@ func Test_forgetCmd(t *testing.T) {
 	p := p.Join(td, "web-console")
 
 	conf := &testConfig{
-		Entries: scoring.Entries{
-			scoring.Entry{p, scoring.NewScore()},
-		},
+		Entries: scoring.Entries{scoring.NewEntry(p)},
 	}
 
 	output := capture(&os.Stdout, func() {

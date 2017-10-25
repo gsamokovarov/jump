@@ -86,14 +86,15 @@ func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset in
 	normalizedTerm := norm.NormalizeTerm()
 
 	for index := offset; index <= offset+proximity; index++ {
-		if entry, ok := entries.Select(index); ok {
+		entry, ok := entries.Select(index)
+		if !ok {
+			continue
+		}
 
-			// Take only the base part, if you wanna do a deep search
-			// like Dev/nes.
-			basePath := filepath.Base(norm.NormalizePath(entry.Path))
-			if basePath == normalizedTerm {
-				return index
-			}
+		// Take only the base part, if you wanna do a deep search like Dev/nes.
+		basePath := filepath.Base(norm.NormalizePath(entry.Path))
+		if basePath == normalizedTerm {
+			return index
 		}
 	}
 

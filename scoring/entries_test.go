@@ -6,8 +6,8 @@ import (
 )
 
 func TestEntriesLen(t *testing.T) {
-	e1 := Entry{"/foo", &Score{100, Now}}
-	e2 := Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", &Score{100, Now}}
+	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
 
@@ -17,8 +17,8 @@ func TestEntriesLen(t *testing.T) {
 }
 
 func TestEntriesSwap(t *testing.T) {
-	e1 := Entry{"/foo", &Score{100, Now}}
-	e2 := Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", &Score{100, Now}}
+	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
 	expectedEntries := Entries{e2, e1}
@@ -31,8 +31,8 @@ func TestEntriesSwap(t *testing.T) {
 }
 
 func TestEntriesLess(t *testing.T) {
-	e1 := Entry{"/foo", &Score{100, Now}}
-	e2 := Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", &Score{100, Now}}
+	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
 
@@ -42,8 +42,8 @@ func TestEntriesLess(t *testing.T) {
 }
 
 func TestEntriesFind(t *testing.T) {
-	e1 := Entry{"/foo", &Score{100, Now}}
-	e2 := Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", &Score{100, Now}}
+	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
 
@@ -57,8 +57,8 @@ func TestEntriesFind(t *testing.T) {
 }
 
 func TestEntriesRemove(t *testing.T) {
-	e1 := Entry{"/foo", &Score{100, Now}}
-	e2 := Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", &Score{100, Now}}
+	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
 
@@ -68,8 +68,8 @@ func TestEntriesRemove(t *testing.T) {
 }
 
 func TestEntriesSort(t *testing.T) {
-	e1 := Entry{"/foo", &Score{100, Now}}
-	e2 := Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", &Score{100, Now}}
+	e2 := &Entry{"/foo/bar", &Score{200, Now}}
 
 	entries := Entries{e1, e2}
 	expectedEntries := Entries{e1, e2}

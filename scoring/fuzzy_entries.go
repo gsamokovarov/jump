@@ -19,8 +19,8 @@ func (fe *FuzzyEntries) Less(i, j int) bool {
 	norm := fuzzy.NewNormalizer(fe.Term)
 	term := norm.NormalizeTerm()
 
-	pathI := norm.NormalizePath((*fe).Entries[i].Path)
-	pathJ := norm.NormalizePath((*fe).Entries[j].Path)
+	pathI := norm.NormalizePath(fe.Entries[i].Path)
+	pathJ := norm.NormalizePath(fe.Entries[j].Path)
 
 	return fuzzy.Length(pathI, term) >= fuzzy.Length(pathJ, term)
 }
@@ -35,12 +35,12 @@ func (fe *FuzzyEntries) Sort() {
 }
 
 // Select selects the entry with greatest LCS score at index.
-func (fe *FuzzyEntries) Select(index int) (entry *Entry, ok bool) {
+func (fe *FuzzyEntries) Select(index int) (*Entry, bool) {
 	if length := fe.Len(); length == 0 || index >= length {
 		return nil, false
 	}
 
-	return &fe.Entries[index], true
+	return fe.Entries[index], true
 }
 
 // NewFuzzyEntries converts a FuzzyEntries and a target string to a
@@ -48,8 +48,8 @@ func (fe *FuzzyEntries) Select(index int) (entry *Entry, ok bool) {
 //
 // Entries is expected to be sorted in ASC before creating the FuzzyEntries.
 // This gives us the best match. This is not enforced, however.
-func NewFuzzyEntries(entries *Entries, target string) *FuzzyEntries {
-	fuzzyEntries := &FuzzyEntries{*entries, target}
+func NewFuzzyEntries(entries Entries, target string) *FuzzyEntries {
+	fuzzyEntries := &FuzzyEntries{entries, target}
 	fuzzyEntries.Sort()
 
 	return fuzzyEntries

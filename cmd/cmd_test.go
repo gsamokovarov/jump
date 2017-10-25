@@ -17,12 +17,12 @@ type testConfig struct {
 	Pin     string
 }
 
-func (c *testConfig) ReadEntries() (*scoring.Entries, error) {
-	return &c.Entries, nil
+func (c *testConfig) ReadEntries() (scoring.Entries, error) {
+	return c.Entries, nil
 }
 
-func (c *testConfig) WriteEntries(entries *scoring.Entries) error {
-	c.Entries = *entries
+func (c *testConfig) WriteEntries(entries scoring.Entries) error {
+	c.Entries = entries
 	return nil
 }
 

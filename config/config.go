@@ -18,8 +18,8 @@ const (
 // Config represents the config directory and all the miscellaneous
 // configuration files we can have in there.
 type Config interface {
-	ReadEntries() (*scoring.Entries, error)
-	WriteEntries(*scoring.Entries) error
+	ReadEntries() (scoring.Entries, error)
+	WriteEntries(scoring.Entries) error
 
 	ReadSearch() Search
 	WriteSearch(string, int) error
