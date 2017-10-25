@@ -8,8 +8,8 @@ Vagrant.configure(2) do |config|
     sudo gem install fpm
 
     cd /tmp
-    wget https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz
-    tar -C /usr/local -xzf go1.8.linux-amd64.tar.gz
+    wget https://storage.googleapis.com/golang/go1.9.1.linux-amd64.tar.gz
+    tar -C /usr/local -xzf go1.9.1.linux-amd64.tar.gz
 
     mkdir -p /home/vagrant/.go/src/github.com/gsamokovarov
     chown -hR vagrant:vagrant /home/vagrant/.go
