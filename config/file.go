@@ -17,6 +17,10 @@ func (ce *closedError) Error() string {
 }
 
 func newClosedError(flockErr, fileErr error) error {
+	if flockErr == nil && fileErr == nil {
+		return nil
+	}
+
 	if fileErr == nil {
 		fileErr = errors.New("no file errors")
 	}
@@ -38,8 +42,8 @@ func createOrOpenLockedFile(name string) (file *os.File, err error) {
 		return
 	}
 
-	if flockErr := syscall.Flock(int(file.Fd()), syscall.LOCK_EX); flockErr != nil {
-		err = flockErr
+	if ferr := syscall.Flock(int(file.Fd()), syscall.LOCK_EX); ferr != nil {
+		err = ferr
 	}
 
 	return
@@ -49,9 +53,5 @@ func closeLockedFile(file *os.File) error {
 	flockErr := syscall.Flock(int(file.Fd()), syscall.LOCK_UN)
 	fileErr := file.Close()
 
-	if flockErr != nil || fileErr != nil {
-		return newClosedError(flockErr, fileErr)
-	}
-
-	return nil
+	return newClosedError(flockErr, fileErr)
 }
