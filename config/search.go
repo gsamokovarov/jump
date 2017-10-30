@@ -19,7 +19,6 @@ func (c *fileConfig) ReadSearch() (search Search) {
 	if err != nil {
 		return
 	}
-
 	defer closeLockedFile(searchFile)
 
 	jsonio.Decode(searchFile, &search)
@@ -33,7 +32,6 @@ func (c *fileConfig) WriteSearch(term string, index int) error {
 	if err != nil {
 		return err
 	}
-
 	defer closeLockedFile(searchFile)
 
 	return jsonio.Encode(searchFile, Search{term, index})

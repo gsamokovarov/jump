@@ -12,7 +12,6 @@ func (c *fileConfig) FindPin(term string) (dir string, found bool) {
 	if err != nil {
 		return
 	}
-
 	defer closeLockedFile(pinsFile)
 
 	pins := map[string]string{}
@@ -29,7 +28,6 @@ func (c *fileConfig) WritePin(pin, value string) error {
 	if err != nil {
 		return err
 	}
-
 	defer closeLockedFile(pinsFile)
 
 	pins := map[string]string{}

@@ -13,7 +13,6 @@ func (c *fileConfig) ReadEntries() (entries scoring.Entries, err error) {
 	if err != nil {
 		return
 	}
-
 	defer closeLockedFile(scoresFile)
 
 	if err = jsonio.Decode(scoresFile, &entries); err != nil {

@@ -71,8 +71,7 @@ func normalizeDir(dir string) (string, error) {
 			return dir, err
 		}
 
-		homeDir := usr.HomeDir
-		return filepath.Join(homeDir, defaultDirName), nil
+		return filepath.Join(usr.HomeDir, defaultDirName), nil
 	}
 
 	return dir, nil
