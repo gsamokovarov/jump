@@ -12,7 +12,7 @@ type closedError struct {
 	fileErr  error
 }
 
-func (ce closedError) Error() string {
+func (ce *closedError) Error() string {
 	return fmt.Sprintf("%s, %s", ce.fileErr.Error(), ce.flockErr.Error())
 }
 
@@ -29,12 +29,11 @@ func newClosedError(flockErr, fileErr error) error {
 }
 
 func createOrOpenLockedFile(name string) (file *os.File, err error) {
-	if _, err := os.Stat(name); os.IsNotExist(err) {
+	if _, serr := os.Stat(name); os.IsNotExist(serr) {
 		file, err = os.Create(name)
 	} else {
 		file, err = os.OpenFile(name, os.O_RDWR, 0644)
 	}
-
 	if err != nil {
 		return
 	}
