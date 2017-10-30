@@ -1,82 +1,55 @@
 package cli
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/gsamokovarov/assert"
 )
 
 func TestParseArgs(t *testing.T) {
 	args := ParseArgs([]string{"program", "command"})
+	assert.Len(t, 1, args)
 
-	if args[0] != "command" {
-		t.Errorf("Expected args[0] to be command, got %v", args[0])
-	}
+	assert.Equal(t, "command", args[0])
 }
 
 func TestFirst(t *testing.T) {
 	args := ParseArgs([]string{"program", "command"})
+	assert.Len(t, 1, args)
+	assert.Equal(t, "command", args.First())
 
-	if args.First() != "command" {
-		t.Errorf("Expected args.First() to be command, got %v", args.First())
-	}
+	args = ParseArgs([]string{"program"})
+	assert.Equal(t, "", args.First())
 }
 
-func TestFirstWithEmptyArgs(t *testing.T) {
-	args := ParseArgs([]string{"program"})
-
-	if args.First() != "" {
-		t.Error("Expected args.First() to be empty")
-	}
-}
-
-func TestArgsCommandName(t *testing.T) {
+func TestCommandName(t *testing.T) {
 	args := ParseArgs([]string{"program", "command"})
 
-	if command := args.CommandName(); command != "command" {
-		t.Errorf("Expected args.CommandName() to be command, got %v", command)
-	}
+	assert.Equal(t, "command", args.CommandName())
 }
 
-func TestArgsHas(t *testing.T) {
+func TestHas(t *testing.T) {
 	args := ParseArgs([]string{"program", "command", "--foo"})
 
-	if !args.Has("--foo") {
-		t.Errorf("Expected %v to have --foo", args)
-	}
-
-	if args.Has("--bar") {
-		t.Errorf("Expected %v to not have --bar", args)
-	}
+	assert.True(t, args.Has("--foo"))
+	assert.False(t, args.Has("--bar"))
 }
 
-func TestGetWithEquals(t *testing.T) {
+func TestGet(t *testing.T) {
 	args := ParseArgs([]string{"program", "--option=val"})
+	assert.Equal(t, "val", args.Get("--option", "none"))
 
-	if value := args.Get("--option", "none"); value != "val" {
-		t.Errorf("Expected val, got: %s", value)
-	}
+	args = ParseArgs([]string{"program", "--option", "val"})
+	assert.Equal(t, "val", args.Get("--option", "none"))
+
+	args = ParseArgs([]string{"program", "--option"})
+	assert.Equal(t, "none", args.Get("--option", "none"))
 }
 
-func TestGetWithSpace(t *testing.T) {
-	args := ParseArgs([]string{"program", "--option", "val"})
-
-	if value := args.Get("--option", "none"); value != "val" {
-		t.Errorf("Expected val, got: %s", value)
-	}
-}
-
-func TestGetHittingDefaultValue(t *testing.T) {
-	args := ParseArgs([]string{"program", "--option"})
-
-	if value := args.Get("--option", "none"); value != "none" {
-		t.Errorf("Expected none, got: %s", value)
-	}
-}
-
-func TestArgsRest(t *testing.T) {
+func TestRest(t *testing.T) {
 	args := ParseArgs([]string{"program", "command"})
+	assert.Len(t, 0, args.Rest())
 
-	if got, want := args.Rest(), []string{"command"}; reflect.DeepEqual(got, want) {
-		t.Errorf("Expected args.Rest() to be %v, got %v", want, got)
-	}
+	args = ParseArgs([]string{"program", "command", "arg"})
+	assert.Equal(t, []string{"arg"}, args.Rest())
 }

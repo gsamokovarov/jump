@@ -2,6 +2,8 @@ package cli
 
 import (
 	"testing"
+
+	"github.com/gsamokovarov/assert"
 )
 
 func TestCommandRegistryCommands(t *testing.T) {
@@ -10,15 +12,11 @@ func TestCommandRegistryCommands(t *testing.T) {
 		"bar": Command{Name: "bar"},
 	}
 
-	for i, cmd := range registry.Commands() {
-		if i == 0 && cmd.Name != "bar" {
-			t.Errorf("Expected command at 0 to be bar, got %v", cmd)
-		}
+	commands := registry.Commands()
+	assert.Len(t, 2, commands)
 
-		if i == 1 && cmd.Name != "foo" {
-			t.Errorf("Expected command at 1 to be foo, got %v", cmd)
-		}
-	}
+	assert.Equal(t, "bar", commands[0].Name)
+	assert.Equal(t, "foo", commands[1].Name)
 }
 
 func TestCommandRegistryOptions(t *testing.T) {
@@ -28,14 +26,7 @@ func TestCommandRegistryOptions(t *testing.T) {
 	}
 
 	options := registry.Options()
+	assert.Len(t, 1, options)
 
-	for i, cmd := range options {
-		if i == 0 && cmd.Name != "--halp" {
-			t.Errorf("Expected command at 0 to be --halp, got %v", cmd)
-		}
-	}
-
-	if len(options) != 1 {
-		t.Errorf("Expected only 1 option, got %v", options)
-	}
+	assert.Equal(t, "--halp", options[0].Name)
 }

@@ -3,28 +3,30 @@ package cli
 import (
 	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/config"
 )
 
 func TestDispatchCommand(t *testing.T) {
-	RegisterCommand("test", "A testing command.", func(Args, config.Config) error { return nil })
+	RegisterCommand("test", "A testing command.", commandFn)
 
 	args := Args([]string{"test"})
-	if _, err := DispatchCommand(args, "default"); err == nil {
-		t.Errorf("Expected an error on missing registered default command")
-	}
 
-	RegisterCommand("default", "A testing command.", func(Args, config.Config) error { return nil })
+	_, err := DispatchCommand(args, "default")
+	assert.NotNil(t, err)
 
-	if command, _ := DispatchCommand(args, "default"); command.Name != "test" {
-		t.Errorf("Expected test command to be dispatched and executed")
-	}
+	RegisterCommand("default", "A testing command.", commandFn)
+
+	command, err := DispatchCommand(args, "default")
+	assert.Nil(t, err)
+
+	assert.Equal(t, "test", command.Name)
 }
 
 func TestCommandIsOption(t *testing.T) {
-	command := &Command{"--test", "Testing command.", func(Args, config.Config) error { return nil }}
+	command := &Command{"--test", "Testing command.", commandFn}
 
-	if !command.IsOption() {
-		t.Errorf("Expected --test command to be an option")
-	}
+	assert.True(t, command.IsOption())
 }
+
+func commandFn(Args, config.Config) error { return nil }
