@@ -58,14 +58,15 @@ func (a Args) Get(option, defaultValue string) string {
 		name, value := nameValue(a[i])
 
 		if name == option {
-			if value == "" {
-				if i+1 < len(a) {
-					return a[i+1]
-				}
-				return defaultValue
+			if value != "" {
+				return value
 			}
 
-			return value
+			if i+1 < len(a) {
+				return a[i+1]
+			}
+
+			return defaultValue
 		}
 	}
 
@@ -83,7 +84,6 @@ func (a Args) Rest() Args {
 
 func nameValue(arg string) (name string, value string) {
 	parts := strings.SplitN(arg, "=", 2)
-
 	if len(parts) == 1 {
 		return parts[0], ""
 	}
