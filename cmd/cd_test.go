@@ -26,6 +26,21 @@ func Test_cdCmd(t *testing.T) {
 	assert.True(t, strings.Contains(output, p.Join(td, "web-console")))
 }
 
+func Test_cdCmd_multipleArgumentsAsSeparators(t *testing.T) {
+	conf := &testConfig{
+		Entries: s.Entries{
+			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
+			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+		},
+	}
+
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{"cl", "web"}, conf))
+	})
+
+	assert.True(t, strings.Contains(output, p.Join(td, "/client/website")))
+}
+
 func Test_cdCmd_absolutePath(t *testing.T) {
 	conf := &testConfig{
 		Entries: s.Entries{

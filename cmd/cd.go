@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -14,7 +15,7 @@ const proximity = 5
 const osSeparator = string(os.PathSeparator)
 
 func cdCmd(args cli.Args, conf config.Config) error {
-	term := args.CommandName()
+	term := strings.Join(args.Raw(), osSeparator)
 	entries, err := conf.ReadEntries()
 
 	if err != nil {

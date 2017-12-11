@@ -13,6 +13,11 @@ func ParseArgs(args []string) Args {
 	return Args(args[1:])
 }
 
+// Raw returns the arguments as a slice of strings.
+func (a Args) Raw() []string {
+	return []string(a)
+}
+
 // First extracts the first argument, no matter if command or option.
 func (a Args) First() string {
 	if len(a) > 0 {
@@ -22,17 +27,13 @@ func (a Args) First() string {
 	return ""
 }
 
-// CommandName extracts a command name out of all the arguments.
-//
-// A command cannot start with --. We think of those arguments as options.
-func (a Args) CommandName() string {
-	for i := 0; i < len(a); i++ {
-		if !strings.HasPrefix(a[i], "--") {
-			return a[i]
-		}
+// Rest extracts the arguments after the command name.
+func (a Args) Rest() Args {
+	if len(a) >= 1 {
+		return a[1:]
 	}
 
-	return ""
+	return a
 }
 
 // Has tells whether the arguments contains a specific argument.
@@ -73,13 +74,17 @@ func (a Args) Get(option, defaultValue string) string {
 	return defaultValue
 }
 
-// Rest extracts the arguments after the command name.
-func (a Args) Rest() Args {
-	if len(a) >= 1 {
-		return a[1:]
+// CommandName extracts a command name out of all the arguments.
+//
+// A command cannot start with --. We think of those arguments as options.
+func (a Args) CommandName() string {
+	for i := 0; i < len(a); i++ {
+		if !strings.HasPrefix(a[i], "--") {
+			return a[i]
+		}
 	}
 
-	return a
+	return ""
 }
 
 func nameValue(arg string) (name string, value string) {
