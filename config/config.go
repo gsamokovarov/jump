@@ -65,14 +65,14 @@ func SetupDefault(dir string) (Config, error) {
 }
 
 func normalizeDir(dir string) (string, error) {
-	if len(dir) == 0 {
-		usr, err := user.Current()
-		if err != nil {
-			return dir, err
-		}
-
-		return filepath.Join(usr.HomeDir, defaultDirName), nil
+	if dir != "" {
+		return dir, nil
 	}
 
-	return dir, nil
+	usr, err := user.Current()
+	if err != nil {
+		return dir, err
+	}
+
+	return filepath.Join(usr.HomeDir, defaultDirName), nil
 }
