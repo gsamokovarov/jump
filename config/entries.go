@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/gsamokovarov/jump/config/atom"
 	"github.com/gsamokovarov/jump/config/jsonio"
 	"github.com/gsamokovarov/jump/scoring"
 )
@@ -9,13 +10,13 @@ import (
 //
 // If the scores file is empty, the returned entries are empty.
 func (c *fileConfig) ReadEntries() (entries scoring.Entries, err error) {
-	scoresFile, err := createOrOpenLockedFile(c.Scores)
+	file, err := atom.Open(c.Scores)
 	if err != nil {
 		return
 	}
-	defer closeLockedFile(scoresFile)
+	defer file.Close()
 
-	if err = jsonio.Decode(scoresFile, &entries); err != nil {
+	if err = jsonio.Decode(file, &entries); err != nil {
 		return
 	}
 
@@ -26,13 +27,13 @@ func (c *fileConfig) ReadEntries() (entries scoring.Entries, err error) {
 //
 // Sorts the entries before writing them to disk.
 func (c *fileConfig) WriteEntries(entries scoring.Entries) error {
-	scoresFile, err := createOrOpenLockedFile(c.Scores)
+	file, err := atom.Open(c.Scores)
 	if err != nil {
 		return err
 	}
-	defer closeLockedFile(scoresFile)
+	defer file.Close()
 
 	entries.Sort()
 
-	return jsonio.Encode(scoresFile, entries)
+	return jsonio.Encode(file, entries)
 }

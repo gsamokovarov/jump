@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/gsamokovarov/jump/config/atom"
 	"github.com/gsamokovarov/jump/config/jsonio"
 )
 
@@ -8,14 +9,14 @@ import (
 //
 // If no search pinned search term is found.
 func (c *fileConfig) FindPin(term string) (dir string, found bool) {
-	pinsFile, err := createOrOpenLockedFile(c.Pins)
+	file, err := atom.Open(c.Pins)
 	if err != nil {
 		return
 	}
-	defer closeLockedFile(pinsFile)
+	defer file.Close()
 
 	pins := map[string]string{}
-	if err := jsonio.Decode(pinsFile, &pins); err == nil {
+	if err := jsonio.Decode(file, &pins); err == nil {
 		dir, found = pins[term]
 	}
 
@@ -24,18 +25,18 @@ func (c *fileConfig) FindPin(term string) (dir string, found bool) {
 
 // WritePin saves a pinned search term into a file.
 func (c *fileConfig) WritePin(pin, value string) error {
-	pinsFile, err := createOrOpenLockedFile(c.Pins)
+	file, err := atom.Open(c.Pins)
 	if err != nil {
 		return err
 	}
-	defer closeLockedFile(pinsFile)
+	defer file.Close()
 
 	pins := map[string]string{}
-	if err := jsonio.Decode(pinsFile, &pins); err != nil {
+	if err := jsonio.Decode(file, &pins); err != nil {
 		return err
 	}
 
 	pins[pin] = value
 
-	return jsonio.Encode(pinsFile, pins)
+	return jsonio.Encode(file, pins)
 }

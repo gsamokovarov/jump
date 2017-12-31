@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/gsamokovarov/jump/config/atom"
 	"github.com/gsamokovarov/jump/config/jsonio"
 )
 
@@ -15,24 +16,24 @@ type Search struct {
 //
 // If the last search doesn't exist, a zero value Search is returned.
 func (c *fileConfig) ReadSearch() (search Search) {
-	searchFile, err := createOrOpenLockedFile(c.Search)
+	file, err := atom.Open(c.Search)
 	if err != nil {
 		return
 	}
-	defer closeLockedFile(searchFile)
+	defer file.Close()
 
-	jsonio.Decode(searchFile, &search)
+	jsonio.Decode(file, &search)
 
 	return
 }
 
 // WriteSearch writes the last search entry to the current search entry.
 func (c *fileConfig) WriteSearch(term string, index int) error {
-	searchFile, err := createOrOpenLockedFile(c.Search)
+	file, err := atom.Open(c.Search)
 	if err != nil {
 		return err
 	}
-	defer closeLockedFile(searchFile)
+	defer file.Close()
 
-	return jsonio.Encode(searchFile, Search{term, index})
+	return jsonio.Encode(file, Search{term, index})
 }
