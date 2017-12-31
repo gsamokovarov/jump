@@ -52,7 +52,5 @@ func Encode(w WriteSeekerTruncater, v interface{}) error {
 		return err
 	}
 
-	encoder := json.NewEncoder(w)
-
-	return encoder.Encode(v)
+	return json.NewEncoder(w).Encode(v)
 }
