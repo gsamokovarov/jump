@@ -4,44 +4,25 @@
 
 <img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
 
-Jump helps you navigate your file system faster by learning your
-habits.
-
-Say you visit `/Users/genadi/Development/web-console` a lot. Jump can
-get you there with `j wc` or `j web` or `j webc`. You name it,
-loosely, and jump will figure it out for you.
-
-This comes with zero configuration! Install jump, integrate it to your shell
-and let it learn your habits for a while. Simply `cd` to your directories like
-you always do. After a while, jump would know how to get you when you type
-`j somewhere` or just `j some`.
-
-Maybe you made a typo like `j ssome`? No problem, jump uses fuzzy searching, so
-you can type tiny, loose search term and be tolerated for your typos.
+**Jump** integrates with the shell and learns about your navigational habits by
+keeping track of the directories you visit. It strives to give you the best
+directory for the shortest search term.
 
 ![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
 
 ### Integration
 
-Jump needs to be integrated into your shell to observe your `cd` habits. The
-integrations also provides the `j` helper, which you would use to interact with
-jump.
+Jump needs to be integrated with the shell. For `bash` and `zsh`, the the line
+below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
-Put the line below in `~/.bashrc`,  `~/bash_profile` or `.zshrc` for
-zshell:
+    eval "$(jump shell)"
 
-```bash
-eval "$(jump shell)"
-```
+For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
-Put the line below in `~/.config/fish/config.fish` for fish shell:
+    status --is-interactive; and . (jump shell | psub)
 
-```fish
-status --is-interactive; and . (jump shell | psub)
-```
-
-Once the integration is done, work like you always do. In a while you
-can just `j` to your projects from everywhere. 👀
+Once integrated, jump will automatically directory changes and start
+building an internal database.
 
 ### But `j` is not my favourite letter!
 
@@ -61,9 +42,109 @@ eval "$(jump shell --bind=goto)"
 
 Voila! `goto dir` becomes a thing. The possibilities are endless!
 
+## Usage
+
+### Regular jump
+
+The default search behavior of **jump** is to case insensitively match only the
+base directory path of the scored directories. This is because absolute paths
+are long and short search terms can fuzzy match them easily, lead to bad
+matches.
+
+If you visit the directory `/Users/genadi/Development/rails/web-console` often,
+you can jump to it by:
+
+    $ j wc      # or...
+    $ j webc    # or...
+    $ j console # or...
+    $ j b-c     # or...
+
+Of course, `web-console` can be typed directly as a search term:
+
+    $ j web-console
+    $ pwd
+    /Users/genadi/Development/rails/web-console
+
+Using jump is all about saving key strokes. However, if you made the effort to
+type a directory base name exactly, **jump** will try to find the exact match,
+rather than fuzzy search.
+
+### Deep jump
+
+Given the following directories:
+
+    /Users/genadi/Development/society/website
+    /Users/genadi/Development/chaos/website
+
+Can you be sure where `j web` will lead you? You can hint jump where you want
+to go.  To ensure a match of `/Users/genadi/Development/chaos/website`, use the
+search term:
+
+    $ j ch web
+    $ pwd
+    /Users/genadi/Development/chaos/website
+
+This instructs **jump** to look for a `web` match inside that is preceded by a
+`ch` match in the parent directory.  The search is normalized only on the last
+two parts of the target paths. This will ensure a better match, because of the
+shorter path to fuzzy match on.
+
+There are no depth limitations though and a jump to
+`/Users/genadi/Development/society/website` can look like:
+
+    $ j dev soc web
+    $ pwd
+    /Users/genadi/Development/society/website
+
+In fact, every space passed to `j` is converted to an OS separator. The search
+term above can be expressed as:
+
+    $ j dev/soc/web
+    $ pwd
+    /Users/genadi/Development/society/website
+
+## Reverse jump
+
+Sometimes bad jumps happen. Maybe the search has a better scored directory
+already. If we want to jump to `/Users/genadi/Development/hack/website` and we
+have the following entries in the database:
+
+    /Users/genadi/Development/society/website
+    /Users/genadi/Development/chaos/website
+    /Users/genadi/Development/hack/website
+
+Typing `j web` would lead to:
+
+    $ j web
+    $ pwd
+    /Users/genadi/Development/society/website
+
+Instead of typing another search term, typing **j** without a search term will
+instruct **jump** to the second best, third best and so on matches.
+
+    $ j
+    $ pwd
+    /Users/genadi/Development/chaos/website
+
+    $ j
+    $ pwd
+    /Users/genadi/Development/hack/website
+
+### CASE SENSITIVE JUMP
+
+To trigger a case-sensitive search, use a term that has a capital letter.
+
+    $ j Dev
+    $ pwd
+    /Users/genadi/Development
+
+The jump will resolve to `/Users/genadi/Development` even if there is
+`/Users/genadi/Development/dev-tools` that scores better.
+
+
 ## Installation
 
-Jump comes in packages for macOS (homebrew) and Linux.
+Jump comes in packages for macOS through homebrew and linux.
 
 ## macOS
 
@@ -83,6 +164,14 @@ sudo dpkg -i jump_0.13.0_amd64.deb
 ```bash
 wget https://github.com/gsamokovarov/jump/releases/download/v0.13.0/jump-0.13.0-1.x86_64.rpm
 sudo rpm -i jump-0.13.0-1.x86_64.rpm
+```
+
+### Go
+
+If you have the Go toolchain installed, you can install it through:
+
+```bash
+go get github.com/gsamokovarov/jump
 ```
 
 You can also build jump by yourself. Or hack on it, you know, if you like Go
