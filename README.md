@@ -165,15 +165,15 @@ brew install jump
 ### Ubuntu/Debian
 
 ```bash
-wget https://github.com/gsamokovarov/jump/releases/download/v0.13.0/jump_0.13.0_amd64.deb
-sudo dpkg -i jump_0.13.0_amd64.deb
+wget https://github.com/gsamokovarov/jump/releases/download/v0.18.0/jump_0.18.0_amd64.deb
+sudo dpkg -i jump_0.18.0_amd64.deb
 ```
 
 ### Red Hat/Fedora
 
 ```bash
-wget https://github.com/gsamokovarov/jump/releases/download/v0.13.0/jump-0.13.0-1.x86_64.rpm
-sudo rpm -i jump-0.13.0-1.x86_64.rpm
+wget https://github.com/gsamokovarov/jump/releases/download/v0.18.0/jump-0.18.0-1.x86_64.rpm
+sudo rpm -i jump-0.18.0-1.x86_64.rpm
 ```
 
 ### Go
