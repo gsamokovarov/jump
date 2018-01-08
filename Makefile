@@ -1,5 +1,5 @@
 NAME = jump
-DESCRIPTION = "Jump helps you navigate your file system faster by learning your habits."
+DESCRIPTION = "Jump helps you navigate faster by learning your habits."
 HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
@@ -32,7 +32,8 @@ deb: build
 		--license $(LICENSE) \
 		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
 		./jump=/usr/bin/jump \
-		./man/jump.1=/usr/share/man/man1/jump.1
+		./man/jump.1=/usr/share/man/man1/jump.1 \
+		./man/j.1=/usr/share/man/man1/j.1
 
 .PHONY: rpm
 rpm: build
@@ -44,12 +45,18 @@ rpm: build
 		--license $(LICENSE) \
 		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
 		./jump=/usr/bin/jump \
-		./man/jump.1=/usr/share/man/man1/jump.1
+		./man/jump.1=/usr/share/man/man1/jump.1 \
+		./man/j.1=/usr/share/man/man1/j.1
 
 .PHONY: clean
 clean:
 	@rm -f jump*
 
 .PHONY: man
-man:
-	@ronn ./man/jump.1.ronn
+man: ronn
+	@ronn ./man/jump.1.ronn --style=dark
+	@cp ./man/jump.1 ./man/j.1
+
+.PHONY: ronn
+ronn:
+	@which -s ronn > /dev/null || gem install ronn
