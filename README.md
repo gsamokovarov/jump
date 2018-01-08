@@ -2,8 +2,6 @@
   <a href="https://github.com/gsamokovarov/jump/releases">[releases]</a>
 </p>
 
-<img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
-
 **Jump** integrates with the shell and learns about your navigational habits by
 keeping track of the directories you visit. It strives to give you the best
 directory for the shortest search term.
@@ -11,6 +9,8 @@ directory for the shortest search term.
 ![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
 
 ### Integration
+
+<img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
 
 Jump needs to be integrated with the shell. For `bash` and `zsh`, the the line
 below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
@@ -23,6 +23,7 @@ For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
 Once integrated, jump will automatically directory changes and start
 building an internal database.
+
 
 ### But `j` is not my favourite letter!
 
