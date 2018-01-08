@@ -10,8 +10,6 @@ directory for the shortest search term.
 
 ### Integration
 
-<img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
-
 Jump needs to be integrated with the shell. For `bash` and `zsh`, the the line
 below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
@@ -26,6 +24,8 @@ building an internal database.
 
 
 ### But `j` is not my favourite letter!
+
+<img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
 
 This is fine, you can bind jump to `z`, with this:
 
@@ -44,6 +44,15 @@ eval "$(jump shell --bind=goto)"
 Voila! `goto dir` becomes a thing. The possibilities are endless!
 
 ## Usage
+
+Once integrated, **jump** introduces the **j** helper. It accepts only search
+terms and as a design goal there are no arguments to **j**. Whatever you give
+it, it's treated as search term.
+
+**Jump** uses fuzzy matching to find the desired directory to jump to. This
+means that your search terms are patterns that match the desired directory
+approximately rather than exactly. Typing **2** to **5** consecutive characters
+of the base directory names is all that **jump** needs to find it.
 
 ### Regular jump
 
@@ -131,7 +140,7 @@ instruct **jump** to the second best, third best and so on matches.
     $ pwd
     /Users/genadi/Development/hack/website
 
-### CASE SENSITIVE JUMP
+### Case sensitive jump
 
 To trigger a case-sensitive search, use a term that has a capital letter.
 
