@@ -12,10 +12,16 @@ function __jump_add --on-variable PWD
   jump chdir
 end
 
+function __jump_hint
+  set -l input (string replace -r '^{{.Bind}} ' '' -- (commandline -cp))
+	echo $input > ~/debug
+	jump hint --smart $input
+end
+
 function {{.Bind}}
   set -l dir (jump cd $argv)
   test -d "$dir"; and cd "$dir"
 end
 
-complete --command {{.Bind}} --exclusive --arguments '(jump hint)'
+complete --command {{.Bind}} --exclusive --arguments '(__jump_hint)'
 `)
