@@ -14,7 +14,6 @@ end
 
 function __jump_hint
   set -l input (string replace -r '^{{.Bind}} ' '' -- (commandline -cp))
-	echo $input > ~/debug
 	jump hint --smart $input
 end
 
