@@ -14,7 +14,7 @@ __jump_prompt_command() {
 
 __jump_hint() {
   local term="${COMP_LINE/#{{.Bind}} /}"
-	jump hint $term
+  jump hint $term
 }
 
 {{.Bind}}() {

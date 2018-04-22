@@ -19,8 +19,9 @@ func Example_shellCmd_Bash() {
 	//   jump chdir && return $status
 	// }
 	//
-	// [[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
-	//   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
+	// __jump_hint() {
+	//   local term="${COMP_LINE/#j /}"
+	//   jump hint $term
 	// }
 	//
 	// j() {
@@ -28,7 +29,11 @@ func Example_shellCmd_Bash() {
 	//   test -d "$dir"  && cd "$dir"
 	// }
 	//
-	// complete -o dirnames -C 'jump hint "${COMP_LINE/#j /}" --smart' j
+	// [[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
+	//   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
+	// }
+	//
+	// complete -o dirnames -C '__jump_hint' j
 }
 
 func Example_shellCmd_Zsh() {
@@ -54,7 +59,7 @@ func Example_shellCmd_Zsh() {
 	// }
 	//
 	// jump_completion() {
-	//   reply=($(jump hint "$1" --smart))
+	//   reply=($(jump hint $@))
 	// }
 	//
 	// compctl -U -K jump_completion j
@@ -75,12 +80,17 @@ func Example_shellCmd_Fish() {
 	//   jump chdir
 	// end
 	//
+	// function __jump_hint
+	//   set -l input (string replace -r '^j ' '' -- (commandline -cp))
+	//   jump hint $input
+	// end
+	//
 	// function j
 	//   set -l dir (jump cd $argv)
 	//   test -d "$dir"; and cd "$dir"
 	// end
 	//
-	// complete --command j --exclusive --arguments '(jump hint)'
+	// complete --command j --exclusive --arguments '(__jump_hint)'
 }
 
 func Example_shellCmd_Bind() {
@@ -98,8 +108,9 @@ func Example_shellCmd_Bind() {
 	//   jump chdir && return $status
 	// }
 	//
-	// [[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
-	//   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
+	// __jump_hint() {
+	//   local term="${COMP_LINE/#z /}"
+	//   jump hint $term
 	// }
 	//
 	// z() {
@@ -107,5 +118,9 @@ func Example_shellCmd_Bind() {
 	//   test -d "$dir"  && cd "$dir"
 	// }
 	//
-	// complete -o dirnames -C 'jump hint "${COMP_LINE/#z /}" --smart' z
+	// [[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
+	//   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
+	// }
+	//
+	// complete -o dirnames -C '__jump_hint' z
 }
