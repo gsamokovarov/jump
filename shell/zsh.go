@@ -20,7 +20,7 @@ chpwd_functions+=__jump_chpwd
 }
 
 jump_completion() {
-  reply=($(jump hint "$1" --smart))
+  reply=($(jump hint $@))
 }
 
 compctl -U -K jump_completion {{.Bind}}

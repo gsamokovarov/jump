@@ -12,8 +12,9 @@ __jump_prompt_command() {
   jump chdir && return $status
 }
 
-[[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
-  PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
+__jump_hint() {
+  local term="${COMP_LINE/#{{.Bind}} /}"
+	jump hint $term
 }
 
 {{.Bind}}() {
@@ -21,5 +22,9 @@ __jump_prompt_command() {
   test -d "$dir"  && cd "$dir"
 }
 
-complete -o dirnames -C 'jump hint "${COMP_LINE/#{{.Bind}} /}" --smart' {{.Bind}}
+[[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
+  PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
+}
+
+complete -o dirnames -C '__jump_hint' {{.Bind}}
 `)

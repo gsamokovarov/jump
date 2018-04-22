@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"sort"
+	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -9,26 +9,15 @@ import (
 )
 
 func hintCmd(args cli.Args, conf config.Config) error {
-	var hints scoring.Entries
-
-	term := args.CommandName()
-	smart := args.Has("--smart")
+	term := strings.Join(args.Raw(), osSeparator)
 
 	entries, err := conf.ReadEntries()
 	if err != nil {
 		return err
 	}
 
-	if len(term) == 0 {
-		// We usually keep them reversely sort to optimize the fuzzy search.
-		sort.Sort(sort.Reverse(entries))
-
-		hints = hintSmartSelect(entries, term, smart)
-	} else {
-		fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
-
-		hints = hintSmartSelect(fuzzyEntries.Entries, term, smart)
-	}
+	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
+	hints := hintSelect(fuzzyEntries.Entries, term)
 
 	for _, entry := range hints {
 		cli.Outf("%s\n", entry.Path)
@@ -37,11 +26,7 @@ func hintCmd(args cli.Args, conf config.Config) error {
 	return nil
 }
 
-func hintSmartSelect(entries scoring.Entries, term string, smart bool) scoring.Entries {
-	if !smart {
-		return entries
-	}
-
+func hintSelect(entries scoring.Entries, term string) scoring.Entries {
 	termLength := len(term)
 
 	switch {
