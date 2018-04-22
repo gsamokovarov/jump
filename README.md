@@ -52,14 +52,12 @@ it, it's treated as search term.
 **Jump** uses fuzzy matching to find the desired directory to jump to. This
 means that your search terms are patterns that match the desired directory
 approximately rather than exactly. Typing **2** to **5** consecutive characters
-of the base directory names is all that **jump** needs to find it.
+of the directory name is all that **jump** needs to find it.
 
 ### Regular jump
 
-The default search behavior of **jump** is to case insensitively match only the
-base directory path of the scored directories. This is because absolute paths
-are long and short search terms can fuzzy match them easily, lead to bad
-matches.
+The default search behavior of **jump** is to fuzzy match the
+directory name of a score. The match is case insenstive.
 
 If you visit the directory `/Users/genadi/Development/rails/web-console` often,
 you can jump to it by:
@@ -69,15 +67,13 @@ you can jump to it by:
     $ j console # or...
     $ j b-c     # or...
 
-Of course, `web-console` can be typed directly as a search term:
+Using jump is all about saving key strokes. However, if you made the effort to
+type a directory base name exactly, **jump** will try to find the exact match,
+rather than fuzzy search.
 
     $ j web-console
     $ pwd
     /Users/genadi/Development/rails/web-console
-
-Using jump is all about saving key strokes. However, if you made the effort to
-type a directory base name exactly, **jump** will try to find the exact match,
-rather than fuzzy search.
 
 ### Deep jump
 
@@ -86,16 +82,18 @@ Given the following directories:
     /Users/genadi/Development/society/website
     /Users/genadi/Development/chaos/website
 
-Can you be sure where `j web` will lead you? You can hint jump where you want
-to go.  To ensure a match of `/Users/genadi/Development/chaos/website`, use the
-search term:
+Typing `j site` matches only the base names of the directories. The base name
+of `/Users/genadi/Development/society/website` is `website`, the same as the
+other absolute path above. The jump above will land on the most scrored path,
+which is the `society` one, however what if we wanted to land on the `chaos`
+website?
 
-    $ j ch web
+    $ j ch site
     $ pwd
     /Users/genadi/Development/chaos/website
 
-This instructs **jump** to look for a `web` match inside that is preceded by a
-`ch` match in the parent directory.  The search is normalized only on the last
+This instructs **jump** to look for a `site` match inside that is preceded by a
+`ch` match in the parent directory. The search is normalized only on the last
 two parts of the target paths. This will ensure a better match, because of the
 shorter path to fuzzy match on.
 
@@ -106,8 +104,8 @@ There are no depth limitations though and a jump to
     $ pwd
     /Users/genadi/Development/society/website
 
-In fact, every space passed to `j` is converted to an OS separator. The search
-term above can be expressed as:
+In fact, every space passed to `j` is converted to an OS separator. The last
+search term can be expressed as:
 
     $ j dev/soc/web
     $ pwd
@@ -115,9 +113,8 @@ term above can be expressed as:
 
 ## Reverse jump
 
-Sometimes bad jumps happen. Maybe the search has a better scored directory
-already. If we want to jump to `/Users/genadi/Development/hack/website` and we
-have the following entries in the database:
+Bad jumps happen. Somethimes we're looking for a directory the isn't the most
+scored one at the moment. Imagine the following jump database:
 
     /Users/genadi/Development/society/website
     /Users/genadi/Development/chaos/website
@@ -129,16 +126,12 @@ Typing `j web` would lead to:
     $ pwd
     /Users/genadi/Development/society/website
 
-Instead of typing another search term, typing **j** without a search term will
-instruct **jump** to the second best, third best and so on matches.
+If we didn't expect this result, instead of another search term, typing **j**
+without any arguments will instruct **jump** to go the second best match.
 
     $ j
     $ pwd
     /Users/genadi/Development/chaos/website
-
-    $ j
-    $ pwd
-    /Users/genadi/Development/hack/website
 
 ### Case sensitive jump
 
@@ -150,7 +143,6 @@ To trigger a case-sensitive search, use a term that has a capital letter.
 
 The jump will resolve to `/Users/genadi/Development` even if there is
 `/Users/genadi/Development/dev-tools` that scores better.
-
 
 ## Installation
 
