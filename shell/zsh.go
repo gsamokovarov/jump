@@ -11,17 +11,17 @@ __jump_chpwd() {
   jump chdir
 }
 
-typeset -gaU chpwd_functions
-chpwd_functions+=__jump_chpwd
+jump_completion() {
+  reply=(${(f)"$(jump hint $@)"})
+}
 
 {{.Bind}}() {
   local dir="$(jump cd $@)"
   test -d "$dir" && cd "$dir"
 }
 
-jump_completion() {
-  reply=($(jump hint $@))
-}
+typeset -gaU chpwd_functions
+chpwd_functions+=__jump_chpwd
 
 compctl -U -K jump_completion {{.Bind}}
 `)

@@ -50,17 +50,17 @@ func Example_shellCmd_Zsh() {
 	//   jump chdir
 	// }
 	//
-	// typeset -gaU chpwd_functions
-	// chpwd_functions+=__jump_chpwd
+	// jump_completion() {
+	//   reply=(${(f)"$(jump hint $@)"})
+	// }
 	//
 	// j() {
 	//   local dir="$(jump cd $@)"
 	//   test -d "$dir" && cd "$dir"
 	// }
 	//
-	// jump_completion() {
-	//   reply=($(jump hint $@))
-	// }
+	// typeset -gaU chpwd_functions
+	// chpwd_functions+=__jump_chpwd
 	//
 	// compctl -U -K jump_completion j
 }
@@ -81,8 +81,8 @@ func Example_shellCmd_Fish() {
 	// end
 	//
 	// function __jump_hint
-	//   set -l input (string replace -r '^j ' '' -- (commandline -cp))
-	//   jump hint $input
+	//   set -l term (string replace -r '^j ' '' -- (commandline -cp))
+	//   jump hint $term
 	// end
 	//
 	// function j

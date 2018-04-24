@@ -13,8 +13,8 @@ function __jump_add --on-variable PWD
 end
 
 function __jump_hint
-  set -l input (string replace -r '^{{.Bind}} ' '' -- (commandline -cp))
-  jump hint $input
+  set -l term (string replace -r '^{{.Bind}} ' '' -- (commandline -cp))
+  jump hint $term
 end
 
 function {{.Bind}}
