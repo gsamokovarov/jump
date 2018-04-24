@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -16,16 +17,26 @@ const osSeparator = string(os.PathSeparator)
 
 func cdCmd(args cli.Args, conf config.Config) error {
 	term := strings.Join(args.Raw(), osSeparator)
-	entries, err := conf.ReadEntries()
 
+	entry, err := cdEntry(term, conf)
 	if err != nil {
 		return err
 	}
 
+	cli.Outf("%s\n", entry.Path)
+
+	return nil
+}
+
+func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
+	entries, err := conf.ReadEntries()
+	if err != nil {
+		return nil, err
+	}
+
 	// If an auto-completion triggered a full path, just go there.
 	if filepath.IsAbs(term) {
-		cli.Outf("%s\n", term)
-		return nil
+		return scoring.NewEntry(term), nil
 	}
 
 	index, search := 0, conf.ReadSearch()
@@ -35,14 +46,13 @@ func cdCmd(args cli.Args, conf config.Config) error {
 	if term == "" {
 		term, index = search.Term, search.Index+1
 	} else {
-		// If there is a term given, first see if there is a bin for
+		// If there is a term given, first see if there is a pin for
 		// it and if so, always follow it.
 		if dir, found := conf.FindPin(term); found {
 			// Except if we land on the current directory again. Then
 			// ignore the term.
 			if !fwdPathIsCwd(dir) {
-				cli.Outf("%s\n", dir)
-				return nil
+				return scoring.NewEntry(dir), nil
 			}
 		}
 	}
@@ -72,14 +82,17 @@ func cdCmd(args cli.Args, conf config.Config) error {
 				continue
 			}
 
-			cli.Outf("%s\n", entry.Path)
-			conf.WriteSearch(term, index)
+			if err := conf.WriteSearch(term, index); err != nil {
+				return nil, err
+			}
+
+			return entry, nil
 		}
 
 		break
 	}
 
-	return nil
+	return nil, errors.New("no entries in the database")
 }
 
 func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
