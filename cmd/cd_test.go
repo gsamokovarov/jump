@@ -26,6 +26,16 @@ func Test_cdCmd(t *testing.T) {
 	assert.True(t, strings.Contains(output, p.Join(td, "web-console")))
 }
 
+func Test_cdCmd_noEntries(t *testing.T) {
+	conf := &testConfig{}
+
+	output := capture(&os.Stderr, func() {
+		assert.Nil(t, cdCmd(cli.Args{"wc"}, conf))
+	})
+
+	assert.Equal(t, noEntriesMessage, output)
+}
+
 func Test_cdCmd_multipleArgumentsAsSeparators(t *testing.T) {
 	conf := &testConfig{
 		Entries: s.Entries{

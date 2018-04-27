@@ -12,6 +12,22 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
+var errNoEntries = errors.New("no entries in the database")
+
+const noEntriesMessage = `Jump's database is empty. This could mean:
+
+1. You are running jump for the first time. Have you integrated jump with your
+   shell? Run the following command for help:
+	
+      $ jump shell
+
+   If you have run the integration, enter a few directories in a new shell to
+   populate the database.
+
+2. The database is corrupted. You can open an issue on jump's issue tracker
+   at https://github.com/gsamokovarov/jump/issues.
+`
+
 const proximity = 5
 const osSeparator = string(os.PathSeparator)
 
@@ -19,6 +35,10 @@ func cdCmd(args cli.Args, conf config.Config) error {
 	term := strings.Join(args.Raw(), osSeparator)
 
 	entry, err := cdEntry(term, conf)
+	if err == errNoEntries {
+		cli.Errf(noEntriesMessage)
+		return nil
+	}
 	if err != nil {
 		return err
 	}
@@ -92,7 +112,7 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 		break
 	}
 
-	return nil, errors.New("no entries in the database")
+	return nil, errNoEntries
 }
 
 func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {

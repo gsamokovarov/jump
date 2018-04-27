@@ -31,3 +31,13 @@ func Test_hintCmd_short(t *testing.T) {
 
 	assert.Equal(t, p1, lines[0])
 }
+
+func Test_hintCmd_noEntries(t *testing.T) {
+	conf := &testConfig{}
+
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, hintCmd(cli.Args{"webcons"}, conf))
+	})
+
+	assert.Equal(t, "", output)
+}
