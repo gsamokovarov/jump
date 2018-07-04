@@ -21,6 +21,7 @@ func Example_helpCmd() {
 	//   pin          Pin a directory to a search term.
 	//   shell        Display a shell integration script.
 	//   top          List the directories as they are scored.
+	//   unpin        Unpin a search term.
 	//
 	// Options:
 	//   --help       Show this screen.

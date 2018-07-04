@@ -26,6 +26,7 @@ type Config interface {
 
 	FindPin(string) (string, bool)
 	WritePin(string, string) error
+	RemovePin(string) error
 }
 
 type fileConfig struct {

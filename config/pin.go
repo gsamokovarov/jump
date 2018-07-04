@@ -40,3 +40,21 @@ func (c *fileConfig) WritePin(pin, value string) error {
 
 	return jsonio.Encode(file, pins)
 }
+
+// RemovePin removes a pinned search term from a file.
+func (c *fileConfig) RemovePin(pin string) error {
+	file, err := atom.Open(c.Pins)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	pins := map[string]string{}
+	if err := jsonio.Decode(file, &pins); err != nil {
+		return err
+	}
+
+	delete(pins, pin)
+
+	return jsonio.Encode(file, pins)
+}

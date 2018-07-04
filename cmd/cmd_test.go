@@ -45,6 +45,11 @@ func (c *testConfig) WritePin(_, value string) error {
 	return nil
 }
 
+func (c *testConfig) RemovePin(term string) error {
+	c.Pin = ""
+	return nil
+}
+
 func capture(stream **os.File, fn func()) string {
 	rescue := *stream
 	r, w, _ := os.Pipe()
