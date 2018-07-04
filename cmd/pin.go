@@ -10,9 +10,9 @@ import (
 
 var pinUsageMsg = `jump pin term
 
-	No term specified. Please specify a term that will be permanently attached to
-	the current directory. If the term contains spaces, they will be normalized
-	to OS separators.
+No term specified. Please specify a term that will be permanently
+attached to the current directory. If the term contains spaces, they
+will be normalized to OS separators.
 `
 
 func pinCmd(args cli.Args, conf config.Config) error {

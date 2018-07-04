@@ -9,8 +9,8 @@ import (
 
 var unpinUsageMsg = `jump unpin term
 
-	No term specified. Please specify a term to be removed from the pinned
-	database.
+No term specified. Please specify a term to be removed from the pinned
+database.
 `
 
 func unpinCmd(args cli.Args, conf config.Config) error {
