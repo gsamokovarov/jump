@@ -2,33 +2,26 @@ package cmd
 
 import (
 	"os"
-	"path/filepath"
+	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
 )
 
-var pinUsageMsg = `jump pin term [directory]
+var pinUsageMsg = `jump pin term
 
-  No term specified. See the signature of the pin call above.
+	No term specified. Please specify a term that will be permanently attached to
+	the current directory. If the term contains spaces, they will be normalized
+	to OS separators.
 `
 
 func pinCmd(args cli.Args, conf config.Config) error {
-	var err error
-
-	term := args.CommandName()
+	term := strings.Join(args.Raw(), osSeparator)
 	if term == "" {
 		cli.Exitf(1, pinUsageMsg)
 	}
 
-	dir := args.Rest().CommandName()
-	if dir == "" {
-		if dir, err = os.Getwd(); err != nil {
-			return err
-		}
-	}
-
-	dir, err = filepath.Abs(dir)
+	dir, err := os.Getwd()
 	if err != nil {
 		return err
 	}
