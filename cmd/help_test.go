@@ -19,8 +19,9 @@ func Example_helpCmd() {
 	//   forget       Removes the current directory from the database.
 	//   hint         Hints relevant paths for jumping.
 	//   pin          Pin a directory to a search term.
+	//   pins         Lists all the pinned search terms.
 	//   shell        Display a shell integration script.
-	//   top          List the directories as they are scored.
+	//   top          Lists the directories as they are scored.
 	//   unpin        Unpin a search term.
 	//
 	// Options:

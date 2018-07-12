@@ -24,6 +24,7 @@ type Config interface {
 	ReadSearch() Search
 	WriteSearch(string, int) error
 
+	ReadPins() (map[string]string, error)
 	FindPin(string) (string, bool)
 	WritePin(string, string) error
 	RemovePin(string) error

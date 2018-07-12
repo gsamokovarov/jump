@@ -24,5 +24,5 @@ func topCmd(_ cli.Args, conf config.Config) error {
 }
 
 func init() {
-	cli.RegisterCommand("top", "List the directories as they are scored.", topCmd)
+	cli.RegisterCommand("top", "Lists the directories as they are scored.", topCmd)
 }
