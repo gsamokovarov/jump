@@ -4,7 +4,7 @@ HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
 
-VERSION = 0.19.0
+VERSION = 0.20.0
 
 .PHONY: build
 build:
