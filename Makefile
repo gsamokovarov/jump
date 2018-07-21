@@ -10,6 +10,10 @@ VERSION = 0.20.0
 build:
 	@go build -o jump
 
+.PHONY: build.linux
+build.linux:
+	@env GOOS=linux go build -o jump
+
 .PHONY: test
 test:
 	@go test ./... -cover
@@ -18,12 +22,15 @@ test:
 lint:
 	@go vet ./... && golint ./...
 
-# Package deb and rpm inside of a Linux virtual machine, because of
-# the user.Current() usage we have. It doesn't work cross-compiled
-# from OSX.
+.PHONY: clean
+clean:
+	@rm -f jump*
 
-.PHONY: deb
-deb: build
+.PHONY: pkg
+pkg: clean pkg.deb pkg.rpm
+
+.PHONY: pkg.deb
+pkg.deb: man build.linux
 	@fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a amd64 \
 		--deb-compression bzip2 \
 		--url $(HOMEPAGE) \
@@ -35,8 +42,8 @@ deb: build
 		./man/jump.1=/usr/share/man/man1/jump.1 \
 		./man/j.1=/usr/share/man/man1/j.1
 
-.PHONY: rpm
-rpm: build
+.PHONY: pkg.rpm
+pkg.rpm: man build.linux
 	@fpm -s dir -t rpm -n $(NAME) -v $(VERSION) -a amd64 \
 		--rpm-compression bzip2 \
 		--url $(HOMEPAGE) \
@@ -47,10 +54,6 @@ rpm: build
 		./jump=/usr/bin/jump \
 		./man/jump.1=/usr/share/man/man1/jump.1 \
 		./man/j.1=/usr/share/man/man1/j.1
-
-.PHONY: clean
-clean:
-	@rm -f jump*
 
 .PHONY: man
 man: ronn
