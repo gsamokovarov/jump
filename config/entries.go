@@ -16,10 +16,7 @@ func (c *fileConfig) ReadEntries() (entries scoring.Entries, err error) {
 	}
 	defer file.Close()
 
-	if err = jsonio.Decode(file, &entries); err != nil {
-		return
-	}
-
+	err = jsonio.Decode(file, &entries)
 	return
 }
 
