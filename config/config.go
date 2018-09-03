@@ -71,10 +71,24 @@ func normalizeDir(dir string) (string, error) {
 		return dir, nil
 	}
 
-	usr, err := user.Current()
+	home, err := homeDir()
 	if err != nil {
 		return dir, err
 	}
 
-	return filepath.Join(usr.HomeDir, defaultDirName), nil
+	return filepath.Join(home, defaultDirName), nil
+}
+
+// See https://github.com/golang/go/issues/26463
+func homeDir() (string, error) {
+	home := os.Getenv("HOME")
+	if home != "" {
+		return home, nil
+	}
+	usr, err := user.Current()
+	if err != nil {
+		return "", err
+	}
+
+	return usr.HomeDir, nil
 }
