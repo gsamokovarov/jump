@@ -27,3 +27,11 @@ func (e *Entry) String() string {
 func NewEntry(path string) *Entry {
 	return &Entry{path, NewScore()}
 }
+
+// NewEntryWithWeight creates a new entry with the specified path and weight.
+func NewEntryWithWeight(path string, weight int64) *Entry {
+	score := NewScore()
+	score.Weight = weight
+
+	return &Entry{path, score}
+}
