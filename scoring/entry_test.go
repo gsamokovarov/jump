@@ -18,10 +18,3 @@ func TestEntriesUpdateScore(t *testing.T) {
 
 	assert.Equal(t, 2, entry.Score.Weight)
 }
-
-func TestNewEntriesWithWeight(t *testing.T) {
-	entry := NewEntryWithWeight("/foo", 2)
-
-	assert.Equal(t, "/foo", entry.Path)
-	assert.Equal(t, 2, entry.Score.Weight)
-}

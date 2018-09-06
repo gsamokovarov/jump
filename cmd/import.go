@@ -8,7 +8,7 @@ import (
 )
 
 func importCmd(args cli.Args, conf config.Config) error {
-	imp := importer.Autojump(conf)
+	imp := importer.Guess(args.CommandName(), conf)
 
 	return imp.Import(func(entry *scoring.Entry) {
 		cli.Outf("Importing %s\n", entry.Path)

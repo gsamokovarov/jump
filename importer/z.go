@@ -3,38 +3,37 @@ package importer
 import (
 	"fmt"
 	"io"
-	"math"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gsamokovarov/jump/config"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-var autojumpDefaultConfigPaths = []string{
-	"$HOME/.local/share/autojump/autojump.txt",
-	"$HOME/Library/autojump/autojump.txt",
+var zDefaultConfigPaths = []string{
+	"$HOME/.z",
 }
 
-// Autojump is an importer for the autojump tool.
-func Autojump(conf config.Config, configPaths ...string) Importer {
+// Z is an importer for the z tool.
+func Z(conf config.Config, configPaths ...string) Importer {
 	if len(configPaths) == 0 {
-		configPaths = autojumpDefaultConfigPaths
+		configPaths = zDefaultConfigPaths
 	}
 
-	return &autojump{
+	return &z{
 		config:      conf,
 		configPaths: configPaths,
 	}
 }
 
-type autojump struct {
+type z struct {
 	config      config.Config
 	configPaths []string
 }
 
-func (i *autojump) Import(fn Callback) error {
-	autojumpEntries, err := i.parseConfig()
+func (i *z) Import(fn Callback) error {
+	zEntries, err := i.parseConfig()
 	if err != nil {
 		return err
 	}
@@ -44,7 +43,7 @@ func (i *autojump) Import(fn Callback) error {
 		return err
 	}
 
-	for _, entry := range autojumpEntries {
+	for _, entry := range zEntries {
 		if _, found := jumpEntries.Find(entry.Path); found {
 			continue
 		}
@@ -59,7 +58,7 @@ func (i *autojump) Import(fn Callback) error {
 	return i.config.WriteEntries(jumpEntries)
 }
 
-func (i *autojump) parseConfig() (scoring.Entries, error) {
+func (i *z) parseConfig() (scoring.Entries, error) {
 	content, err := readConfig(i.configPaths)
 	if err != nil {
 		return nil, err
@@ -86,18 +85,22 @@ func (i *autojump) parseConfig() (scoring.Entries, error) {
 	return entries, nil
 }
 
-func (i *autojump) newEntryFromLine(line string) (*scoring.Entry, error) {
+func (i *z) newEntryFromLine(line string) (*scoring.Entry, error) {
 	if line == "" {
 		return nil, io.EOF
 	}
 
-	parts := strings.Split(line, "\t")
-	if len(parts) != 2 {
+	parts := strings.Split(line, "|")
+	if len(parts) != 3 {
 		return nil, fmt.Errorf("importer: cannot parse entry: %s", line)
 	}
 
-	path := parts[1]
-	weight, err := strconv.ParseFloat(parts[0], 64)
+	path := parts[0]
+	weight, err := strconv.ParseInt(parts[1], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	epoch, err := strconv.ParseInt(parts[2], 10, 64)
 	if err != nil {
 		return nil, err
 	}
@@ -105,8 +108,8 @@ func (i *autojump) newEntryFromLine(line string) (*scoring.Entry, error) {
 	return &scoring.Entry{
 		Path: path,
 		Score: &scoring.Score{
-			Weight: int64(math.Round(weight)),
-			Age:    scoring.Now,
+			Weight: weight,
+			Age:    time.Unix(epoch, 0),
 		},
 	}, nil
 }

@@ -3,7 +3,9 @@ package importer
 import (
 	"os"
 	"path"
+	"testing"
 
+	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/config"
 	"github.com/gsamokovarov/jump/scoring"
 )
@@ -23,6 +25,7 @@ func (c *testConfig) ReadEntries() (scoring.Entries, error) {
 
 func (c *testConfig) WriteEntries(entries scoring.Entries) error {
 	c.Entries = entries
+	c.Entries.Sort()
 	return nil
 }
 
@@ -52,6 +55,27 @@ func (c *testConfig) WritePin(_, value string) error {
 func (c *testConfig) RemovePin(term string) error {
 	c.Pin = ""
 	return nil
+}
+
+func TestGuess_Autojump(t *testing.T) {
+	imp := Guess("autojump", &testConfig{})
+
+	_, ok := imp.(*autojump)
+	assert.True(t, ok)
+}
+
+func TestGuess_Z(t *testing.T) {
+	imp := Guess("z", &testConfig{})
+
+	_, ok := imp.(*z)
+	assert.True(t, ok)
+}
+
+func TestGuess_Both(t *testing.T) {
+	imp := Guess("", &testConfig{})
+
+	_, ok := imp.(multiImporter)
+	assert.True(t, ok)
 }
 
 func init() {

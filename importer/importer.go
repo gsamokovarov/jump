@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/gsamokovarov/jump/config"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
@@ -17,6 +18,23 @@ type Callback func(*scoring.Entry)
 // Importer imports a configuration from an external tool into jump.
 type Importer interface {
 	Import(fn Callback) error
+}
+
+// Guess tries to guess the importer to use based on a hint.
+func Guess(hint string, conf config.Config) Importer {
+	var imp Importer
+
+	switch hint {
+	case "autojump":
+		imp = Autojump(conf)
+	case "z":
+		imp = Z(conf)
+	default:
+		// First try z, then try autojump.
+		imp = multiImporter{Z(conf), Autojump(conf)}
+	}
+
+	return imp
 }
 
 func readConfig(paths []string) (string, error) {
