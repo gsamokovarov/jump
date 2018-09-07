@@ -9,8 +9,8 @@ import (
 	"github.com/gsamokovarov/jump/scoring"
 )
 
-// UnsupportedErr is an error returned when the importing tool is not found.
-var UnsupportedErr = errors.New("importer: unsupported")
+// NotFoundErr is an error returned when the importing tool is not found.
+var NotFoundErr = errors.New("importer: cannot find autojump or z data files")
 
 // Callback is called on every import.
 type Callback func(*scoring.Entry)
@@ -67,5 +67,5 @@ func findPath(paths []string) (string, error) {
 		}
 	}
 
-	return "", UnsupportedErr
+	return "", NotFoundErr
 }

@@ -10,7 +10,7 @@ func (mi multiImporter) Import(fn Callback) error {
 
 	for _, i := range mi {
 		err := i.Import(fn)
-		if err == UnsupportedErr {
+		if err == NotFoundErr {
 			continue
 		}
 		if err != nil {
