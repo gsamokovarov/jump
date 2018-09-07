@@ -8,11 +8,12 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 	s "github.com/gsamokovarov/jump/scoring"
 )
 
 func Test_cdCmd(t *testing.T) {
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
 			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
@@ -27,7 +28,7 @@ func Test_cdCmd(t *testing.T) {
 }
 
 func Test_cdCmd_noEntries(t *testing.T) {
-	conf := &testConfig{}
+	conf := &config.Testing{}
 
 	output := capture(&os.Stderr, func() {
 		assert.Nil(t, cdCmd(cli.Args{"wc"}, conf))
@@ -37,7 +38,7 @@ func Test_cdCmd_noEntries(t *testing.T) {
 }
 
 func Test_cdCmd_multipleArgumentsAsSeparators(t *testing.T) {
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
 			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
@@ -52,7 +53,7 @@ func Test_cdCmd_multipleArgumentsAsSeparators(t *testing.T) {
 }
 
 func Test_cdCmd_absolutePath(t *testing.T) {
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
 			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
@@ -71,7 +72,7 @@ func Test_cdCmd_exactMatch(t *testing.T) {
 	p2 := p.Join(td, "/client/website")
 	p3 := p.Join(td, "web")
 
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
 			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},

@@ -18,6 +18,7 @@ func Example_helpCmd() {
 	//   clean        Cleans the database of inexisting entries.
 	//   forget       Removes the current directory from the database.
 	//   hint         Hints relevant paths for jumping.
+	//   import       Import autojump or z scores.
 	//   pin          Pin a directory to a search term.
 	//   pins         Lists all the pinned search terms.
 	//   shell        Display a shell integration script.

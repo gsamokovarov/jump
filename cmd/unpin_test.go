@@ -7,6 +7,7 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 	s "github.com/gsamokovarov/jump/scoring"
 )
 
@@ -14,7 +15,7 @@ func Test_unpinCmd(t *testing.T) {
 	p1 := p.Join(td, "web")
 	p2 := p.Join(td, "web-console")
 
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{p2, &s.Score{Weight: 1, Age: s.Now}},
 			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},

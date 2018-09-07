@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	"github.com/gsamokovarov/assert"
+	"github.com/gsamokovarov/jump/config"
 )
 
 func Test_pinsCmd(t *testing.T) {
-	conf := &testConfig{
+	conf := &config.Testing{
 		Pins: map[string]string{
 			"r": "/home/user/projects/rails",
 		},

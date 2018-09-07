@@ -52,8 +52,10 @@ func Open(name string) (File, error) {
 }
 
 type file struct {
-	to    string
-	tmp   *os.File
+	to  string
+	tmp *os.File
+	// dirty indicates whether this tmpfile has experienced errors which mean it
+	// should not be used to update the original.
 	dirty bool
 }
 
