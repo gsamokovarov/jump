@@ -8,13 +8,14 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
 func Test_forgetCmd(t *testing.T) {
 	p := p.Join(td, "web-console")
 
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: scoring.Entries{scoring.NewEntry(p)},
 	}
 

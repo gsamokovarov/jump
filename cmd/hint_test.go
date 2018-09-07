@@ -8,6 +8,7 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 	s "github.com/gsamokovarov/jump/scoring"
 )
 
@@ -15,7 +16,7 @@ func Test_hintCmd_short(t *testing.T) {
 	p1 := p.Join(td, "web-console")
 	p2 := p.Join(td, "/client/website")
 
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
 			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
@@ -33,7 +34,7 @@ func Test_hintCmd_short(t *testing.T) {
 }
 
 func Test_hintCmd_noEntries(t *testing.T) {
-	conf := &testConfig{}
+	conf := &config.Testing{}
 
 	output := capture(&os.Stdout, func() {
 		assert.Nil(t, hintCmd(cli.Args{"webcons"}, conf))

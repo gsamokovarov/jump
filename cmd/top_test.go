@@ -8,6 +8,7 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 	s "github.com/gsamokovarov/jump/scoring"
 )
 
@@ -15,7 +16,7 @@ func Test_topCmd(t *testing.T) {
 	wc := p.Join(td, "web-console")
 	web := p.Join(td, "/client/website")
 
-	conf := &testConfig{
+	conf := &config.Testing{
 		Entries: s.Entries{
 			&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
 			&s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},

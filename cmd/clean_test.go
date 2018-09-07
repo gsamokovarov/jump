@@ -7,10 +7,11 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 )
 
 func Test_cleanCmd(t *testing.T) {
-	conf := &testConfig{}
+	conf := &config.Testing{}
 
 	assert.Nil(t, chdirCmd(cli.Args{"/inexistent/dir/dh891n2kisdha"}, conf))
 
