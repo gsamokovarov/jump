@@ -48,9 +48,7 @@ func (i *z) Import(fn Callback) error {
 			continue
 		}
 
-		if fn != nil {
-			fn(entry)
-		}
+		fn.Call(entry)
 
 		jumpEntries = append(jumpEntries, entry)
 	}

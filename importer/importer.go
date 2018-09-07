@@ -15,6 +15,13 @@ var UnsupportedErr = errors.New("importer: unsupported")
 // Callback is called on every import.
 type Callback func(*scoring.Entry)
 
+// Call calls the callback without the need of nil checks.
+func (fn Callback) Call(entry *scoring.Entry) {
+	if fn != nil {
+		fn(entry)
+	}
+}
+
 // Importer imports a configuration from an external tool into jump.
 type Importer interface {
 	Import(fn Callback) error

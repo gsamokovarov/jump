@@ -78,6 +78,13 @@ func TestGuess_Both(t *testing.T) {
 	assert.True(t, ok)
 }
 
+func TestCallback(t *testing.T) {
+	var fn Callback
+
+	// Does not crash when fn is nil.
+	fn.Call(nil)
+}
+
 func init() {
 	cwd, _ := os.Getwd()
 	td = path.Join(cwd, "testdata")
