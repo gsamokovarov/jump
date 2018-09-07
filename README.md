@@ -144,6 +144,26 @@ To trigger a case-sensitive search, use a term that has a capital letter.
 The jump will resolve to `/Users/genadi/Development` even if there is
 `/Users/genadi/Development/dev-tools` that scores better.
 
+## Is it like autojump or z?
+
+Yes, it is! You can import your datafile from `autojump` or `z` with:
+
+```bash
+$ jump import
+```
+
+This will try `z` first then `autojump`, so you can even combine all the
+entries from both tools.
+
+The command is safe to run on pre-existing jump database, because if an entry
+exist in jump already, it won't be imported and it's score will remain
+unchanged. You can be explicit and choose to import `autojump` or `z` with:
+
+```bash
+$ jump import autojump
+$ jump import z
+```
+
 ## Installation
 
 Jump comes in packages for macOS through homebrew and linux.
