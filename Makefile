@@ -27,7 +27,7 @@ clean:
 	@rm -f jump*
 
 .PHONY: pkg
-pkg: clean pkg.deb pkg.rpm
+pkg: clean pkg.deb pkg.rpm pkg.linux
 
 .PHONY: pkg.deb
 pkg.deb: man build.linux
@@ -54,6 +54,10 @@ pkg.rpm: man build.linux
 		./jump=/usr/bin/jump \
 		./man/jump.1=/usr/share/man/man1/jump.1 \
 		./man/j.1=/usr/share/man/man1/j.1
+
+.PHONY: pkg.rpm
+pkg.linux: man build.linux
+	@mv jump jump_linux_amd64_binary
 
 .PHONY: man
 man: ronn
