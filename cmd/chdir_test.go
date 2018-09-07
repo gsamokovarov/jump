@@ -7,13 +7,14 @@ import (
 
 	"github.com/gsamokovarov/assert"
 	"github.com/gsamokovarov/jump/cli"
+	"github.com/gsamokovarov/jump/config"
 )
 
 func Test_chdirCmd(t *testing.T) {
 	p1 := p.Join(td, "web-console")
 	p2 := p.Join(td, "/client/website")
 
-	conf := &testConfig{}
+	conf := &config.Testing{}
 
 	entries, err := conf.ReadEntries()
 	assert.Nil(t, err)
@@ -47,7 +48,7 @@ func Test_chdirCmd(t *testing.T) {
 }
 
 func Test_chdirCmd_cwd(t *testing.T) {
-	conf := &testConfig{}
+	conf := &config.Testing{}
 
 	entries, err := conf.ReadEntries()
 	assert.Nil(t, err)

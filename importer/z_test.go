@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/gsamokovarov/assert"
+	"github.com/gsamokovarov/jump/config"
 )
 
 func TestZ(t *testing.T) {
-	conf := &testConfig{}
+	conf := &config.Testing{}
 	configPath := p.Join(td, "z")
 
 	imp := Z(conf, configPath)

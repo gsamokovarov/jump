@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	"github.com/gsamokovarov/assert"
+	"github.com/gsamokovarov/jump/config"
 )
 
 func TestAutojump(t *testing.T) {
-	conf := &testConfig{}
+	conf := &config.Testing{}
 	configPath := p.Join(td, "autojump.txt")
 
 	imp := Autojump(conf, configPath)
