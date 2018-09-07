@@ -1,0 +1,6 @@
+38.729833462	/Users/genadi/Development/jump
+14.1421356237	/Users/genadi/Development/mock_last_status
+33.1662479035	/Users/genadi/Development
+14.1421356237	/Users/genadi/.go/src/github.com/gsamokovarov/jump
+43.5889894353	/usr/local/Cellar/autojump
+20.0	/Users/genadi/Development/gloat
