@@ -19,7 +19,7 @@ For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
     status --is-interactive; and . (jump shell | psub)
 
-Once integrated, jump will automatically directory changes and start
+Once integrated, jump will automatically monitor directory changes and start
 building an internal database.
 
 
