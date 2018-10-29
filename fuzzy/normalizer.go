@@ -7,6 +7,7 @@ import (
 )
 
 const osSeparator = string(os.PathSeparator)
+const glob = "*"
 
 // Normalizer holds utilities for search term transformation.
 type Normalizer struct {
@@ -36,14 +37,15 @@ func (m Normalizer) NormalizePath(path string) string {
 		path = strings.ToLower(path)
 	}
 
-	if containsOsSeparators(m.term) {
-		count := strings.Count(m.term, osSeparator)
-		path = finalChunks(path, count)
-	} else {
-		path = filepath.Base(path)
+	if containsGlobs(m.term) {
+		return path
 	}
 
-	return path
+	if containsOsSeparators(m.term) {
+		return finalChunks(path, strings.Count(m.term, osSeparator))
+	}
+
+	return filepath.Base(path)
 }
 
 // NormalizeTerm normalizes the search term.
@@ -51,8 +53,8 @@ func (m Normalizer) NormalizePath(path string) string {
 // The normalization consists only of returning a case insensitive (lowered) or
 // sensitive string.
 func (m Normalizer) NormalizeTerm() string {
-	if caseInsensitiveSearch(m.term) {
-		return strings.ToLower(m.term)
+	if containsGlobs(m.term) {
+		return strings.Replace(m.term, "*", "", -1)
 	}
 
 	return m.term
@@ -69,6 +71,10 @@ func caseInsensitiveSearch(str string) bool {
 
 func containsOsSeparators(str string) bool {
 	return strings.ContainsAny(str, osSeparator)
+}
+
+func containsGlobs(str string) bool {
+	return strings.ContainsAny(str, glob)
 }
 
 func finalChunks(path string, sepCount int) string {
