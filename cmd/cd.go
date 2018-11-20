@@ -28,7 +28,6 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
    at https://github.com/gsamokovarov/jump/issues.
 `
 
-const proximity = 5
 const osSeparator = string(os.PathSeparator)
 
 func cdCmd(args cli.Args, conf config.Config) error {
@@ -115,11 +114,18 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 	return nil, errNoEntries
 }
 
+const exactMatchProximity = 5
+const exactMatchLenRequirement = 5
+
 func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
 	norm := fuzzy.NewNormalizer(filepath.Base(term))
 	normalizedTerm := norm.NormalizeTerm()
 
-	for index := offset; index <= offset+proximity; index++ {
+	if len(normalizedTerm) < exactMatchLenRequirement {
+		return offset
+	}
+
+	for index := offset; index <= offset+exactMatchProximity; index++ {
 		entry, ok := entries.Select(index)
 		if !ok {
 			continue

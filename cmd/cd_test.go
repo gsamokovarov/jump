@@ -69,23 +69,44 @@ func Test_cdCmd_absolutePath(t *testing.T) {
 
 func Test_cdCmd_exactMatch(t *testing.T) {
 	p1 := p.Join(td, "web-console")
-	p2 := p.Join(td, "/client/website")
+	p2 := p.Join(td, "/client/webcon")
 	p3 := p.Join(td, "web")
 
 	conf := &config.Testing{
 		Entries: s.Entries{
-			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
-			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
 			&s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
+			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
+			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
 		},
 	}
 
+	// You have to type at least 5 characters here to trigger the exact match
+	// here to avoid jumps to popular `app`, `src`, `test`, `spec` or the likes
+	// that are common to project structures.
 	output := capture(&os.Stdout, func() {
 		assert.Nil(t, cdCmd(cli.Args{"web"}, conf))
 	})
 
-	// If someone typed a dir exactly, jump straight to it. Not good for short
-	// names like this test here, but pretty useful for most of the catch-all
-	// directories.
-	assert.Equal(t, p3+"\n", output)
+	assert.NotEqual(t, p3+"\n", output)
+}
+
+func Test_cdCmd_exactMatch_enoughLength(t *testing.T) {
+	p1 := p.Join(td, "web-console")
+	p2 := p.Join(td, "/client/webcon")
+	p3 := p.Join(td, "web")
+
+	conf := &config.Testing{
+		Entries: s.Entries{
+			&s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
+			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
+			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+		},
+	}
+
+	// If someone typed a dir exactly, jump straight to it.
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{"webcon"}, conf))
+	})
+
+	assert.Equal(t, p2+"\n", output)
 }
