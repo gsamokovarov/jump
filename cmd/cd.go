@@ -19,10 +19,15 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
 1. You are running jump for the first time. Have you integrated jump with your
    shell? Run the following command for help:
 	
-      $ jump shell
+       $ jump shell
 
    If you have run the integration, enter a few directories in a new shell to
    populate the database.
+
+   Are you coming from autojump or z? You can import their existing scoring
+	 databases into jump with:
+
+       $ jump import
 
 2. The database is corrupted. You can open an issue on jump's issue tracker
    at https://github.com/gsamokovarov/jump/issues.
