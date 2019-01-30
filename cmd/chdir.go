@@ -1,21 +1,14 @@
 package cmd
 
 import (
-	"os"
-	"path/filepath"
-
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
 func chdirCmd(args cli.Args, conf config.Config) error {
-	dir, err := os.Getwd()
-	if len(args) == 0 && err != nil {
-		return err
-	}
-
-	if dir, err = filepath.Abs(args.CommandName()); err != nil {
+	dir, err := cwdFromArgs(args)
+	if err != nil {
 		return err
 	}
 
