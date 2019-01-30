@@ -12,10 +12,10 @@ func forgetCmd(args cli.Args, conf config.Config) error {
 	dir, err := os.Getwd()
 	if len(args) == 0 && err != nil {
 		return err
-	} else {
-		if dir, err = filepath.Abs(args.CommandName()); err != nil {
-			return err
-		}
+	}
+
+	if dir, err = filepath.Abs(args.CommandName()); err != nil {
+		return err
 	}
 
 	entries, err := conf.ReadEntries()
@@ -27,9 +27,7 @@ func forgetCmd(args cli.Args, conf config.Config) error {
 		cli.Outf("Cleaning %s\n", entry.Path)
 		entries.Remove(entry.Path)
 
-		if err := conf.WriteEntries(entries); err != nil {
-			return err
-		}
+		return conf.WriteEntries(entries)
 	}
 
 	return nil

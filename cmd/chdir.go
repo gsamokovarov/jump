@@ -13,10 +13,10 @@ func chdirCmd(args cli.Args, conf config.Config) error {
 	dir, err := os.Getwd()
 	if len(args) == 0 && err != nil {
 		return err
-	} else {
-		if dir, err = filepath.Abs(args.CommandName()); err != nil {
-			return err
-		}
+	}
+
+	if dir, err = filepath.Abs(args.CommandName()); err != nil {
+		return err
 	}
 
 	entries, err := conf.ReadEntries()
@@ -30,11 +30,7 @@ func chdirCmd(args cli.Args, conf config.Config) error {
 		entries = append(entries, scoring.NewEntry(dir))
 	}
 
-	if err := conf.WriteEntries(entries); err != nil {
-		return err
-	}
-
-	return nil
+	return conf.WriteEntries(entries)
 }
 
 func init() {
