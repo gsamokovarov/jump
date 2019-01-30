@@ -21,12 +21,12 @@ func TestCommandRegistryCommands(t *testing.T) {
 
 func TestCommandRegistryOptions(t *testing.T) {
 	registry := commandRegistry{
-		"foo":    Command{Name: "foo"},
-		"--halp": Command{Name: "--halp"},
+		"foo":      Command{Name: "foo"},
+		"--switch": Command{Name: "--switch"},
 	}
 
 	options := registry.Options()
 	assert.Len(t, 1, options)
 
-	assert.Equal(t, "--halp", options[0].Name)
+	assert.Equal(t, "--switch", options[0].Name)
 }
