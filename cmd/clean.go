@@ -23,11 +23,9 @@ func cleanCmd(args cli.Args, conf config.Config) error {
 			cli.Outf("Cleaning %s\n", entry.Path)
 			cleanEntries.Remove(entry.Path)
 		}
-
-		conf.WriteEntries(cleanEntries)
 	}
 
-	return nil
+	return conf.WriteEntries(cleanEntries)
 }
 
 func init() {
