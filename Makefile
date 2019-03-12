@@ -14,6 +14,10 @@ build:
 build.linux:
 	@env GOOS=linux go build -o jump
 
+.PHONY: build.linux.arm
+build.linux.arm:
+	@env GOOS=linux GOARCH=arm go build -o jump
+
 .PHONY: test
 test:
 	@go test ./... -cover
@@ -58,6 +62,10 @@ pkg.rpm: man build.linux
 .PHONY: pkg.rpm
 pkg.linux: man build.linux
 	@mv jump jump_linux_amd64_binary
+
+.PHONY: pkg.rpm
+pkg.linux.arm: man build.linux.arm
+	@mv jump jump_linux_arm_binary
 
 .PHONY: man
 man: ronn
