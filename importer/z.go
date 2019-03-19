@@ -3,6 +3,7 @@ package importer
 import (
 	"fmt"
 	"io"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -94,7 +95,7 @@ func (i *z) newEntryFromLine(line string) (*scoring.Entry, error) {
 	}
 
 	path := parts[0]
-	weight, err := strconv.ParseInt(parts[1], 10, 64)
+	weight, err := strconv.ParseFloat(parts[1], 64)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +107,7 @@ func (i *z) newEntryFromLine(line string) (*scoring.Entry, error) {
 	return &scoring.Entry{
 		Path: path,
 		Score: &scoring.Score{
-			Weight: weight,
+			Weight: int64(math.Round(weight)),
 			Age:    time.Unix(epoch, 0),
 		},
 	}, nil
