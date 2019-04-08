@@ -4,7 +4,7 @@ HOMEPAGE = https://github.com/gsamokovarov/jump
 AUTHOR = "Genadi Samokovarov"
 LICENSE = MIT
 
-VERSION = 0.22.0
+VERSION = 0.23.0
 
 .PHONY: build
 build:
@@ -31,7 +31,7 @@ clean:
 	@rm -f jump*
 
 .PHONY: pkg
-pkg: clean pkg.deb pkg.rpm pkg.linux
+pkg: clean pkg.deb pkg.rpm pkg.linux pkg.linux.arm
 
 .PHONY: pkg.deb
 pkg.deb: man build.linux
