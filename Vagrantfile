@@ -6,7 +6,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get update
     sudo apt-get install -y rpm build-essential ruby2.6 ruby2.6-dev git
 
-    sudo gem install fpm
+    sudo gem install fpm -v 1.10.0
     sudo gem install ronn
 
     GOVERSION=1.12.5
