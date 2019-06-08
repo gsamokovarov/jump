@@ -4,7 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 )
 
 // Truncater encapsulates everything that responds to Truncate(int64).
@@ -24,7 +24,7 @@ type File interface {
 
 // Open opens an atomic file for writing.
 func Open(name string) (File, error) {
-	tmp, err := ioutil.TempFile(path.Dir(name), ".jump")
+	tmp, err := ioutil.TempFile(filepath.Dir(name), ".jump")
 	if err != nil {
 		return nil, err
 	}
