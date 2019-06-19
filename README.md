@@ -17,7 +17,7 @@ below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
 For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
-    status --is-interactive; and . (jump shell | psub)
+    status --is-interactive; and source (jump shell fish | psub)
 
 Once integrated, jump will automatically monitor directory changes and start
 building an internal database.
