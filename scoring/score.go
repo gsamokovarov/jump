@@ -18,8 +18,8 @@ type Score struct {
 }
 
 // Update the weight and age of the current score.
-func (s *Score) Update() {
-	s.Weight++
+func (s *Score) Update(weight int64) {
+	s.Weight += weight
 	s.Age = Now
 }
 

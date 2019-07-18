@@ -14,7 +14,7 @@ func TestEntriesCalculateScore(t *testing.T) {
 
 func TestEntriesUpdateScore(t *testing.T) {
 	entry := Entry{"/foo", NewScore()}
-	entry.UpdateScore()
+	entry.UpdateScore(1)
 
 	assert.Equal(t, 2, entry.Score.Weight)
 }

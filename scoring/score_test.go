@@ -22,7 +22,7 @@ func TestScoreRelevance(t *testing.T) {
 
 func TestScoreUpdate(t *testing.T) {
 	score := Score{2, Now}
-	score.Update()
+	score.Update(1)
 
 	assert.Equal(t, Now, score.Age)
 	assert.Equal(t, 3, score.Weight)

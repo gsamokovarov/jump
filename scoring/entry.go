@@ -9,8 +9,8 @@ type Entry struct {
 }
 
 // UpdateScore updates the score for an entry.
-func (e *Entry) UpdateScore() {
-	e.Score.Update()
+func (e *Entry) UpdateScore(weight int64) {
+	e.Score.Update(weight)
 }
 
 // CalculateScore calculates the score for an entry.
