@@ -71,6 +71,10 @@ func normalizeDir(dir string) (string, error) {
 		return dir, nil
 	}
 
+	if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
+		return filepath.Join(xdg, "jump"), nil
+	}
+
 	home, err := homeDir()
 	if err != nil {
 		return dir, err
