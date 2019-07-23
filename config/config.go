@@ -12,7 +12,7 @@ const (
 	defaultScoreFile  = "scores.json"
 	defaultSearchFile = "search.json"
 	defaultPinsFile   = "pins.json"
-	defaultDirName    = ".jump"
+	defaultName       = "jump"
 )
 
 // Config represents the config directory and all the miscellaneous
@@ -66,13 +66,11 @@ func SetupDefault(dir string) (Config, error) {
 	return Setup(dir)
 }
 
+// $JUMP_HOME > $XDG_CONFIG_HOME/jump > $HOME/.jump
+// if $HOME/.jump dir already exists, keep use it.
 func normalizeDir(dir string) (string, error) {
 	if dir != "" {
 		return dir, nil
-	}
-
-	if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
-		return filepath.Join(xdg, "jump"), nil
 	}
 
 	home, err := homeDir()
@@ -80,7 +78,14 @@ func normalizeDir(dir string) (string, error) {
 		return dir, err
 	}
 
-	return filepath.Join(home, defaultDirName), nil
+	jumpHome := filepath.Join(home, "."+defaultName)
+	if _, err := os.Stat(jumpHome); os.IsNotExist(err) {
+		if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
+			jumpHome = filepath.Join(xdg, defaultName)
+		}
+	}
+
+	return jumpHome, nil
 }
 
 // See https://github.com/golang/go/issues/26463
