@@ -87,7 +87,7 @@ func findConfigDir(dir string) (string, error) {
 		return dir, err
 	}
 
-	configDir := filepath.Join(home, "."+defaultHomeDir)
+	configDir := filepath.Join(home, defaultHomeDir)
 	if _, err := os.Stat(configDir); os.IsNotExist(err) {
 		if xdgHome := os.Getenv("XDG_CONFIG_HOME"); xdgHome != "" {
 			configDir = filepath.Join(xdgHome, defaultXDGDir)
