@@ -12,7 +12,8 @@ const (
 	defaultScoreFile  = "scores.json"
 	defaultSearchFile = "search.json"
 	defaultPinsFile   = "pins.json"
-	defaultName       = "jump"
+	defaultHomeDir    = ".jump"
+	defaultXDGDir     = "jump"
 )
 
 // Config represents the config directory and all the miscellaneous
@@ -58,7 +59,7 @@ func Setup(dir string) (Config, error) {
 //
 // If the directory path is an empty string, the path is automatically guessed.
 func SetupDefault(dir string) (Config, error) {
-	dir, err := normalizeDir(dir)
+	dir, err := findConfigDir(dir)
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +67,17 @@ func SetupDefault(dir string) (Config, error) {
 	return Setup(dir)
 }
 
-// $JUMP_HOME > $XDG_CONFIG_HOME/jump > $HOME/.jump
-// if $HOME/.jump dir already exists, keep use it.
-func normalizeDir(dir string) (string, error) {
+// findConfigDir finds the jump configuration directory.
+//
+// The search algorithm tries the directories in order:
+//
+// - $JUMP_HOME (if given)
+// - $HOME/.jump (if already exists)
+// - $XDG_CONFIG_HOME/jump (prefer for new installs)
+//
+// We're moving towards XDG, but for existing installs or non-XDG supported
+// systems, the ~/.jump dur will be used.
+func findConfigDir(dir string) (string, error) {
 	if dir != "" {
 		return dir, nil
 	}
@@ -78,14 +87,14 @@ func normalizeDir(dir string) (string, error) {
 		return dir, err
 	}
 
-	jumpHome := filepath.Join(home, "."+defaultName)
-	if _, err := os.Stat(jumpHome); os.IsNotExist(err) {
-		if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
-			jumpHome = filepath.Join(xdg, defaultName)
+	configDir := filepath.Join(home, "."+defaultHomeDir)
+	if _, err := os.Stat(configDir); os.IsNotExist(err) {
+		if xdgHome := os.Getenv("XDG_CONFIG_HOME"); xdgHome != "" {
+			configDir = filepath.Join(xdgHome, defaultXDGDir)
 		}
 	}
 
-	return jumpHome, nil
+	return configDir, nil
 }
 
 // See https://github.com/golang/go/issues/26463
