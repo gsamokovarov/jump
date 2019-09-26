@@ -20,7 +20,7 @@ func topCmd(args cli.Args, conf config.Config) error {
 		sort.Sort(sort.Reverse(entries))
 
 		for _, entry := range entries {
-			cli.Outf("%s\n", entry.Path)
+			cli.Outf("%s %.2f\n", entry.Path, entry.CalculateScore())
 		}
 
 		return nil
@@ -30,7 +30,7 @@ func topCmd(args cli.Args, conf config.Config) error {
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 
 	for _, entry := range fuzzyEntries.Entries {
-		cli.Outf("%s\n", entry.Path)
+		cli.Outf("%s %.2f\n", entry.Path, entry.CalculateScore())
 	}
 
 	return nil
