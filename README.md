@@ -2,11 +2,24 @@
   <a href="https://github.com/gsamokovarov/jump/releases">[releases]</a>
 </p>
 
+<img align="center" src="https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.svg">
+
+[![Build Status](https://travis-ci.org/gsamokovarov/jump.svg?branch=master)](https://travis-ci.org/gsamokovarov/jump) [![Go Report Card](https://goreportcard.com/badge/github.com/gsamokovarov/jump)](https://goreportcard.com/report/github.com/gsamokovarov/jump)
+
 **Jump** integrates with the shell and learns about your navigational habits by
 keeping track of the directories you visit. It strives to give you the best
 directory for the shortest search term.
 
-![demo](https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.gif)
+## Installation
+
+Jump comes in packages for macOS through homebrew and linux.
+
+| Platform | Command |
+| -- | ------- |
+| macOS | `brew install jump` |
+| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb && sudo dpkg -i jump_0.23.0_amd64.deb` |
+| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump-0.23.0-1.x86_64.rpm && sudo rpm -i jump-0.23.0-1.x86_64.rpm` |
+| Go | `go get github.com/gsamokovarov/jump` |
 
 ### Integration
 
@@ -24,8 +37,6 @@ building an internal database.
 
 
 ### But `j` is not my favourite letter!
-
-<img align="right" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
 
 This is fine, you can bind jump to `z`, with this:
 
@@ -164,44 +175,8 @@ $ jump import autojump
 $ jump import z
 ```
 
-## Installation
 
-Jump comes in packages for macOS through homebrew and linux.
-
-## macOS
-
-```bash
-brew install jump
-```
-
-### Ubuntu/Debian
-
-```bash
-wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb
-sudo dpkg -i jump_0.23.0_amd64.deb
-```
-
-### Red Hat/Fedora
-
-```bash
-wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump-0.23.0-1.x86_64.rpm
-sudo rpm -i jump-0.23.0-1.x86_64.rpm
-```
-
-### Go
-
-If you have the Go toolchain installed, you can install it through:
-
-```bash
-go get github.com/gsamokovarov/jump
-```
-
-You can also build jump by yourself. Or hack on it, you know, if you like Go
-and UNIX stuff. 💻
-
-## Build
-
-[![Build Status](https://travis-ci.org/gsamokovarov/jump.svg?branch=master)](https://travis-ci.org/gsamokovarov/jump) [![Go Report Card](https://goreportcard.com/badge/github.com/gsamokovarov/jump)](https://goreportcard.com/report/github.com/gsamokovarov/jump)
+<img align="center" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
