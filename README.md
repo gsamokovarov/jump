@@ -1,14 +1,14 @@
+[![Build Status](https://travis-ci.org/gsamokovarov/jump.svg?branch=master)](https://travis-ci.org/gsamokovarov/jump) [![Go Report Card](https://goreportcard.com/badge/github.com/gsamokovarov/jump)](https://goreportcard.com/report/github.com/gsamokovarov/jump)
+
 <p align="right">
   <a href="https://github.com/gsamokovarov/jump/releases">[releases]</a>
 </p>
 
-<img align="center" src="https://raw.githubusercontent.com/gsamokovarov/jump/master/assets/demo.svg">
-
-[![Build Status](https://travis-ci.org/gsamokovarov/jump.svg?branch=master)](https://travis-ci.org/gsamokovarov/jump) [![Go Report Card](https://goreportcard.com/badge/github.com/gsamokovarov/jump)](https://goreportcard.com/report/github.com/gsamokovarov/jump)
-
 **Jump** integrates with the shell and learns about your navigational habits by
 keeping track of the directories you visit. It strives to give you the best
 directory for the shortest search term.
+
+![Demo](./assets/demo.svg)
 
 ## Installation
 
