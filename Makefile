@@ -8,7 +8,7 @@ VERSION = 0.23.0
 
 .PHONY: build
 build:
-	@go build -o jump
+	@env CGO_ENABLED=0 go build -o jump
 
 .PHONY: build.linux
 build.linux:
