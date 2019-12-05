@@ -5,10 +5,11 @@ import "github.com/gsamokovarov/jump/scoring"
 // Testing is an in-memory testing config which loosely follows the default
 // file-based configuration behavior.
 type Testing struct {
-	Entries scoring.Entries
-	Search  Search
-	Pins    map[string]string
-	Pin     string
+	Entries  scoring.Entries
+	Search   Search
+	Pins     map[string]string
+	Pin      string
+	Settings Settings
 }
 
 // ReadEntries implements the Config interface.
@@ -20,6 +21,17 @@ func (c *Testing) ReadEntries() (scoring.Entries, error) {
 func (c *Testing) WriteEntries(entries scoring.Entries) error {
 	c.Entries = entries
 	c.Entries.Sort()
+	return nil
+}
+
+// ReadSettings implements the Config interface.
+func (c *Testing) ReadSettings() Settings {
+	return c.Settings
+}
+
+// WriteSettings implements the Config interface.
+func (c *Testing) WriteSettings(settings Settings) error {
+	c.Settings = settings
 	return nil
 }
 

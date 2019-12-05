@@ -9,11 +9,12 @@ import (
 )
 
 const (
-	defaultScoreFile  = "scores.json"
-	defaultSearchFile = "search.json"
-	defaultPinsFile   = "pins.json"
-	defaultHomeDir    = ".jump"
-	defaultXDGDir     = "jump"
+	defaultScoreFile    = "scores.json"
+	defaultSearchFile   = "search.json"
+	defaultSettingsFile = "settings.json"
+	defaultPinsFile     = "pins.json"
+	defaultHomeDir      = ".jump"
+	defaultXDGDir       = "jump"
 )
 
 // Config represents the config directory and all the miscellaneous
@@ -29,13 +30,17 @@ type Config interface {
 	FindPin(string) (string, bool)
 	WritePin(string, string) error
 	RemovePin(string) error
+
+	ReadSettings() Settings
+	WriteSettings(Settings) error
 }
 
 type fileConfig struct {
-	Dir    string
-	Scores string
-	Search string
-	Pins   string
+	Dir      string
+	Scores   string
+	Search   string
+	Pins     string
+	Settings string
 }
 
 // Setup setups the config folder from a directory path.
@@ -48,11 +53,13 @@ func Setup(dir string) (Config, error) {
 		return nil, err
 	}
 
-	scores := filepath.Join(dir, defaultScoreFile)
-	search := filepath.Join(dir, defaultSearchFile)
-	pins := filepath.Join(dir, defaultPinsFile)
-
-	return &fileConfig{dir, scores, search, pins}, nil
+	return &fileConfig{
+		Dir:      dir,
+		Scores:   filepath.Join(dir, defaultScoreFile),
+		Search:   filepath.Join(dir, defaultSearchFile),
+		Pins:     filepath.Join(dir, defaultPinsFile),
+		Settings: filepath.Join(dir, defaultSettingsFile),
+	}, nil
 }
 
 // SetupDefault setups the config folder from a directory path.
