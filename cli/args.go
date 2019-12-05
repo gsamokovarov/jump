@@ -2,6 +2,11 @@ package cli
 
 import "strings"
 
+// Optional marks an --option value as optional. The value is the empty string,
+// if needed to be checked, but could be used purely for informational
+// principles.
+const Optional = ""
+
 // Args represents an ordered collection of command line argument.
 type Args []string
 
@@ -42,7 +47,8 @@ func (a Args) Rest() Args {
 // as is.
 func (a Args) Has(option string) bool {
 	for i := 0; i < len(a); i++ {
-		if a[i] == option {
+		name, _ := nameValue(a[i])
+		if name == option {
 			return true
 		}
 	}
@@ -53,7 +59,8 @@ func (a Args) Has(option string) bool {
 // Get checks if an --option has a value given.
 //
 // If the option is not given, the default value is returned. There is
-// currently no concept of optional arguments, as we haven't got the need.
+// currently no concept of optional arguments, as we haven't got the need for
+// them.
 func (a Args) Get(option, defaultValue string) string {
 	for i := 0; i < len(a); i++ {
 		name, value := nameValue(a[i])

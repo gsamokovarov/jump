@@ -29,21 +29,30 @@ func TestCommandName(t *testing.T) {
 }
 
 func TestHas(t *testing.T) {
-	args := ParseArgs([]string{"program", "command", "--foo"})
+	t.Run("--option without a value", func(t *testing.T) {
+		args := ParseArgs([]string{"program", "command", "--option"})
 
-	assert.True(t, args.Has("--foo"))
-	assert.False(t, args.Has("--bar"))
+		assert.True(t, args.Has("--option"))
+		assert.False(t, args.Has("--another"))
+	})
+
+	t.Run("--option=with-value", func(t *testing.T) {
+		args := ParseArgs([]string{"program", "command", "--option=value"})
+
+		assert.True(t, args.Has("--option"))
+		assert.False(t, args.Has("--another"))
+	})
 }
 
 func TestGet(t *testing.T) {
 	args := ParseArgs([]string{"program", "--option=val"})
-	assert.Equal(t, "val", args.Get("--option", "none"))
+	assert.Equal(t, "val", args.Get("--option", Optional))
 
 	args = ParseArgs([]string{"program", "--option", "val"})
-	assert.Equal(t, "val", args.Get("--option", "none"))
+	assert.Equal(t, "val", args.Get("--option", Optional))
 
 	args = ParseArgs([]string{"program", "--option"})
-	assert.Equal(t, "none", args.Get("--option", "none"))
+	assert.Equal(t, "default", args.Get("--option", "default"))
 }
 
 func TestRest(t *testing.T) {
