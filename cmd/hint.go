@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
 )
@@ -9,7 +11,7 @@ func hintCmd(args cli.Args, conf config.Config) error {
 	term := termFromArgs(args, conf)
 
 	entry, err := cdEntry(term, conf)
-	if err == errNoEntries {
+	if errors.Is(err, errNoEntries) {
 		return nil
 	}
 	if err != nil {

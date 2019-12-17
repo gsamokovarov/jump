@@ -1,5 +1,7 @@
 package importer
 
+import "errors"
+
 // multiImporter tries to import configurations from multiple importers. If at
 // least on of the importers succeed, no errors will be returned.
 type multiImporter []Importer
@@ -10,7 +12,7 @@ func (mi multiImporter) Import(fn Callback) error {
 
 	for _, i := range mi {
 		err := i.Import(fn)
-		if err == ErrNotFound {
+		if errors.Is(err, ErrNotFound) {
 			continue
 		}
 		if err != nil {

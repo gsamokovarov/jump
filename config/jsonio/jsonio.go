@@ -2,6 +2,7 @@ package jsonio
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 )
 
@@ -26,7 +27,7 @@ func Decode(r io.Reader, v interface{}) error {
 	decoder := json.NewDecoder(r)
 
 	for {
-		if err := decoder.Decode(v); err == io.EOF {
+		if err := decoder.Decode(v); errors.Is(err, io.EOF) {
 			break
 		} else if err != nil {
 			return err

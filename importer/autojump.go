@@ -1,6 +1,7 @@
 package importer
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -67,7 +68,7 @@ func (i *autojump) parseConfig() (scoring.Entries, error) {
 
 	for _, line := range strings.Split(content, "\n") {
 		entry, err := i.newEntryFromLine(line)
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			continue
 		}
 		if err != nil {

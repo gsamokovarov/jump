@@ -37,7 +37,7 @@ func cdCmd(args cli.Args, conf config.Config) error {
 	term := strings.Join(args.Raw(), osSeparator)
 
 	entry, err := cdEntry(term, conf)
-	if err == errNoEntries {
+	if errors.Is(err, errNoEntries) {
 		cli.Errf(noEntriesMessage)
 		return nil
 	}
