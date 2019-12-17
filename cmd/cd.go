@@ -33,8 +33,6 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
    at https://github.com/gsamokovarov/jump/issues.
 `
 
-const osSeparator = string(os.PathSeparator)
-
 func cdCmd(args cli.Args, conf config.Config) error {
 	term := strings.Join(args.Raw(), osSeparator)
 

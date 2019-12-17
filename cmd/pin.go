@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -16,7 +15,7 @@ will be normalized to OS separators.
 `
 
 func pinCmd(args cli.Args, conf config.Config) error {
-	term := strings.Join(args.Raw(), osSeparator)
+	term := termFromArgs(args, conf)
 	if term == "" {
 		cli.Exitf(1, pinUsage)
 	}

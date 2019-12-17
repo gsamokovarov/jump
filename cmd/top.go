@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"sort"
-	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -28,7 +27,7 @@ func topCmd(args cli.Args, conf config.Config) error {
 		return nil
 	}
 
-	term := strings.Join(args.Raw(), osSeparator)
+	term := termFromArgs(args, conf)
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 
 	for _, entry := range fuzzyEntries.Entries {
