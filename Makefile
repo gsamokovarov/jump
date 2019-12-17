@@ -20,6 +20,7 @@ build.linux.arm:
 
 .PHONY: test
 test:
+	@rm -rf ./config/testdata/.tmp*
 	@go test ./... -cover
 
 .PHONY: lint
