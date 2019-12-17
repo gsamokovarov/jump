@@ -52,6 +52,7 @@ func cmdSettings(args cli.Args, conf config.Config) error {
 
 func cmdSettingSpace(conf config.Config, value string) error {
 	settings := conf.ReadSettings()
+
 	switch value {
 	case "slash":
 		settings.Space = config.SpaceSlash

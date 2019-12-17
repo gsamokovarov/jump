@@ -48,7 +48,7 @@ func (c *fileConfig) ReadSettings() (settings Settings) {
 	}
 	defer file.Close()
 
-	jsonio.Decode(file, settings)
+	jsonio.Decode(file, &settings)
 
 	return
 }
