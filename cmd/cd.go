@@ -79,6 +79,8 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 		}
 	}
 
+	settings := conf.ReadSettings()
+
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 
 	// Prefer an exact match if it's in a reasonable proximity of the best
@@ -89,7 +91,7 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 	for {
 		if entry, ok := fuzzyEntries.Select(index); ok {
 			// Remove the entries that no longer exists.
-			if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
+			if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.KeepMissing {
 				entries.Remove(entry.Path)
 				conf.WriteEntries(entries)
 
