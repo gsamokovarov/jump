@@ -12,13 +12,13 @@ func TestSettings(t *testing.T) {
 
 		err := conf.WriteSettings(Settings{
 			Space:       SpaceIgnore,
-			KeepMissing: true,
+			Preserve: true,
 		})
 		assert.Nil(t, err)
 
 		s := conf.ReadSettings()
 
 		assert.Equal(t, SpaceIgnore, s.Space)
-		assert.Equal(t, true, s.KeepMissing)
+		assert.Equal(t, true, s.Preserve)
 	})
 }

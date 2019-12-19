@@ -15,11 +15,11 @@ Jump is opinionated and we would recommend you to stick to the sweet hand-tuned 
 
     jump settings --space=ignore
 
---keep-missing=true (values: false (default), true)
+--preserve=true (values: false (default), true)
 
-  By default, landing in a directory that is no-longer available on disk will cause jump to remove that directory from its database. If a jump lands in unmounted drive, the changing of directory will timeout. This is why its turned off (false) by default.
+  By default, landing in a directory that is no-longer available on disk will cause jump to remove that directory from its database. If a jump lands in unmounted drive, the changing of directory will timeout. This is why this is turned off (false) by default.
 
-    jump settings --keep-missing=true
+    jump settings --preserve=true
 `
 
 func cmdSettings(args cli.Args, conf config.Config) error {
@@ -34,8 +34,8 @@ func cmdSettings(args cli.Args, conf config.Config) error {
 		validOptionsUsed = true
 	}
 
-	if args.Has("--keep-missing") {
-		err := cmdSettingKeepMissing(conf, args.Get("--keep-missing", cli.Optional))
+	if args.Has("--preserve") {
+		err := cmdSettingPreserve(conf, args.Get("--preserve", cli.Optional))
 		if err != nil {
 			return err
 		}
@@ -69,15 +69,15 @@ func cmdSettingSpace(conf config.Config, value string) error {
 	return conf.WriteSettings(settings)
 }
 
-func cmdSettingKeepMissing(conf config.Config, value string) error {
+func cmdSettingPreserve(conf config.Config, value string) error {
 	settings := conf.ReadSettings()
 	switch value {
 	case "true":
-		settings.KeepMissing = true
+		settings.Preserve = true
 	case "false":
-		settings.KeepMissing = false
+		settings.Preserve = false
 	case cli.Optional:
-		cli.Outf("--keep-missing=%v", settings.Space)
+		cli.Outf("--preserve=%v", settings.Space)
 		return nil
 	default:
 		cli.Exitf(1, "Invalid value: %s; valid values: slash, ignore", value)

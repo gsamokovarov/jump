@@ -34,8 +34,8 @@ func (s SpaceSetting) String() string {
 //
 // Keep the default setting values the zero value of their type.
 type Settings struct {
-	Space       SpaceSetting
-	KeepMissing bool
+	Space    SpaceSetting
+	Preserve bool
 }
 
 // ReadSettings reads the current user settings.
