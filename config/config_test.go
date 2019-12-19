@@ -1,7 +1,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 	"testing"
@@ -10,14 +9,9 @@ import (
 var td string
 
 func tempConfig(t *testing.T) Config {
-	tempDir, err := ioutil.TempDir(td, ".tmp")
+	conf, err := Temporary(td, ".tmp")
 	if err != nil {
-		t.Fatalf("Cannot create temporary testing directory: %v", err)
-	}
-
-	conf, err := Setup(tempDir)
-	if err != nil {
-		t.Fatalf("Cannot setup temporary testing directory: %v", err)
+		t.Fatalf("Cannot setup temporary testing config: %v", err)
 	}
 
 	return conf

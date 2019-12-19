@@ -1,6 +1,27 @@
 package config
 
-import "github.com/gsamokovarov/jump/scoring"
+import (
+	"io/ioutil"
+
+	"github.com/gsamokovarov/jump/scoring"
+)
+
+// Temporary setups a temporary jump configuration folder that can be
+// used for integration testing. Needs a dir and prefix passed directly
+// to ioutil.TempDir.
+func Temporary(dir, prefix string) (Config, error) {
+	tempDir, err := ioutil.TempDir(dir, prefix)
+	if err != nil {
+		return nil, err
+	}
+
+	conf, err := Setup(tempDir)
+	if err != nil {
+		return nil, err
+	}
+
+	return conf, nil
+}
 
 // Testing is an in-memory testing config which loosely follows the default
 // file-based configuration behavior.
