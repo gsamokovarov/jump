@@ -15,7 +15,7 @@ func Test_pinCmd(t *testing.T) {
 	p1 := p.Join(td, "web")
 	p2 := p.Join(td, "web-console")
 
-	conf := &config.Testing{
+	conf := &config.InMemory{
 		Entries: s.Entries{
 			&s.Entry{p2, &s.Score{Weight: 1, Age: s.Now}},
 			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
@@ -35,7 +35,7 @@ func Test_pinCmd_normalizedTerms(t *testing.T) {
 	p1 := p.Join(td, "web")
 	p2 := p.Join(td, "web-console")
 
-	conf := &config.Testing{
+	conf := &config.InMemory{
 		Entries: s.Entries{
 			&s.Entry{p2, &s.Score{Weight: 1, Age: s.Now}},
 			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},

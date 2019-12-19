@@ -14,7 +14,7 @@ type failingImporter struct{}
 func (failingImporter) Import(Callback) error { return errors.New("importer: failing") }
 
 func Test_multiImporter(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 	autojumpPath := p.Join(td, "autojump.txt")
 	zPath := p.Join(td, "z")
 
@@ -30,7 +30,7 @@ func Test_multiImporter(t *testing.T) {
 }
 
 func Test_multiImporter_oneErrored(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 	autojumpPath := p.Join(td, "autojump.txt")
 
 	imp := multiImporter{

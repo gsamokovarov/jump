@@ -11,7 +11,7 @@ import (
 )
 
 func Test_cleanCmd(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 
 	assert.Nil(t, chdirCmd(cli.Args{"/inexistent/dir/dh891n2kisdha"}, conf))
 

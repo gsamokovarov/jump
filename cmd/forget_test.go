@@ -15,7 +15,7 @@ import (
 func Test_forgetCmd(t *testing.T) {
 	p := p.Join(td, "web-console")
 
-	conf := &config.Testing{
+	conf := &config.InMemory{
 		Entries: scoring.Entries{scoring.NewEntry(p)},
 	}
 

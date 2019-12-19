@@ -9,7 +9,7 @@ import (
 )
 
 func Test_pinsCmd(t *testing.T) {
-	conf := &config.Testing{
+	conf := &config.InMemory{
 		Pins: map[string]string{
 			"r": "/home/user/projects/rails",
 		},

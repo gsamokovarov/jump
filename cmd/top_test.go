@@ -20,7 +20,7 @@ func Test_topCmd(t *testing.T) {
 		wc := p.Join(td, "web-console")
 		web := p.Join(td, "/client/website")
 
-		conf := &config.Testing{
+		conf := &config.InMemory{
 			Entries: s.Entries{
 				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
 				&s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
@@ -43,7 +43,7 @@ func Test_topCmd(t *testing.T) {
 		wc := p.Join(td, "web-console")
 		web := p.Join(td, "/client/website")
 
-		conf := &config.Testing{
+		conf := &config.InMemory{
 			Entries: s.Entries{
 				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
 				&s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
@@ -66,7 +66,7 @@ func Test_topCmd(t *testing.T) {
 		wc := p.Join(td, "web-console")
 		neu := p.Join(td, "neuvents")
 
-		conf := &config.Testing{
+		conf := &config.InMemory{
 			Entries: s.Entries{
 				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
 				&s.Entry{neu, &s.Score{Weight: 90, Age: s.Now}},
@@ -89,7 +89,7 @@ func Test_topCmd(t *testing.T) {
 		wc := p.Join(td, "web-console")
 		neu := p.Join(td, "neuvents")
 
-		conf := &config.Testing{
+		conf := &config.InMemory{
 			Entries: s.Entries{
 				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
 				&s.Entry{neu, &s.Score{Weight: 90, Age: s.Now}},

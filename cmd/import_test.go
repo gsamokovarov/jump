@@ -15,7 +15,7 @@ func Test_importCmd_autojump(t *testing.T) {
 
 	os.Setenv("HOME", td)
 
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 
 	output := capture(&os.Stdout, func() {
 		assert.Nil(t, importCmd(cli.Args{"autojump"}, conf))
@@ -38,7 +38,7 @@ func Test_importCmd_z(t *testing.T) {
 
 	os.Setenv("HOME", td)
 
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 
 	output := capture(&os.Stdout, func() {
 		assert.Nil(t, importCmd(cli.Args{"z"}, conf))
@@ -59,7 +59,7 @@ func Test_importCmd_itALL(t *testing.T) {
 
 	os.Setenv("HOME", td)
 
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 
 	output := capture(&os.Stdout, func() {
 		assert.Nil(t, importCmd(cli.Args{""}, conf))

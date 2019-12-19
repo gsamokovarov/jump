@@ -10,7 +10,7 @@ import (
 )
 
 func TestZ(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 	configPath := p.Join(td, "z")
 
 	imp := Z(conf, configPath)
@@ -43,7 +43,7 @@ func TestZ(t *testing.T) {
 }
 
 func TestZAged(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 	configPath := p.Join(td, "z-aged.txt")
 
 	imp := Z(conf, configPath)

@@ -14,7 +14,7 @@ func Test_chdirCmd(t *testing.T) {
 	p1 := p.Join(td, "web-console")
 	p2 := p.Join(td, "/client/website")
 
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 
 	entries, err := conf.ReadEntries()
 	assert.Nil(t, err)
@@ -48,7 +48,7 @@ func Test_chdirCmd(t *testing.T) {
 }
 
 func Test_chdirCmd_cwd(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 
 	entries, err := conf.ReadEntries()
 	assert.Nil(t, err)

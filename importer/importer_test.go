@@ -12,21 +12,21 @@ import (
 var td string
 
 func TestGuess_Autojump(t *testing.T) {
-	imp := Guess("autojump", &config.Testing{})
+	imp := Guess("autojump", &config.InMemory{})
 
 	_, ok := imp.(*autojump)
 	assert.True(t, ok)
 }
 
 func TestGuess_Z(t *testing.T) {
-	imp := Guess("z", &config.Testing{})
+	imp := Guess("z", &config.InMemory{})
 
 	_, ok := imp.(*z)
 	assert.True(t, ok)
 }
 
 func TestGuess_Both(t *testing.T) {
-	imp := Guess("", &config.Testing{})
+	imp := Guess("", &config.InMemory{})
 
 	_, ok := imp.(multiImporter)
 	assert.True(t, ok)

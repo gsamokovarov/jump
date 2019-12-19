@@ -23,9 +23,9 @@ func Temporary(dir, prefix string) (Config, error) {
 	return conf, nil
 }
 
-// Testing is an in-memory testing config which loosely follows the default
-// file-based configuration behavior.
-type Testing struct {
+// InMemory is an in-memory testing config which loosely follows the
+// default file-based configuration behavior.
+type InMemory struct {
 	Entries  scoring.Entries
 	Search   Search
 	Pins     map[string]string
@@ -34,58 +34,58 @@ type Testing struct {
 }
 
 // ReadEntries implements the Config interface.
-func (c *Testing) ReadEntries() (scoring.Entries, error) {
+func (c *InMemory) ReadEntries() (scoring.Entries, error) {
 	return c.Entries, nil
 }
 
 // WriteEntries implements the Config interface.
-func (c *Testing) WriteEntries(entries scoring.Entries) error {
+func (c *InMemory) WriteEntries(entries scoring.Entries) error {
 	c.Entries = entries
 	c.Entries.Sort()
 	return nil
 }
 
 // ReadSettings implements the Config interface.
-func (c *Testing) ReadSettings() Settings {
+func (c *InMemory) ReadSettings() Settings {
 	return c.Settings
 }
 
 // WriteSettings implements the Config interface.
-func (c *Testing) WriteSettings(settings Settings) error {
+func (c *InMemory) WriteSettings(settings Settings) error {
 	c.Settings = settings
 	return nil
 }
 
 // ReadSearch implements the Config interface.
-func (c *Testing) ReadSearch() Search {
+func (c *InMemory) ReadSearch() Search {
 	return c.Search
 }
 
 // WriteSearch implements the Config interface.
-func (c *Testing) WriteSearch(term string, index int) error {
+func (c *InMemory) WriteSearch(term string, index int) error {
 	c.Search.Term = term
 	c.Search.Index = index
 	return nil
 }
 
 // ReadPins implements the Config interface.
-func (c *Testing) ReadPins() (map[string]string, error) {
+func (c *InMemory) ReadPins() (map[string]string, error) {
 	return c.Pins, nil
 }
 
 // FindPin implements the Config interface.
-func (c *Testing) FindPin(term string) (string, bool) {
+func (c *InMemory) FindPin(term string) (string, bool) {
 	return c.Pin, c.Pin != ""
 }
 
 // WritePin implements the Config interface.
-func (c *Testing) WritePin(_, value string) error {
+func (c *InMemory) WritePin(_, value string) error {
 	c.Pin = value
 	return nil
 }
 
 // RemovePin implements the Config interface.
-func (c *Testing) RemovePin(term string) error {
+func (c *InMemory) RemovePin(term string) error {
 	c.Pin = ""
 	return nil
 }

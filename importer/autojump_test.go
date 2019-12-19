@@ -9,7 +9,7 @@ import (
 )
 
 func TestAutojump(t *testing.T) {
-	conf := &config.Testing{}
+	conf := &config.InMemory{}
 	configPath := p.Join(td, "autojump.txt")
 
 	imp := Autojump(conf, configPath)
