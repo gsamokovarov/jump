@@ -1,6 +1,6 @@
 jump*
 
-config/testdata/.tmp*
+**/testdata/.tmp*
 
 .tags
 .vagrant/

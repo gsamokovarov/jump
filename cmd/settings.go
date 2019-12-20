@@ -86,7 +86,7 @@ func cmdSettingPreserve(conf config.Config, value string) error {
 	case "false":
 		settings.Preserve = false
 	case cli.Optional:
-		cli.Outf("--preserve=%v", settings.Space)
+		cli.Outf("--preserve=%v", settings.Preserve)
 		return nil
 	default:
 		cli.Exitf(1, "Invalid value: %s; valid values: slash, ignore", value)

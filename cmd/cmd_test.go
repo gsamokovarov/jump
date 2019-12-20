@@ -4,9 +4,21 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"testing"
+
+	"github.com/gsamokovarov/jump/config"
 )
 
 var td string
+
+func tempConfig(t *testing.T) config.Config {
+	conf, err := config.Temporary(td, ".tmp")
+	if err != nil {
+		t.Fatalf("Cannot setup temporary testing config: %v", err)
+	}
+
+	return conf
+}
 
 func capture(stream **os.File, fn func()) string {
 	rescue := *stream
