@@ -120,5 +120,5 @@ func cmdSettingReset(conf config.Config) error {
 }
 
 func init() {
-	cli.RegisterCommand("settings", "Configure jump settings", cmdSettings)
+	cli.RegisterCommand("settings", "Configure jump settings.", cmdSettings)
 }
