@@ -21,7 +21,7 @@ func Example_helpCmd() {
 	//   import       Import autojump or z scores.
 	//   pin          Pin a directory to a search term.
 	//   pins         Lists all the pinned search terms.
-	//   settings     Configure jump settings
+	//   settings     Configure jump settings.
 	//   shell        Display a shell integration script.
 	//   top          Lists the directories as they are scored.
 	//   unpin        Unpin a search term.
