@@ -12,7 +12,7 @@ hand-tuned defaults we have provided after years of research, however,
 we provide a few options few settings that may be useful to hand-tune
 yourself:
 
---space=ignore (values: slash (default), ignore)
+--space (values: slash (default), ignore)
 
 	The calls "j parent child" and "j parent/child" are equivalent by
 	default because spaces are treated as OS separators (/ in Unix). You
@@ -21,7 +21,7 @@ yourself:
 
     jump settings --space=ignore
 
---preserve=true (values: false (default), true)
+--preserve (values: false (default), true)
 
 	By default, landing in a directory that is no-longer available on disk
 	will cause jump to remove that directory from its database. If a jump
@@ -29,6 +29,12 @@ yourself:
 	is why this is turned off (false) by default.
 
     jump settings --preserve=true
+
+--reset
+
+  Reset jump settings to their default values.
+
+    jump settings --reset
 `
 
 func cmdSettings(args cli.Args, conf config.Config) error {
@@ -45,6 +51,15 @@ func cmdSettings(args cli.Args, conf config.Config) error {
 
 	if args.Has("--preserve") {
 		err := cmdSettingPreserve(conf, args.Get("--preserve", cli.Optional))
+		if err != nil {
+			return err
+		}
+
+		validOptionsUsed = true
+	}
+
+	if args.Has("--reset") {
+		err := cmdSettingReset(conf)
 		if err != nil {
 			return err
 		}
@@ -94,6 +109,14 @@ func cmdSettingPreserve(conf config.Config, value string) error {
 	}
 
 	return conf.WriteSettings(settings)
+}
+
+func cmdSettingReset(conf config.Config) error {
+	// The zero value of config.Settings is actually the default settings. Make
+	// sure to keep it that way, because it's a nice constraint to have.
+	var defaultSettings config.Settings
+
+	return conf.WriteSettings(defaultSettings)
 }
 
 func init() {
