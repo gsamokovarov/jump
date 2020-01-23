@@ -20,6 +20,7 @@ Jump comes in packages for the following platforms.
 | Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb && sudo dpkg -i jump_0.23.0_amd64.deb` |
 | Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump-0.23.0-1.x86_64.rpm && sudo rpm -i jump-0.23.0-1.x86_64.rpm` |
 | Go | `go get github.com/gsamokovarov/jump` |
+| Nix | `nix-env -iA nixpkgs.jump` |
 
 ### Integration
 
