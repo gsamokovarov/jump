@@ -83,7 +83,7 @@ func SetupDefault(dir string) (Config, error) {
 // - $XDG_CONFIG_HOME/jump (prefer for new installs)
 //
 // We're moving towards XDG, but for existing installs or non-XDG supported
-// systems, the ~/.jump dur will be used.
+// systems, the ~/.jump dir will be used.
 func findConfigDir(dir string) (string, error) {
 	if dir != "" {
 		return dir, nil
