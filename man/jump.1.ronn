@@ -27,9 +27,8 @@ building an internal database.
 
 ### HELPER
 
-Once integrated, **jump** introduces the **j** helper. It accepts only search
-terms and as a design goal there are no arguments to **j**. Whatever you give
-it, it's treated as search term.
+Once integrated, **jump** introduces the **j** helper. Every argument to **j**
+is treated as a search term. This is a design goal.
 
 **Jump** uses fuzzy matching to find the desired directory to jump to. This
 means that your search terms are patterns that match the desired directory
@@ -133,11 +132,43 @@ To trigger a case-sensitive search, use a term that has a capital letter.
 The jump will resolve to `/Users/genadi/Development` even if there is
 `/Users/genadi/Development/dev-tools` that scores better.
 
+## JUMP SETTINGS
+
+Jump is opinionated and we would recommend you to stick to the sweet
+hand-tuned defaults we have provided after years of research, however,
+we provide a few options few settings that may be useful to hand-tune
+yourself:
+
+### --space (values: slash (default), ignore)
+
+The calls "j parent child" and "j parent/child" are equivalent by
+default because spaces are treated as OS separators (/ in Unix). You
+can choose to ignore spaces in searches by setting the "spaces" option
+to "ignore":
+
+    jump settings --space=ignore
+
+
+### --preserve (values: false (default), true)
+
+By default, landing in a directory that is no-longer available on disk
+will cause jump to remove that directory from its database. If a jump
+lands in unmounted drive, the changing of directory will timeout. This
+is why this is turned off (false) by default.
+
+    jump settings --preserve=true
+
+### --reset
+
+Reset jump settings to their default values.
+
+    jump settings --reset
+
 ## COPYRIGHT
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 Genadi Samokovarov
+Copyright (c) 2015-2020 Genadi Samokovarov
 
 ## SEE ALSO
 

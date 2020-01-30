@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JUMP" "1" "October 2018" "" ""
+.TH "JUMP" "1" "January 2020" "" ""
 .
 .SH "NAME"
 \fBjump\fR \- navigate faster by learning your habits
@@ -42,7 +42,7 @@ status \-\-is\-interactive; and \. (jump shell | psub)
 Once integrated, \fBjump\fR will automatically directory changes and start building an internal database\.
 .
 .SS "HELPER"
-Once integrated, \fBjump\fR introduces the \fBj\fR helper\. It accepts only search terms and as a design goal there are no arguments to \fBj\fR\. Whatever you give it, it\'s treated as search term\.
+Once integrated, \fBjump\fR introduces the \fBj\fR helper\. Every argument to \fBj\fR is treated as a search term\. This is a design goal\.
 .
 .P
 \fBJump\fR uses fuzzy matching to find the desired directory to jump to\. This means that your search terms are patterns that match the desired directory approximately rather than exactly\. Typing \fB2\fR to \fB5\fR consecutive characters of the base directory names is all that \fBjump\fR needs to find it\.
@@ -213,11 +213,53 @@ $ pwd
 .P
 The jump will resolve to \fB/Users/genadi/Development\fR even if there is \fB/Users/genadi/Development/dev\-tools\fR that scores better\.
 .
+.SH "JUMP SETTINGS"
+Jump is opinionated and we would recommend you to stick to the sweet hand\-tuned defaults we have provided after years of research, however, we provide a few options few settings that may be useful to hand\-tune yourself:
+.
+.SS "\-\-space (values: slash (default), ignore)"
+The calls "j parent child" and "j parent/child" are equivalent by default because spaces are treated as OS separators (/ in Unix)\. You can choose to ignore spaces in searches by setting the "spaces" option to "ignore":
+.
+.IP "" 4
+.
+.nf
+
+jump settings \-\-space=ignore
+.
+.fi
+.
+.IP "" 0
+.
+.SS "\-\-preserve (values: false (default), true)"
+By default, landing in a directory that is no\-longer available on disk will cause jump to remove that directory from its database\. If a jump lands in unmounted drive, the changing of directory will timeout\. This is why this is turned off (false) by default\.
+.
+.IP "" 4
+.
+.nf
+
+jump settings \-\-preserve=true
+.
+.fi
+.
+.IP "" 0
+.
+.SS "\-\-reset"
+Reset jump settings to their default values\.
+.
+.IP "" 4
+.
+.nf
+
+jump settings \-\-reset
+.
+.fi
+.
+.IP "" 0
+.
 .SH "COPYRIGHT"
 The MIT License (MIT)
 .
 .P
-Copyright (c) 2015\-2018 Genadi Samokovarov
+Copyright (c) 2015\-2020 Genadi Samokovarov
 .
 .SH "SEE ALSO"
 autojump(1), z(1), pushd(1), popd(1)
