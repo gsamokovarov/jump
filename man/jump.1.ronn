@@ -134,10 +134,9 @@ The jump will resolve to `/Users/genadi/Development` even if there is
 
 ## JUMP SETTINGS
 
-Jump is opinionated and we would recommend you to stick to the sweet
-hand-tuned defaults we have provided after years of research, however,
-we provide a few options few settings that may be useful to hand-tune
-yourself:
+Jump is opinionated and we would recommend you to stick to the sweet hand-tuned
+defaults we have provided after years of research, however, we provide a few
+options that may be useful to hand-tune yourself:
 
 ### --space (values: slash (default), ignore)
 
