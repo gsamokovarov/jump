@@ -17,21 +17,25 @@ Jump comes in packages for the following platforms.
 | Platform | Command |
 | --- | --- |
 | macOS | `brew install jump` |
-| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb && sudo dpkg -i jump_0.23.0_amd64.deb` |
-| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump-0.23.0-1.x86_64.rpm && sudo rpm -i jump-0.23.0-1.x86_64.rpm` |
-| Go | `go get github.com/gsamokovarov/jump` |
+| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.30.0/jump_0.30.0_amd64.deb && sudo dpkg -i jump_0.30.0_amd64.deb` |
+| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.30.0/jump-0.30.0-1.x86_64.rpm && sudo rpm -i jump-0.30.0-1.x86_64.rpm` |
 | Nix | `nix-env -iA nixpkgs.jump` |
+| Go | `go get github.com/gsamokovarov/jump` |
 
 ### Integration
 
 Jump needs to be integrated with the shell. For `bash` and `zsh`, the the line
 below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
-    eval "$(jump shell)"
+```bash
+eval "$(jump shell)"
+```
 
 For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
-    status --is-interactive; and source (jump shell fish | psub)
+```
+status --is-interactive; and source (jump shell fish | psub)
+```
 
 Once integrated, jump will automatically monitor directory changes and start
 building an internal database.
@@ -74,25 +78,31 @@ directory name of a score. The match is case insenstive.
 If you visit the directory `/Users/genadi/Development/rails/web-console` often,
 you can jump to it by:
 
-    $ j wc      # or...
-    $ j webc    # or...
-    $ j console # or...
-    $ j b-c     # or...
+```bash
+$ j wc      # or...
+$ j webc    # or...
+$ j console # or...
+$ j b-c     # or...
+```
 
 Using jump is all about saving key strokes. However, if you made the effort to
 type a directory base name exactly, **jump** will try to find the exact match,
 rather than fuzzy search.
 
-    $ j web-console
-    $ pwd
-    /Users/genadi/Development/rails/web-console
+```bash
+$ j web-console
+$ pwd
+/Users/genadi/Development/rails/web-console
+```
 
 ### Deep jump
 
 Given the following directories:
 
-    /Users/genadi/Development/society/website
-    /Users/genadi/Development/chaos/website
+```bash
+/Users/genadi/Development/society/website
+/Users/genadi/Development/chaos/website
+```
 
 Typing `j site` matches only the base names of the directories. The base name
 of `/Users/genadi/Development/society/website` is `website`, the same as the
@@ -100,9 +110,11 @@ other absolute path above. The jump above will land on the most scrored path,
 which is the `society` one, however what if we wanted to land on the `chaos`
 website?
 
-    $ j ch site
-    $ pwd
-    /Users/genadi/Development/chaos/website
+```bash
+$ j ch site
+$ pwd
+/Users/genadi/Development/chaos/website
+```
 
 This instructs **jump** to look for a `site` match inside that is preceded by a
 `ch` match in the parent directory. The search is normalized only on the last
@@ -112,46 +124,58 @@ shorter path to fuzzy match on.
 There are no depth limitations though and a jump to
 `/Users/genadi/Development/society/website` can look like:
 
-    $ j dev soc web
-    $ pwd
-    /Users/genadi/Development/society/website
+```bash
+$ j dev soc web
+$ pwd
+/Users/genadi/Development/society/website
+```
 
 In fact, every space passed to `j` is converted to an OS separator. The last
 search term can be expressed as:
 
-    $ j dev/soc/web
-    $ pwd
-    /Users/genadi/Development/society/website
+```bash
+$ j dev/soc/web
+$ pwd
+/Users/genadi/Development/society/website
+```
 
 ## Reverse jump
 
-Bad jumps happen. Somethimes we're looking for a directory the isn't the most
+Bad jumps happen. Sometimes we're looking for a directory the isn't the most
 scored one at the moment. Imagine the following jump database:
 
-    /Users/genadi/Development/society/website
-    /Users/genadi/Development/chaos/website
-    /Users/genadi/Development/hack/website
+```bash
+/Users/genadi/Development/society/website
+/Users/genadi/Development/chaos/website
+/Users/genadi/Development/hack/website
+```
 
 Typing `j web` would lead to:
 
-    $ j web
-    $ pwd
-    /Users/genadi/Development/society/website
+```bash
+$ j web
+$ pwd
+/Users/genadi/Development/society/website
+```
 
 If we didn't expect this result, instead of another search term, typing **j**
 without any arguments will instruct **jump** to go the second best match.
 
-    $ j
-    $ pwd
-    /Users/genadi/Development/chaos/website
+```bash
+$ j
+$ pwd
+/Users/genadi/Development/chaos/website
+```
 
 ### Case sensitive jump
 
 To trigger a case-sensitive search, use a term that has a capital letter.
 
-    $ j Dev
-    $ pwd
-    /Users/genadi/Development
+```bash
+$ j Dev
+$ pwd
+/Users/genadi/Development
+```
 
 The jump will resolve to `/Users/genadi/Development` even if there is
 `/Users/genadi/Development/dev-tools` that scores better.
@@ -176,8 +200,12 @@ $ jump import autojump
 $ jump import z
 ```
 
+If you want to know more about the difference between Jump, z, and autojump,
+check-out this Twitter [conversation].
 
-<img align="center" src="https://github.com/gsamokovarov/jump/raw/master/assets/logo-light.png">
+## Thanks! 🙌
+
+Thank you for stopping by and showing your interest in Jump!
 
 [man]: http://gsamokovarov.com/jump
 [Go workspace]: https://golang.org/doc/code.html#Workspaces
