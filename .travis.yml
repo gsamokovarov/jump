@@ -1,7 +1,8 @@
+dist: bionic
 language: go
 
 go:
-  - 1.13
+  - 1.13.x
   - master
 
 script:
@@ -13,6 +14,3 @@ matrix:
   allow_failures:
     - go: master
 
-env:
-  global:
-    - GO111MODULE=on
