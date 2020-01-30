@@ -9,8 +9,10 @@ const settingsUsage = `Usage: jump settings --setting[=value]
 
 Jump is opinionated and we would recommend you to stick to the
 sweet hand-tuned defaults we have provided after years of
-research, however, we provide a few options few settings that
-may be useful to hand-tune yourself:
+research.
+
+However, we provide a few options that can be useful to a
+small audience that wants hand-tune Jump themselves:
 
 --space (values: slash (default), ignore)
 
