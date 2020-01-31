@@ -18,6 +18,10 @@ build.linux:
 build.linux.arm:
 	@env GOOS=linux GOARCH=arm go build -o jump
 
+.PHONY: build.windows
+build.windows:
+	@env GOOS=windows GOARCH=amd64 go build -o jump.exe
+
 .PHONY: test
 test:
 	@rm -rf ./config/testdata/.tmp*
