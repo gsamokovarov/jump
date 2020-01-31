@@ -24,8 +24,8 @@ Jump comes in packages for the following platforms.
 
 ### Integration
 
-Jump needs to be integrated with the shell. For `bash` and `zsh`, the the line
-below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
+Jump needs to be integrated with the shell. For `bash` and `zsh`, the line
+below needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
 ```bash
 eval "$(jump shell)"
