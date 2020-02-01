@@ -39,7 +39,7 @@ clean:
 pkg: clean pkg.deb pkg.rpm pkg.linux pkg.linux.arm
 
 .PHONY: pkg.deb
-pkg.deb: man build.linux
+pkg.deb: 
 	@fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a amd64 \
 		--deb-compression bzip2 \
 		--url $(HOMEPAGE) \

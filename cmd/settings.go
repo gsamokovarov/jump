@@ -12,7 +12,7 @@ sweet hand-tuned defaults we have provided after years of
 research.
 
 However, we provide a few options that can be useful to a
-small audience that wants hand-tune Jump themselves:
+small audience that wants to hand-tune Jump themselves:
 
 --space (values: slash (default), ignore)
 
