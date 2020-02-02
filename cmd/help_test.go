@@ -15,7 +15,7 @@ func Example_helpCmd() {
 	// Commands:
 	//   cd           Fuzzy match a directory to jump to.
 	//   chdir        Update the score of directory during chdir.
-	//   clean        Cleans the database of inexisting entries.
+	//   clean        Cleans the database of non-existent entries.
 	//   forget       Removes the current directory from the database.
 	//   hint         Hints relevant paths for jumping.
 	//   import       Import autojump or z scores.

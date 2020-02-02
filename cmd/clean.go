@@ -29,5 +29,5 @@ func cleanCmd(args cli.Args, conf config.Config) error {
 }
 
 func init() {
-	cli.RegisterCommand("clean", "Cleans the database of inexisting entries.", cleanCmd)
+	cli.RegisterCommand("clean", "Cleans the database of non-existent entries.", cleanCmd)
 }
