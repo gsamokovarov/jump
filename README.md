@@ -81,7 +81,7 @@ eval "$(jump shell zsh)"
 Put the line below in `~/.config/fish/config.fish`:
 
 ```fish
-status --is-interactive; and . (jump shell fish | psub)
+status --is-interactive; and source (jump shell fish | psub)
 ```
 
 ## Issues
