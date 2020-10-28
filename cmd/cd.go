@@ -25,7 +25,7 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
    populate the database.
 
    Are you coming from autojump or z? You can import their existing scoring
-	 databases into jump with:
+   databases into jump with:
 
        $ jump import
 
