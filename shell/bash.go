@@ -14,11 +14,11 @@ __jump_prompt_command() {
 
 __jump_hint() {
   local term="${COMP_LINE/#{{.Bind}} /}"
-  jump hint $term
+  echo \'$(jump hint "$term")\'
 }
 
 {{.Bind}}() {
-  local dir="$(jump cd $@)"
+  local dir="$(jump cd "$@")"
   test -d "$dir"  && cd "$dir"
 }
 
