@@ -12,7 +12,7 @@ __jump_chpwd() {
 }
 
 jump_completion() {
-  reply=(${(f)"$(jump hint $@)"})
+  reply="'$(jump hint "$@")'"
 }
 
 {{.Bind}}() {

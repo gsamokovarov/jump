@@ -14,11 +14,11 @@ end
 
 function __jump_hint
   set -l term (string replace -r '^{{.Bind}} ' '' -- (commandline -cp))
-  jump hint $term
+  jump hint "$term"
 end
 
 function {{.Bind}}
-  set -l dir (jump cd $argv)
+  set -l dir (jump cd "$argv")
   test -d "$dir"; and cd "$dir"
 end
 
