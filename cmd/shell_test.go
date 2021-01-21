@@ -21,11 +21,11 @@ func Example_shellCmd_Bash() {
 	//
 	// __jump_hint() {
 	//   local term="${COMP_LINE/#j /}"
-	//   jump hint $term
+	//   echo \'$(jump hint "$term")\'
 	// }
 	//
 	// j() {
-	//   local dir="$(jump cd $@)"
+	//   local dir="$(jump cd "$@")"
 	//   test -d "$dir"  && cd "$dir"
 	// }
 	//
@@ -51,7 +51,7 @@ func Example_shellCmd_Zsh() {
 	// }
 	//
 	// jump_completion() {
-	//   reply=(${(f)"$(jump hint $@)"})
+	//   reply="'$(jump hint "$@")'"
 	// }
 	//
 	// j() {
@@ -82,11 +82,11 @@ func Example_shellCmd_Fish() {
 	//
 	// function __jump_hint
 	//   set -l term (string replace -r '^j ' '' -- (commandline -cp))
-	//   jump hint $term
+	//   jump hint "$term"
 	// end
 	//
 	// function j
-	//   set -l dir (jump cd $argv)
+	//   set -l dir (jump cd "$argv")
 	//   test -d "$dir"; and cd "$dir"
 	// end
 	//
@@ -110,11 +110,11 @@ func Example_shellCmd_Bind() {
 	//
 	// __jump_hint() {
 	//   local term="${COMP_LINE/#z /}"
-	//   jump hint $term
+	//   echo \'$(jump hint "$term")\'
 	// }
 	//
 	// z() {
-	//   local dir="$(jump cd $@)"
+	//   local dir="$(jump cd "$@")"
 	//   test -d "$dir"  && cd "$dir"
 	// }
 	//
