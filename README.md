@@ -73,7 +73,7 @@ of the directory name is all that **jump** needs to find it.
 ### Regular jump
 
 The default search behavior of **jump** is to fuzzy match the
-directory name of a score. The match is case insenstive.
+directory name of a score. The match is case insensitive.
 
 If you visit the directory `/Users/genadi/Development/rails/web-console` often,
 you can jump to it by:
