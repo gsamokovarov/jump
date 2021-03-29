@@ -2,7 +2,6 @@ package config
 
 import (
 	"os"
-	"os/user"
 	"path/filepath"
 
 	"github.com/gsamokovarov/jump/scoring"
@@ -89,7 +88,7 @@ func findConfigDir(dir string) (string, error) {
 		return dir, nil
 	}
 
-	home, err := homeDir()
+	home, err := os.UserHomeDir()
 	if err != nil {
 		return dir, err
 	}
@@ -102,18 +101,4 @@ func findConfigDir(dir string) (string, error) {
 	}
 
 	return configDir, nil
-}
-
-// See https://github.com/golang/go/issues/26463
-func homeDir() (string, error) {
-	home := os.Getenv("HOME")
-	if home != "" {
-		return home, nil
-	}
-	usr, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-
-	return usr.HomeDir, nil
 }
