@@ -142,8 +142,8 @@ $ pwd
 
 ## Reverse jump
 
-Bad jumps happen. Sometimes we're looking for a directory the isn't the most
-scored one at the moment. Imagine the following jump database:
+Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
+best score at the moment. Let's work with the following following jump database:
 
 ```bash
 /Users/genadi/Development/society/website
