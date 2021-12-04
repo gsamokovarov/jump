@@ -35,7 +35,7 @@ eval "$(jump shell)"
 For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
 ```
-status --is-interactive; and source (jump shell fish | psub)
+jump shell fish | source
 ```
 
 Once integrated, jump will automatically monitor directory changes and start
