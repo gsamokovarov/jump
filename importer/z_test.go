@@ -1,6 +1,7 @@
 package importer
 
 import (
+	"os"
 	p "path"
 	"testing"
 	"time"
@@ -47,6 +48,39 @@ func TestZAged(t *testing.T) {
 	configPath := p.Join(td, "z-aged.txt")
 
 	imp := Z(conf, configPath)
+
+	err := imp.Import(nil)
+	assert.Nil(t, err)
+
+	assert.
+		Len(t, 3, conf.Entries).
+		// 0
+		Equal(t, "/var/log", conf.Entries[0].Path).
+		Equal(t, 79, conf.Entries[0].Score.Weight).
+		Equal(t, time.Unix(1553005178, 0), conf.Entries[0].Score.Age).
+		// 1
+		Equal(t, "/", conf.Entries[1].Path).
+		Equal(t, 90, conf.Entries[1].Score.Weight).
+		Equal(t, time.Unix(1553005180, 0), conf.Entries[1].Score.Age).
+		// 2
+		Equal(t, "/home", conf.Entries[2].Path).
+		Equal(t, 8658, conf.Entries[2].Score.Weight).
+		Equal(t, time.Unix(1553005185, 0), conf.Entries[2].Score.Age)
+
+	for i, j := 0, 1; i < len(conf.Entries)-1; i, j = i+1, j+1 {
+		assert.True(t, conf.Entries[i].CalculateScore() <= conf.Entries[j].CalculateScore())
+	}
+}
+
+func TestZCustomEnv(t *testing.T) {
+	conf := &config.InMemory{}
+
+	os.Setenv("Z_DATA", p.Join(td, "z-aged.txt"))
+	defer func() {
+		os.Unsetenv("Z_DATA")
+	}()
+
+	imp := Z(conf)
 
 	err := imp.Import(nil)
 	assert.Nil(t, err)

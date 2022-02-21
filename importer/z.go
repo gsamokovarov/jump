@@ -15,6 +15,7 @@ import (
 
 var zDefaultConfigPaths = []string{
 	"$HOME/.z",
+	"$Z_DATA",
 }
 
 // Z is an importer for the z tool.
