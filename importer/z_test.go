@@ -99,8 +99,4 @@ func TestZCustomEnv(t *testing.T) {
 		Equal(t, "/home", conf.Entries[2].Path).
 		Equal(t, 8658, conf.Entries[2].Score.Weight).
 		Equal(t, time.Unix(1553005185, 0), conf.Entries[2].Score.Age)
-
-	for i, j := 0, 1; i < len(conf.Entries)-1; i, j = i+1, j+1 {
-		assert.True(t, conf.Entries[i].CalculateScore() <= conf.Entries[j].CalculateScore())
-	}
 }
