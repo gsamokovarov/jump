@@ -8,9 +8,9 @@ description: |
 
   ## Installation
 
-  Jump comes in packages for the following platforms.
-
-  `snap install jump`
+  ```bash
+  snap install jump
+  ```
 
   ### Integration
 
