@@ -6,17 +6,15 @@ description: |
   keeping track of the directories you visit. It gives you the most visited
   directory for the shortest search term you type.
 
-  Installation
-  ============
+  ## Installation
 
   ```
   snap install jump
   ```
 
-  Integration
-  ===========
+  ### Integration
 
-  Jump needs to be integrated with the shell. For `` and `zsh`, the line
+  Jump needs to be integrated with the shell. For `bash` and `zsh`, the line
   below needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
   ```
@@ -29,8 +27,7 @@ description: |
   jump shell fish | source
   ```
 
-  Usage
-  =====
+  ## Usage
 
   Once integrated, **jump** introduces the **j** helper. It accepts only search
   terms and as a design goal there are no arguments to **j**. Whatever you give
@@ -41,8 +38,7 @@ description: |
   approximately rather than exactly. Typing **2** to **5** consecutive characters
   of the directory name is all that **jump** needs to find it.
 
-  Regular jump
-  ============
+  ### Regular jump
 
   The default search behavior of **jump** is to fuzzy match the
   directory name of a score. The match is case insensitive.
@@ -65,8 +61,7 @@ description: |
   $ j web-console # -> /Users/genadi/rails/web-console
   ```
 
-  Deep jump
-  =========
+  ### Deep jump
 
   Given the following directories:
 
@@ -104,8 +99,7 @@ description: |
   $ j dev/soc/web # -> /Users/genadi/society/website
   ```
 
-  Reverse jump
-  ============
+  ## Reverse jump
 
   Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
   best score at the moment. Let's work with the following following jump database:
@@ -129,8 +123,7 @@ description: |
   $ j # -> /Users/genadi/chaos/website
   ```
 
-  Case sensitive jump
-  ===================
+  ### Case sensitive jump
 
   To trigger a case-sensitive search, use a term that has a capital letter.
 
@@ -141,8 +134,7 @@ description: |
   The jump will resolve to `/Users/genadi/Development` even if there is
   `/Users/genadi/dev-tools` that scores better.
 
-  Is it like autojump or z?
-  =========================
+  ## Is it like autojump or z?
 
   Yes, it is! You can import your datafile from `autojump` or `z` with:
 
