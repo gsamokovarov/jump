@@ -46,12 +46,7 @@ description: |
   If you visit the directory `/Users/genadi/rails/web-console` often,
   you can jump to it by:
 
-  ```
-  $ j wc      # or
-  $ j webc    # or
-  $ j console # or
-  $ j b-c     # or
-  ```
+  `j wc` or `j webc` or `j console` or `j b-c`
 
   Using jump is all about saving key strokes. However, if you made the effort to
   type a directory base name exactly, **jump** will try to find the exact match,
@@ -65,10 +60,8 @@ description: |
 
   Given the following directories:
 
-  ```
-  /Users/genadi/society/website
-  /Users/genadi/chaos/website
-  ```
+  `/Users/genadi/society/website`
+  `/Users/genadi/chaos/website`
 
   Typing `j site` matches only the base names of the directories. The base name
   of `/Users/genadi/society/website` is `website`, the same as the
@@ -104,11 +97,9 @@ description: |
   Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
   best score at the moment. Let's work with the following following jump database:
 
-  ```
-  /Users/genadi/society/website
-  /Users/genadi/chaos/website
-  /Users/genadi/hack/website
-  ```
+  `/Users/genadi/society/website`
+  `/Users/genadi/chaos/website`
+  `/Users/genadi/hack/website`
 
   Typing `j web` would lead to:
 
