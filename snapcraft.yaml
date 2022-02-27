@@ -8,16 +8,16 @@ description: |
 
   ## Installation
 
-  ```bash
+  ```
   snap install jump
   ```
 
   ### Integration
 
-  Jump needs to be integrated with the shell. For `bash` and `zsh`, the line
+  Jump needs to be integrated with the shell. For `` and `zsh`, the line
   below needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
-  ```bash
+  ```
   eval "$(jump shell)"
   ```
 
@@ -46,7 +46,7 @@ description: |
   If you visit the directory `/Users/genadi/rails/web-console` often,
   you can jump to it by:
 
-  ```bash
+  ```
   $ j wc      # or
   $ j webc    # or
   $ j console # or
@@ -57,7 +57,7 @@ description: |
   type a directory base name exactly, **jump** will try to find the exact match,
   rather than fuzzy search.
 
-  ```bash
+  ```
   $ j web-console # -> /Users/genadi/rails/web-console
   ```
 
@@ -65,7 +65,7 @@ description: |
 
   Given the following directories:
 
-  ```bash
+  ```
   /Users/genadi/society/website
   /Users/genadi/chaos/website
   ```
@@ -76,7 +76,7 @@ description: |
   which is the `society` one, however what if we wanted to land on the `chaos`
   website?
 
-  ```bash
+  ```
   $ j ch site # -> /Users/genadi/chaos/website
   ```
 
@@ -88,14 +88,14 @@ description: |
   There are no depth limitations though and a jump to
   `/Users/genadi/society/website` can look like:
 
-  ```bash
+  ```
   $ j dev soc web # -> /Users/genadi/society/website
   ```
 
   In fact, every space passed to `j` is converted to an OS separator. The last
   search term can be expressed as:
 
-  ```bash
+  ```
   $ j dev/soc/web # -> /Users/genadi/society/website
   ```
 
@@ -104,7 +104,7 @@ description: |
   Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
   best score at the moment. Let's work with the following following jump database:
 
-  ```bash
+  ```
   /Users/genadi/society/website
   /Users/genadi/chaos/website
   /Users/genadi/hack/website
@@ -112,14 +112,14 @@ description: |
 
   Typing `j web` would lead to:
 
-  ```bash
+  ```
   $ j web # -> /Users/genadi/society/website
   ```
 
   If we didn't expect this result, instead of another search term, typing **j**
   without any arguments will instruct **jump** to go the second best match.
 
-  ```bash
+  ```
   $ j # -> /Users/genadi/chaos/website
   ```
 
@@ -127,7 +127,7 @@ description: |
 
   To trigger a case-sensitive search, use a term that has a capital letter.
 
-  ```bash
+  ```
   $ j Dev # -> /Users/genadi/Development
   ```
 
@@ -138,7 +138,7 @@ description: |
 
   Yes, it is! You can import your datafile from `autojump` or `z` with:
 
-  ```bash
+  ```
   $ jump import
   ```
 
