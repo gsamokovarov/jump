@@ -1,0 +1,156 @@
+name: jump
+version: '0.41.0'
+summary: Jump helps you navigate faster by learning your habits.
+description: |
+  **Jump** integrates with your shell and learns about your navigational habits by
+  keeping track of the directories you visit. It gives you the most visited
+  directory for the shortest search term you type.
+
+  ## Installation
+
+  Jump comes in packages for the following platforms.
+
+  `snap install jump`
+
+  ### Integration
+
+  Jump needs to be integrated with the shell. For `bash` and `zsh`, the line
+  below needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
+
+  ```bash
+  eval "$(jump shell)"
+  ```
+
+  For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
+
+  ```
+  jump shell fish | source
+  ```
+
+  ## Usage
+
+  Once integrated, **jump** introduces the **j** helper. It accepts only search
+  terms and as a design goal there are no arguments to **j**. Whatever you give
+  it, it's treated as search term.
+
+  **Jump** uses fuzzy matching to find the desired directory to jump to. This
+  means that your search terms are patterns that match the desired directory
+  approximately rather than exactly. Typing **2** to **5** consecutive characters
+  of the directory name is all that **jump** needs to find it.
+
+  ### Regular jump
+
+  The default search behavior of **jump** is to fuzzy match the
+  directory name of a score. The match is case insensitive.
+
+  If you visit the directory `/Users/genadi/rails/web-console` often,
+  you can jump to it by:
+
+  ```bash
+  $ j wc      # or
+  $ j webc    # or
+  $ j console # or
+  $ j b-c     # or
+  ```
+
+  Using jump is all about saving key strokes. However, if you made the effort to
+  type a directory base name exactly, **jump** will try to find the exact match,
+  rather than fuzzy search.
+
+  ```bash
+  $ j web-console # -> /Users/genadi/rails/web-console
+  ```
+
+  ### Deep jump
+
+  Given the following directories:
+
+  ```bash
+  /Users/genadi/society/website
+  /Users/genadi/chaos/website
+  ```
+
+  Typing `j site` matches only the base names of the directories. The base name
+  of `/Users/genadi/society/website` is `website`, the same as the
+  other absolute path above. The jump above will land on the most scrored path,
+  which is the `society` one, however what if we wanted to land on the `chaos`
+  website?
+
+  ```bash
+  $ j ch site # -> /Users/genadi/chaos/website
+  ```
+
+  This instructs **jump** to look for a `site` match inside that is preceded by a
+  `ch` match in the parent directory. The search is normalized only on the last
+  two parts of the target paths. This will ensure a better match, because of the
+  shorter path to fuzzy match on.
+
+  There are no depth limitations though and a jump to
+  `/Users/genadi/society/website` can look like:
+
+  ```bash
+  $ j dev soc web # -> /Users/genadi/society/website
+  ```
+
+  In fact, every space passed to `j` is converted to an OS separator. The last
+  search term can be expressed as:
+
+  ```bash
+  $ j dev/soc/web # -> /Users/genadi/society/website
+  ```
+
+  ## Reverse jump
+
+  Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
+  best score at the moment. Let's work with the following following jump database:
+
+  ```bash
+  /Users/genadi/society/website
+  /Users/genadi/chaos/website
+  /Users/genadi/hack/website
+  ```
+
+  Typing `j web` would lead to:
+
+  ```bash
+  $ j web # -> /Users/genadi/society/website
+  ```
+
+  If we didn't expect this result, instead of another search term, typing **j**
+  without any arguments will instruct **jump** to go the second best match.
+
+  ```bash
+  $ j # -> /Users/genadi/chaos/website
+  ```
+
+  ### Case sensitive jump
+
+  To trigger a case-sensitive search, use a term that has a capital letter.
+
+  ```bash
+  $ j Dev # -> /Users/genadi/Development
+  ```
+
+  The jump will resolve to `/Users/genadi/Development` even if there is
+  `/Users/genadi/dev-tools` that scores better.
+
+  ## Is it like autojump or z?
+
+  Yes, it is! You can import your datafile from `autojump` or `z` with:
+
+  ```bash
+  $ jump import
+  ```
+
+confinement: devmode
+base: core20
+
+parts:
+  jump:
+    plugin: go
+    source: https://github.com/gsamokovarov/jump
+    source-type: git
+
+apps:
+  jump:
+    command: bin/jump
