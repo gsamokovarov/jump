@@ -114,7 +114,7 @@ description: |
 
   `$ jump import`
 
-confinement: devmode
+confinement: strict
 base: core20
 
 parts:
