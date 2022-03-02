@@ -17,11 +17,21 @@ Jump comes in packages for the following platforms.
 | Platform | Command |
 | --- | --- |
 | macOS | `brew install jump` |
-| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump_0.40.0_amd64.deb && sudo dpkg -i jump_0.40.0_amd64.deb` |
-| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump-0.40.0-1.x86_64.rpm && sudo rpm -i jump-0.40.0-1.x86_64.rpm` |
-| Void | `xbps-install -S jump` |
+| Linux | `sudo snap install jump` |
 | Nix | `nix-env -iA nixpkgs.jump` |
 | Go | `go install github.com/gsamokovarov/jump@latest` |
+
+<details>
+<summary>Linux distribution specific packages</summary>
+
+| Distribution | Command |
+| --- | --- |
+| Void | `xbps-install -S jump` |
+| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump_0.40.0_amd64.deb && sudo dpkg -i jump_0.40.0_amd64.deb` |
+| Debian | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump_0.40.0_amd64.deb && sudo dpkg -i jump_0.40.0_amd64.deb` |
+| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump-0.40.0-1.x86_64.rpm && sudo rpm -i jump-0.40.0-1.x86_64.rpm` |
+
+</details>
 
 ### Integration
 
