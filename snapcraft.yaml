@@ -8,7 +8,7 @@ description: |
 
   ## Installation
 
-  `snap install jump`
+  `sudo snap install jump`
 
   ### Integration
 
