@@ -17,6 +17,7 @@ Jump comes in packages for the following platforms.
 | Platform | Command |
 | --- | --- |
 | macOS | `brew install jump` |
+| macOS ([MacPorts](https://ports.macports.org/port/jump/)) | `port install jump` |
 | Linux | `sudo snap install jump` |
 | Nix | `nix-env -iA nixpkgs.jump` |
 | Go | `go install github.com/gsamokovarov/jump@latest` |
