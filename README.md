@@ -43,10 +43,16 @@ below needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 eval "$(jump shell)"
 ```
 
-For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
+For fish shell, the line below needs to be in `~/.config/fish/config.fish`:
 
 ```
 jump shell fish | source
+```
+
+For PowerShell, the line below needs to be in your profile, located by typing $PROFILE in Powershell:
+
+```
+Invoke-Expression (&jump shell pwsh | Out-String)
 ```
 
 Once integrated, jump will automatically monitor directory changes and start
