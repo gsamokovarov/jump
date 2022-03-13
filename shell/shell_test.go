@@ -22,6 +22,15 @@ func TestZshCompiles(t *testing.T) {
 	Zsh.MustCompile("j")
 }
 
+func TestGuessPwsh(t *testing.T) {
+	assert.Equal(t, Pwsh, Guess("/usr/bin/pwsh"))
+	assert.Equal(t, Pwsh, Guess("~/.dotnet/tools/pwsh"))
+}
+
+func TestPwshCompiles(t *testing.T) {
+	Pwsh.MustCompile("j")
+}
+
 func TestGuessBash(t *testing.T) {
 	assert.Equal(t, Bash, Guess("/bin/bash"))
 	assert.Equal(t, Bash, Guess("/bin/sh"))
