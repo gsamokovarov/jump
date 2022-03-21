@@ -23,7 +23,7 @@ type WriteSeekerTruncater interface {
 //
 // If the decoding cannot happen, an error is returned. Otherwise, the value is
 // written straight into v.
-func Decode(r io.Reader, v interface{}) error {
+func Decode(r io.Reader, v any) error {
 	decoder := json.NewDecoder(r)
 
 	for {
@@ -44,7 +44,7 @@ func Decode(r io.Reader, v interface{}) error {
 //
 // Technically, the writable needs to implement WriterSeekerTruncater, but
 // you'll most likely use an os.File.
-func Encode(w WriteSeekerTruncater, v interface{}) error {
+func Encode(w WriteSeekerTruncater, v any) error {
 	if _, err := w.Seek(0, io.SeekStart); err != nil {
 		return err
 	}
