@@ -16,8 +16,7 @@ Jump comes in packages for the following platforms.
 
 | Platform | Command |
 | --- | --- |
-| macOS | `brew install jump` |
-| macOS ([MacPorts](https://ports.macports.org/port/jump/)) | `port install jump` |
+| macOS | `brew install jump` or `port install jump` |
 | Linux | `sudo snap install jump` |
 | Nix | `nix-env -iA nixpkgs.jump` |
 | Go | `go install github.com/gsamokovarov/jump@latest` |
@@ -36,20 +35,28 @@ Jump comes in packages for the following platforms.
 
 ### Integration
 
-Jump needs to be integrated with the shell. For `bash` and `zsh`, the line
-below needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
+You are using Jump through its shell helper function, `j`. To get it, you have
+to integrate Jump with your shell.
+
+#### bash / zsh
+
+Add the he line below in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
 ```bash
 eval "$(jump shell)"
 ```
 
-For fish shell, the line below needs to be in `~/.config/fish/config.fish`:
+#### fish
+
+Add the line below in `~/.config/fish/config.fish`:
 
 ```
 jump shell fish | source
 ```
 
-For PowerShell, the line below needs to be in your profile, located by typing $PROFILE in Powershell:
+#### PowerShell
+
+Add the line below needs to your profile, located by typing `$PROFILE` in Powershell:
 
 ```
 Invoke-Expression (&jump shell pwsh | Out-String)
@@ -58,18 +65,17 @@ Invoke-Expression (&jump shell pwsh | Out-String)
 Once integrated, jump will automatically monitor directory changes and start
 building an internal database.
 
-
 ### But `j` is not my favourite letter!
 
-This is fine, you can bind jump to `z`, with this:
+This is fine, you can bind jump to `z` with the following integration command:
 
 ```bash
 eval "$(jump shell --bind=z)"
 ```
 
-And now, you can use `jump` like `z dir` and it would just work! This is only
-an example, you can bind it to _anything_. If you are one of those persons that
-likes to type a lot with their fingers, you can do:
+Typing `z dir` would just work! This is only an example, you can bind it to
+_anything_. If you are one of those persons that likes to type a lot with their
+fingers, you can do:
 
 ```bash
 eval "$(jump shell --bind=goto)"
