@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
     sudo gem install fpm -v 1.10.0
     sudo gem install ronn
 
-    GOVERSION=1.15.7
+    GOVERSION=1.18.1
 
     cd /tmp
     wget https://storage.googleapis.com/golang/go$GOVERSION.linux-amd64.tar.gz
