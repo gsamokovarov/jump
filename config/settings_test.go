@@ -11,7 +11,7 @@ func TestSettings(t *testing.T) {
 		conf := tempConfig(t)
 
 		err := conf.WriteSettings(Settings{
-			Space:       SpaceIgnore,
+			Space:    SpaceIgnore,
 			Preserve: true,
 		})
 		assert.Nil(t, err)
