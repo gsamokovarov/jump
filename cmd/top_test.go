@@ -22,8 +22,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
+				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
+				entry(web, &s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -45,8 +45,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{web, &s.Score{Weight: 90, Age: s.Now}},
+				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
+				entry(web, &s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -68,8 +68,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{neu, &s.Score{Weight: 90, Age: s.Now}},
+				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
+				entry(neu, &s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -91,8 +91,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{wc, &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{neu, &s.Score{Weight: 90, Age: s.Now}},
+				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
+				entry(neu, &s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 

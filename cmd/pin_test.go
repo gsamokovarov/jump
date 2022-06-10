@@ -17,8 +17,8 @@ func Test_pinCmd(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p2, &s.Score{Weight: 1, Age: s.Now}},
-			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			entry(p2, &s.Score{Weight: 1, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 
@@ -37,8 +37,8 @@ func Test_pinCmd_normalizedTerms(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p2, &s.Score{Weight: 1, Age: s.Now}},
-			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			entry(p2, &s.Score{Weight: 1, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 

@@ -18,8 +18,8 @@ func Test_hintCmd_short(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
-			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			entry(p2, &s.Score{Weight: 90, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 

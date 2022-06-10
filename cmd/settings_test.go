@@ -30,8 +30,8 @@ func Test_cdSettings(t *testing.T) {
 	t.Run("jump settings --space=ignore ignores whitespace in arguments", func(t *testing.T) {
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+				entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
 			},
 			Settings: config.Settings{
 				Space: config.SpaceIgnore,
@@ -62,8 +62,8 @@ func Test_cdSettings(t *testing.T) {
 	t.Run("jump settings --preserve=true does not delete missing files", func(t *testing.T) {
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{p.Join(td, "webview"), &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+				entry(p.Join(td, "webview"), &s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
 			},
 			Settings: config.Settings{
 				Preserve: true,
@@ -80,8 +80,8 @@ func Test_cdSettings(t *testing.T) {
 	t.Run("jump settings --reset resets the settings to their default values", func(t *testing.T) {
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				&s.Entry{p.Join(td, "webview"), &s.Score{Weight: 100, Age: s.Now}},
-				&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+				entry(p.Join(td, "webview"), &s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
 			},
 			Settings: config.Settings{
 				Space:    config.SpaceIgnore,
@@ -96,5 +96,4 @@ func Test_cdSettings(t *testing.T) {
 		assert.Equal(t, config.SpaceSlash, conf.Settings.Space)
 		assert.Equal(t, false, conf.Settings.Preserve)
 	})
-
 }

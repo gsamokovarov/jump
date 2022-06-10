@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/gsamokovarov/jump/config"
+	"github.com/gsamokovarov/jump/scoring"
 )
 
 var td string
@@ -18,6 +19,10 @@ func tempConfig(t *testing.T) config.Config {
 	}
 
 	return conf
+}
+
+func entry(path string, score *scoring.Score) *scoring.Entry {
+	return &scoring.Entry{Path: path, Score: score}
 }
 
 func capture(stream **os.File, fn func()) string {

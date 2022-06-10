@@ -15,8 +15,8 @@ import (
 func Test_cdCmd(t *testing.T) {
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
-			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+			entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
+			entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
 		},
 	}
 
@@ -40,8 +40,8 @@ func Test_cdCmd_noEntries(t *testing.T) {
 func Test_cdCmd_multipleArgumentsAsSeparators(t *testing.T) {
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
-			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+			entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
+			entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
 		},
 	}
 
@@ -55,8 +55,8 @@ func Test_cdCmd_multipleArgumentsAsSeparators(t *testing.T) {
 func Test_cdCmd_absolutePath(t *testing.T) {
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}},
-			&s.Entry{p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}},
+			entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
+			entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
 		},
 	}
 
@@ -74,9 +74,9 @@ func Test_cdCmd_exactMatch(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
-			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
-			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			entry(p3, &s.Score{Weight: 80, Age: s.Now}),
+			entry(p2, &s.Score{Weight: 90, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 
@@ -97,9 +97,9 @@ func Test_cdCmd_exactMatch_enoughLength(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			&s.Entry{p3, &s.Score{Weight: 80, Age: s.Now}},
-			&s.Entry{p2, &s.Score{Weight: 90, Age: s.Now}},
-			&s.Entry{p1, &s.Score{Weight: 100, Age: s.Now}},
+			entry(p3, &s.Score{Weight: 80, Age: s.Now}),
+			entry(p2, &s.Score{Weight: 90, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 
