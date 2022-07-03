@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JUMP" "1" "January 2021" "" ""
+.TH "JUMP" "1" "July 2022" "" ""
 .
 .SH "NAME"
 \fBjump\fR \- navigate faster by learning your habits
@@ -32,7 +32,20 @@ For fish shell, put the line below needs to be in \fB~/\.config/fish/config\.fis
 .
 .nf
 
-status \-\-is\-interactive; and source (jump shell fish | psub)
+jump shell fish | source
+.
+.fi
+.
+.IP "" 0
+.
+.P
+For PowerShell add the following to your profile, located by typing \fB$PROFILE\fR:
+.
+.IP "" 4
+.
+.nf
+
+Invoke\-Expression (&jump shell pwsh | Out\-String)
 .
 .fi
 .
@@ -259,7 +272,7 @@ jump settings \-\-reset
 The MIT License (MIT)
 .
 .P
-Copyright (c) 2015\-2020 Genadi Samokovarov
+Copyright (c) 2015\-2022 Genadi Samokovarov
 .
 .SH "SEE ALSO"
 autojump(1), z(1), pushd(1), popd(1)
