@@ -18,6 +18,10 @@ build.linux:
 build.linux.arm:
 	@env GOOS=linux GOARCH=arm go build -o jump
 
+.PHONY: build.arm
+build.arm:
+	@env GOARCH=arm64 go build -o jump
+
 .PHONY: build.windows
 build.windows:
 	@env GOOS=windows GOARCH=amd64 go build -o jump.exe
@@ -36,10 +40,10 @@ clean:
 	@rm -f jump*
 
 .PHONY: pkg
-pkg: clean pkg.deb pkg.rpm pkg.linux pkg.linux.arm
+pkg: pkg.deb pkg.rpm pkg.linux pkg.linux.arm
 
 .PHONY: pkg.deb
-pkg.deb: 
+pkg.deb: man build.linux
 	@fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a amd64 \
 		--deb-compression bzip2 \
 		--url $(HOMEPAGE) \
@@ -64,11 +68,11 @@ pkg.rpm: man build.linux
 		./man/jump.1=/usr/share/man/man1/jump.1 \
 		./man/j.1=/usr/share/man/man1/j.1
 
-.PHONY: pkg.rpm
-pkg.linux: man build.linux
+.PHONY: pkg.linux
+pkg.linux: build.linux
 	@mv jump jump_linux_amd64_binary
 
-.PHONY: pkg.rpm
+.PHONY: pkg.linux.arm
 pkg.linux.arm: man build.linux.arm
 	@mv jump jump_linux_arm_binary
 
