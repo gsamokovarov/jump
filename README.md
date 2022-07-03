@@ -27,9 +27,9 @@ Jump comes in packages for the following platforms.
 | Distribution | Command |
 | --- | --- |
 | Void | `xbps-install -S jump` |
-| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump_0.40.0_amd64.deb && sudo dpkg -i jump_0.40.0_amd64.deb` |
-| Debian | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump_0.40.0_amd64.deb && sudo dpkg -i jump_0.40.0_amd64.deb` |
-| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.40.0/jump-0.40.0-1.x86_64.rpm && sudo rpm -i jump-0.40.0-1.x86_64.rpm` |
+| Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.50.0/jump_0.50.0_amd64.deb && sudo dpkg -i jump_0.50.0_amd64.deb` |
+| Debian | `wget https://github.com/gsamokovarov/jump/releases/download/v0.50.0/jump_0.50.0_amd64.deb && sudo dpkg -i jump_0.50.0_amd64.deb` |
+| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.50.0/jump-0.50.0-1.x86_64.rpm && sudo rpm -i jump-0.50.0-1.x86_64.rpm` |
 
 </details>
 
