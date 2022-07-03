@@ -40,7 +40,7 @@ to integrate Jump with your shell.
 
 #### bash / zsh
 
-Add the he line below in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
+Add the line below in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
 ```bash
 eval "$(jump shell)"
@@ -56,7 +56,7 @@ jump shell fish | source
 
 #### PowerShell
 
-Add the line below needs to your profile, located by typing `$PROFILE` in Powershell:
+Add the line below needs to your profile, located by typing `$PROFILE`:
 
 ```
 Invoke-Expression (&jump shell pwsh | Out-String)

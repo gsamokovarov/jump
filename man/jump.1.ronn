@@ -20,7 +20,11 @@ below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
 For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
 
-    status --is-interactive; and source (jump shell fish | psub)
+    jump shell fish | source
+
+For PowerShell add the following to your profile, located by typing `$PROFILE`:
+
+    Invoke-Expression (&jump shell pwsh | Out-String)
 
 Once integrated, **jump** will automatically directory changes and start
 building an internal database.
@@ -147,7 +151,6 @@ to "ignore":
 
     jump settings --space=ignore
 
-
 ### --preserve (values: false (default), true)
 
 By default, landing in a directory that is no-longer available on disk
@@ -167,7 +170,7 @@ Reset jump settings to their default values.
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2020 Genadi Samokovarov
+Copyright (c) 2015-2022 Genadi Samokovarov
 
 ## SEE ALSO
 

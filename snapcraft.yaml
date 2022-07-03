@@ -21,7 +21,7 @@ description: |
 
   `jump shell fish | source`
 
-  For PowerShell, the line below needs to be in your profile, located by typing $PROFILE in Powershell:
+  For PowerShell, the line below needs to be in your profile, located by typing $PROFILE:
 
   `Invoke-Expression (&jump shell pwsh | Out-String)`
 
