@@ -4,7 +4,6 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -34,7 +33,7 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
 `
 
 func cdCmd(args cli.Args, conf config.Config) error {
-	term := strings.Join(args.Raw(), osSeparator)
+	term := termFromArgs(args, conf)
 
 	entry, err := cdEntry(term, conf)
 	if errors.Is(err, errNoEntries) {

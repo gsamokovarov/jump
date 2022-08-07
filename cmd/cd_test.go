@@ -90,6 +90,47 @@ func Test_cdCmd_exactMatch(t *testing.T) {
 	assert.NotEqual(t, p3+"\n", output)
 }
 
+func Test_cdCmd_implicitConfigSpace(t *testing.T) {
+	p1 := p.Join(td, "web-console")
+	p2 := p.Join(td, "/client/webcon")
+	p3 := p.Join(td, "web")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(p3, &s.Score{Weight: 80, Age: s.Now}),
+			entry(p2, &s.Score{Weight: 90, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+		},
+	}
+
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{"cli", "web"}, conf))
+	})
+
+	assert.Equal(t, p2+"\n", output)
+}
+
+func Test_cdCmd_explicitConfigSpace(t *testing.T) {
+	p1 := p.Join(td, "web-console")
+	p2 := p.Join(td, "/client/webcon")
+	p3 := p.Join(td, "web")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(p3, &s.Score{Weight: 80, Age: s.Now}),
+			entry(p2, &s.Score{Weight: 90, Age: s.Now}),
+			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+		},
+		Settings: config.Settings{Space: config.SpaceSlash},
+	}
+
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{"cli", "web"}, conf))
+	})
+
+	assert.Equal(t, p2+"\n", output)
+}
+
 func Test_cdCmd_exactMatch_enoughLength(t *testing.T) {
 	p1 := p.Join(td, "web-console")
 	p2 := p.Join(td, "/client/webcon")
