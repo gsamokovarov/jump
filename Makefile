@@ -12,11 +12,11 @@ build:
 
 .PHONY: build.linux
 build.linux:
-	@env GOOS=linux go build -o jump
+	@env GOOS=linux go build -buildvcs=false -o jump
 
 .PHONY: build.linux.arm
 build.linux.arm:
-	@env GOOS=linux GOARCH=arm go build -o jump
+	@env GOOS=linux GOARCH=arm64 go build -o jump
 
 .PHONY: build.arm
 build.arm:
