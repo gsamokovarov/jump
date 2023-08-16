@@ -32,11 +32,3 @@ func Length(left, right string) uint64 {
 
 	return current[shorterLen]
 }
-
-func max(left, right uint64) uint64 {
-	if left > right {
-		return left
-	}
-
-	return right
-}
