@@ -128,7 +128,7 @@ Given the following directories:
 
 Typing `j site` matches only the base names of the directories. The base name
 of `/Users/genadi/Development/society/website` is `website`, the same as the
-other absolute path above. The jump above will land on the most scrored path,
+other absolute path above. The jump above will land on the most scored path,
 which is the `society` one, however what if we wanted to land on the `chaos`
 website?
 
