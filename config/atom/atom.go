@@ -2,7 +2,6 @@ package atom
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -24,7 +23,7 @@ type File interface {
 
 // Open opens an atomic file for writing.
 func Open(name string) (File, error) {
-	tmp, err := ioutil.TempFile(filepath.Dir(name), ".jump")
+	tmp, err := os.CreateTemp(filepath.Dir(name), ".jump")
 	if err != nil {
 		return nil, err
 	}
