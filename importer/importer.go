@@ -2,7 +2,6 @@ package importer
 
 import (
 	"errors"
-	"io/ioutil"
 	"os"
 
 	"github.com/gsamokovarov/jump/config"
@@ -50,7 +49,7 @@ func readConfig(paths []string) (string, error) {
 		return "", err
 	}
 
-	bytes, err := ioutil.ReadFile(path)
+	bytes, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}

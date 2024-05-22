@@ -2,7 +2,7 @@ package shell
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"path/filepath"
 	"text/template"
 )
@@ -22,7 +22,7 @@ func (s Shell) MustCompile(shortcut string) string {
 	tmpl := template.Must(template.New("shell").Parse(string(s)))
 	tmpl.Execute(outputBuffer, context)
 
-	outputBytes, err := ioutil.ReadAll(outputBuffer)
+	outputBytes, err := io.ReadAll(outputBuffer)
 	if err != nil {
 		panic(err)
 	}

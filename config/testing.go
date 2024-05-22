@@ -1,7 +1,7 @@
 package config
 
 import (
-	"io/ioutil"
+	"os"
 
 	"github.com/gsamokovarov/jump/scoring"
 )
@@ -10,7 +10,7 @@ import (
 // used for integration testing. Needs a dir and prefix passed directly
 // to ioutil.TempDir.
 func Temporary(dir, prefix string) (Config, error) {
-	tempDir, err := ioutil.TempDir(dir, prefix)
+	tempDir, err := os.MkdirTemp(dir, prefix)
 	if err != nil {
 		return nil, err
 	}
