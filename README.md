@@ -204,7 +204,40 @@ The jump will resolve to `/Users/genadi/Development` even if there is
 
 ## Is it like autojump or z?
 
-Yes, it is! You can import your datafile from `autojump` or `z` with:
+I was an avid autojump user but it wasn't forgiving my sloppy fingers. That
+pushed me into creating jump with the goal to accepts fuzzy search terms. This
+let’s you type a couple of letters and go to your project:
+
+`j web` vs `j website`
+
+The fuzzy typing is your fingers friendly. You can make a typo and the jump
+would mostly work:
+
+`j wwebsite`
+
+As a design goal, the `j` helper doesn't have any arguments. It's all about the search
+term. That said, you can use the search term itself to hint jump about the desired directory.
+
+Typing mixed case input would force a case-sensitive match:
+
+`j Dev` would prefer /Users/genadi/Development
+
+If you have multiple projects with the same name in umbrella directories you
+can hint with OS separators:
+
+`j soc/web` -> /society/website
+`j ra/web` -> /raketa/website
+
+If your input doesn’t give you the right dir, you can `j`. That will jump to
+the next entry with the prev input.
+
+Little hand-tuned details like those let `jump` reads my mind with zero LLMs
+interaction. If I wasn't a humble developer, I'd call it an artisan
+hard-crafted software, but I am, so I'll let you call it what you want. 😄
+
+## Migrate from `autojump` or `z`
+
+You can import your datafile from `autojump` or `z` with:
 
 ```bash
 $ jump import
@@ -221,9 +254,6 @@ unchanged. You can be explicit and choose to import `autojump` or `z` with:
 $ jump import autojump
 $ jump import z
 ```
-
-If you want to know more about the difference between Jump, z, and autojump,
-check-out this Twitter [conversation].
 
 ## Thanks! 🙌
 
