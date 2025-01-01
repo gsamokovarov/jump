@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 Vagrant.configure(2) do |config|
-  config.vm.box = 'ubuntu/trusty64'
+  config.vm.box = 'hashicorp/bionic64'
 
   config.vm.provision 'shell', inline: <<-SHELL
     sudo apt-add-repository -y ppa:brightbox/ruby-ng
     sudo apt-get update
-    sudo apt-get install -y rpm build-essential ruby2.6 ruby2.6-dev git
+    sudo apt-get install -y rpm build-essential ruby3.2 ruby3.2-dev git
 
-    sudo gem install fpm -v 1.10.0
+    sudo apt install flatpak
+
+    sudo gem install fpm
     sudo gem install ronn
 
-    GOVERSION=1.18.3
+    GOVERSION=1.22.4
 
     cd /tmp
     wget https://storage.googleapis.com/golang/go$GOVERSION.linux-amd64.tar.gz
