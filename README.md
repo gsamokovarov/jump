@@ -63,6 +63,17 @@ Invoke-Expression (&jump shell pwsh | Out-String)
 Once integrated, jump will automatically monitor directory changes and start
 building an internal database.
 
+#### Murex
+
+Jump bindings can be installed directly from Murex:
+
+```
+murex-package install https://github.com/lmorg/murex-module-jump.git
+```
+
+Please note that this doesn't install `jump` itself. You will still need to
+install the `jump` executable via the installation instructions above.
+
 ### But `j` is not my favourite letter!
 
 This is fine, you can bind jump to `z` with the following integration command:
