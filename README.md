@@ -200,7 +200,7 @@ $ pwd
 /Users/genadi/Development/chaos/website
 ```
 
-### Case sensitive jump
+### Case-sensitive jump
 
 To trigger a case-sensitive search, use a term that has a capital letter.
 
@@ -212,6 +212,24 @@ $ pwd
 
 The jump will resolve to `/Users/genadi/Development` even if there is
 `/Users/genadi/Development/dev-tools` that scores better.
+
+### Pins
+
+For various reasons, Jump may not always find the directory you want, but don't worry—you can make it work!
+
+A pin forces an input to always go to a specific location. If you want j r to always go to /Users/genadi/development/rails, you can do:
+
+```
+$ cd /Users/genadi/development/rails
+$ jump pin r
+$ cd
+$ j r # Skips the scoring and goes straight to the pinned directory.
+$ pwd
+/Users/genadi/development/rails
+```
+
+Notice the `jump` command instead of the `j` shell function helper. `j` will always treat its input as search terms. It may apply some heuristics to the way the input looks, but it will never accept arguments or switches. Here is where the `jump` command comes in. It is bundled with lots of helpers to make your j life easier. The pins are one of them. Try `jump --help` for all those hidden (**not** not-documented ones) features.
+
 
 ## Is it like autojump or z?
 
