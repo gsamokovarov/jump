@@ -60,7 +60,7 @@ Add the line below needs to your profile, located by typing `$PROFILE`:
 Invoke-Expression (&jump shell pwsh | Out-String)
 ```
 
-Once integrated, jump will automatically monitor directory changes and start
+Once integrated, Jump will automatically monitor directory changes and start
 building an internal database.
 
 #### Murex
@@ -72,9 +72,9 @@ murex-package install https://github.com/lmorg/murex-module-jump.git
 ```
 
 Please note that this doesn't install `jump` itself. You will still need to
-install the `jump` executable via the installation instructions above.
+install the `jump` executable using the installation instructions above.
 
-### But `j` is not my favourite letter!
+### But `j` is not my favorite letter!
 
 This is fine, you can bind jump to `z` with the following integration command:
 
@@ -95,8 +95,8 @@ Voila! `goto dir` becomes a thing. The possibilities are endless!
 ## Usage
 
 Once integrated, **jump** introduces the **j** helper. It accepts only search
-terms and as a design goal there are no arguments to **j**. Whatever you give
-it, it's treated as search term.
+terms, and as a design goal, there are no arguments for **j**. Whatever you give
+it, it's treated as a search term.
 
 **Jump** uses fuzzy matching to find the desired directory to jump to. This
 means that your search terms are patterns that match the desired directory
@@ -105,7 +105,7 @@ of the directory name is all that **jump** needs to find it.
 
 ### Regular jump
 
-The default search behavior of **jump** is to fuzzy match the
+The default search behavior of **jump** is to match the
 directory name of a score. The match is case insensitive.
 
 If you visit the directory `/Users/genadi/Development/rails/web-console` often,
@@ -118,9 +118,9 @@ $ j console # or...
 $ j b-c     # or...
 ```
 
-Using jump is all about saving key strokes. However, if you made the effort to
+Using jump is all about saving keystrokes. However, if you made the effort to
 type a directory base name exactly, **jump** will try to find the exact match,
-rather than fuzzy search.
+rather than a fuzzy search.
 
 ```bash
 $ j web-console
@@ -139,8 +139,8 @@ Given the following directories:
 
 Typing `j site` matches only the base names of the directories. The base name
 of `/Users/genadi/Development/society/website` is `website`, the same as the
-other absolute path above. The jump above will land on the most scored path,
-which is the `society` one, however what if we wanted to land on the `chaos`
+other absolute path above. The jump above will land on the most-scored path,
+which is the `society` one, however, what if we wanted to land on the `chaos`
 website?
 
 ```bash
@@ -151,11 +151,11 @@ $ pwd
 
 This instructs **jump** to look for a `site` match inside that is preceded by a
 `ch` match in the parent directory. The search is normalized only on the last
-two parts of the target paths. This will ensure a better match, because of the
-shorter path to fuzzy match on.
+two parts of the target paths. This will ensure a better match because of the
+shorter path to a fuzzy match.
 
-There are no depth limitations though and a jump to
-`/Users/genadi/Development/society/website` can look like:
+There are no depth limitations, though and a jump to
+`/Users/genadi/Development/society/website` can look like this:
 
 ```bash
 $ j dev soc web
@@ -163,7 +163,7 @@ $ pwd
 /Users/genadi/Development/society/website
 ```
 
-In fact, every space passed to `j` is converted to an OS separator. The last
+Every space passed to `j` is converted to an OS separator. The last
 search term can be expressed as:
 
 ```bash
@@ -174,7 +174,7 @@ $ pwd
 
 ## Reverse jump
 
-Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
+Bad jumps happen. Sometimes, we're looking for a directory that doesn't have the
 best score at the moment. Let's work with the following following jump database:
 
 ```bash
@@ -192,7 +192,7 @@ $ pwd
 ```
 
 If we didn't expect this result, instead of another search term, typing **j**
-without any arguments will instruct **jump** to go the second best match.
+without any arguments, will instruct **jump** to go to the second-best match.
 
 ```bash
 $ j
@@ -233,13 +233,13 @@ Notice the `jump` command instead of the `j` shell function helper. `j` will alw
 
 ## Is it like autojump or z?
 
-I was an avid autojump user but it wasn't forgiving my sloppy fingers. That
-pushed me into creating jump with the goal to accepts fuzzy search terms. This
-let’s you type a couple of letters and go to your project:
+I was an avid autojump user, but it wasn't forgiving my sloppy fingers. That
+pushed me to create Jump with the goal of accepting fuzzy search terms. This
+lets you type a couple of letters and go to your project:
 
 `j web` vs `j website`
 
-The fuzzy typing is your fingers friendly. You can make a typo and the jump
+The fuzzy typing is your fingers-friendly. You can make a typo, and the jump
 would mostly work:
 
 `j wwebsite`
@@ -258,10 +258,10 @@ can hint with OS separators:
 `j ra/web` -> /raketa/website
 
 If your input doesn’t give you the right dir, you can `j`. That will jump to
-the next entry with the prev input.
+the next entry with the previous input.
 
-Little hand-tuned details like those let `jump` reads my mind with zero LLMs
-interaction. If I wasn't a humble developer, I'd call it an artisan
+Little hand-tuned details like those let `jump` read my mind with zero LLMs
+interaction. If I wasn't a humble developer, I'd call it artisan
 hard-crafted software, but I am, so I'll let you call it what you want. 😄
 
 ## Migrate from `autojump` or `z`
@@ -272,11 +272,11 @@ You can import your datafile from `autojump` or `z` with:
 $ jump import
 ```
 
-This will try `z` first then `autojump`, so you can even combine all the
+This will try `z` first, then `autojump`, so you can even combine all the
 entries from both tools.
 
-The command is safe to run on pre-existing jump database, because if an entry
-exist in jump already, it won't be imported and it's score will remain
+The command is safe to run on a pre-existing jump database, because if an entry
+exist in jump already, it won't be imported, and its score will remain
 unchanged. You can be explicit and choose to import `autojump` or `z` with:
 
 ```bash
