@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JUMP" "1" "July 2022" "" ""
+.TH "JUMP" "1" "June 2025" "" ""
 .
 .SH "NAME"
 \fBjump\fR \- navigate faster by learning your habits
@@ -226,6 +226,169 @@ $ pwd
 .P
 The jump will resolve to \fB/Users/genadi/Development\fR even if there is \fB/Users/genadi/Development/dev\-tools\fR that scores better\.
 .
+.SH "PINS"
+For various reasons, Jump may not always find the directory you want, but don\'t worry—you can make it work!
+.
+.P
+A pin forces an input to always go to a specific location\. If you want \fBj r\fR to always go to \fB/Users/genadi/development/rails\fR, you can do:
+.
+.IP "" 4
+.
+.nf
+
+$ cd /Users/genadi/development/rails
+$ jump pin r
+$ cd
+$ j r # Skips the scoring and goes straight to the pinned directory\.
+$ pwd
+/Users/genadi/development/rails
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Notice the \fBjump\fR command instead of the \fBj\fR shell function helper\. \fBj\fR will always treat its input as search terms\. It may apply some heuristics to how the input looks, but it will never accept arguments or switches\. Here is where the \fBjump\fR command comes in\. It is bundled with lots of helpers to make your \fBj\fR life easier\. The pins are one of them\.
+.
+.SH "COMMANDS"
+.
+.SS "jump clean"
+Cleans the database of non\-existent entries\. Removes all database entries pointing to directories that have been deleted from your filesystem\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump clean
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump forget [path]"
+Removes the current directory (or specified path) from the database\. Useful when you\'re in a directory you don\'t want Jump to remember or suggest in the future\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump forget
+$ jump forget /path/to/directory
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump top [term] [\-\-score]"
+Lists the directories as they are scored, sorted by their calculated scores (highest first)\. Optionally filter with a search term or show numeric scores\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump top
+$ jump top dev
+$ jump top \-\-score
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump pin <var>term</var>"
+Pin a directory to a search term\. The current directory will be permanently attached to the specified term\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump pin r
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump pins"
+Lists all the pinned search terms in tab\-separated format\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump pins
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump unpin <var>term</var>"
+Unpin a search term, removing it from the pinned database\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump unpin r
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump import [autojump|z]"
+Import autojump or z scores\. Without arguments, tries z first, then autojump\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump import
+$ jump import autojump
+$ jump import z
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump shell [shell] [\-\-bind=<var>shortcut</var>]"
+Display a shell integration script\. Optionally specify shell type and key binding\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump shell
+$ jump shell bash
+$ jump shell \-\-bind=z
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump cd <var>term</var>"
+Fuzzy match a directory to jump to\. This is the core command that \fBj\fR calls under the hood\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump cd web
+.
+.fi
+.
+.IP "" 0
+.
+.SS "jump hint <var>term</var>"
+Hints relevant paths for jumping\. Used internally for shell completion\.
+.
+.IP "" 4
+.
+.nf
+
+$ jump hint we
+.
+.fi
+.
+.IP "" 0
+.
 .SH "JUMP SETTINGS"
 Jump is opinionated and we would recommend you to stick to the sweet hand\-tuned defaults we have provided after years of research, however, we provide a few options that may be useful to hand\-tune yourself:
 .
@@ -272,7 +435,7 @@ jump settings \-\-reset
 The MIT License (MIT)
 .
 .P
-Copyright (c) 2015\-2022 Genadi Samokovarov
+Copyright (c) 2015\-2025 Genadi Samokovarov
 .
 .SH "SEE ALSO"
 autojump(1), z(1), pushd(1), popd(1)

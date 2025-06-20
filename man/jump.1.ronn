@@ -136,6 +136,96 @@ To trigger a case-sensitive search, use a term that has a capital letter.
 The jump will resolve to `/Users/genadi/Development` even if there is
 `/Users/genadi/Development/dev-tools` that scores better.
 
+## PINS
+
+For various reasons, Jump may not always find the directory you want, but don't
+worry—you can make it work!
+
+A pin forces an input to always go to a specific location. If you want `j r` to
+always go to `/Users/genadi/development/rails`, you can do:
+
+    $ cd /Users/genadi/development/rails
+    $ jump pin r
+    $ cd
+    $ j r # Skips the scoring and goes straight to the pinned directory.
+    $ pwd
+    /Users/genadi/development/rails
+
+Notice the `jump` command instead of the `j` shell function helper. `j` will
+always treat its input as search terms. It may apply some heuristics to how the
+input looks, but it will never accept arguments or switches. Here is where the
+`jump` command comes in. It is bundled with lots of helpers to make your `j`
+life easier. The pins are one of them.
+
+## COMMANDS
+
+### jump clean
+
+Cleans the database of non-existent entries. Removes all database entries pointing to directories that have been deleted from your filesystem.
+
+    $ jump clean
+
+### jump forget [path]
+
+Removes the current directory (or specified path) from the database. Useful when you're in a directory you don't want Jump to remember or suggest in the future.
+
+    $ jump forget
+    $ jump forget /path/to/directory
+
+### jump top [term] [--score]
+
+Lists the directories as they are scored, sorted by their calculated scores (highest first). Optionally filter with a search term or show numeric scores.
+
+    $ jump top
+    $ jump top dev
+    $ jump top --score
+
+### jump pin <term>
+
+Pin a directory to a search term. The current directory will be permanently attached to the specified term.
+
+    $ jump pin r
+
+### jump pins
+
+Lists all the pinned search terms in tab-separated format.
+
+    $ jump pins
+
+### jump unpin <term>
+
+Unpin a search term, removing it from the pinned database.
+
+    $ jump unpin r
+
+### jump import [autojump|z]
+
+Import autojump or z scores. Without arguments, tries z first, then autojump.
+
+    $ jump import
+    $ jump import autojump
+    $ jump import z
+
+### jump shell [shell] [--bind=<shortcut>]
+
+Display a shell integration script. Optionally specify shell type and key binding.
+
+    $ jump shell
+    $ jump shell bash
+    $ jump shell --bind=z
+
+### jump cd <term>
+
+Fuzzy match a directory to jump to. This is the core command that `j` calls under the hood.
+
+    $ jump cd web
+
+### jump hint <term>
+
+Hints relevant paths for jumping. Used internally for shell completion.
+
+    $ jump hint we
+
 ## JUMP SETTINGS
 
 Jump is opinionated and we would recommend you to stick to the sweet hand-tuned
@@ -170,7 +260,7 @@ Reset jump settings to their default values.
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2022 Genadi Samokovarov
+Copyright (c) 2015-2025 Genadi Samokovarov
 
 ## SEE ALSO
 
