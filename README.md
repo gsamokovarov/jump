@@ -215,11 +215,13 @@ The jump will resolve to `/Users/genadi/Development` even if there is
 
 ### Pins
 
-For various reasons, Jump may not always find the directory you want, but don't worry—you can make it work!
+For various reasons, Jump may not always find the directory you want, but don't
+worry—you can make it work!
 
-A pin forces an input to always go to a specific location. If you want j r to always go to /Users/genadi/development/rails, you can do:
+A pin forces an input to always go to a specific location. If you want `j r` to
+always go to `/Users/genadi/development/rails`, you can do:
 
-```
+```bash
 $ cd /Users/genadi/development/rails
 $ jump pin r
 $ cd
@@ -228,9 +230,90 @@ $ pwd
 /Users/genadi/development/rails
 ```
 
-Notice the `jump` command instead of the `j` shell function helper. `j` will always treat its input as search terms. It may apply some heuristics to how the input looks, but it will never accept arguments or switches. Here is where the `jump` command comes in. It is bundled with lots of helpers to make your `j` life easier. The pins are one of them.
+Notice the `jump` command instead of the `j` shell function helper. `j` will
+always treat its input as search terms. It may apply some heuristics to how the
+input looks, but it will never accept arguments or switches. Here is where the
+`jump` command comes in. It is bundled with lots of helpers to make your `j`
+life easier. The pins are one of them.
 
-Try `jump --help` for all those hidden (**not** not-documented ones) features.
+To list all your pinned search terms:
+
+```bash
+$ jump pins
+```
+
+This displays your pins in a tab-separated format:
+
+```bash
+r    /Users/genadi/Development/rails
+w    /Users/genadi/Development/website
+```
+
+To remove a pin:
+
+```bash
+$ jump unpin r
+```
+
+This removes the pin for "r", so `j r` will go back to using fuzzy matching
+instead of jumping directly to the pinned directory.
+
+## Database Management
+
+### Cleaning the Database
+
+Jump automatically tracks directories, but sometimes you need to clean up
+entries for directories that no longer exist:
+
+```bash
+$ jump clean
+```
+
+This command removes all database entries pointing to directories that have
+been deleted from your filesystem. Jump runs this automatically when you try to
+jump to a non-existent directory (unless you have `--preserve=true` set), but
+you can also run it manually to clean up your database.
+
+### Forgetting Directories
+
+If you want to remove the current directory from Jump's database:
+
+```bash
+$ jump forget
+```
+
+This is useful when you're in a directory you don't want Jump to remember or
+suggest in the future. You can also specify a path:
+
+```bash
+$ jump forget /path/to/directory
+```
+
+### Listing Top Directories
+
+See which directories Jump considers most important:
+
+```bash
+$ jump top
+```
+
+This shows all directories in your database, sorted by their calculated scores
+(highest first). Add the `--score` flag to see the actual numeric scores:
+
+```bash
+$ jump top --score
+/Users/genadi/Development/jump 45.67
+/Users/genadi/Development 23.45
+/Users/genadi/projects/website 12.34
+```
+
+You can also filter the results with a search term:
+
+```bash
+$ jump top dev
+```
+
+This shows only directories that match "dev", sorted by how well they match the fuzzy search.
 
 ## Is it like autojump or z?
 
