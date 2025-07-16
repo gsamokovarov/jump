@@ -39,3 +39,12 @@ func TestGuessBash(t *testing.T) {
 func TestBashCompiles(t *testing.T) {
 	Bash.MustCompile("j")
 }
+
+func TestGuessNushell(t *testing.T) {
+	assert.Equal(t, Nushell, Guess("/usr/bin/nu"))
+	assert.Equal(t, Nushell, Guess("/opt/homebrew/bin/nu"))
+}
+
+func TestNushellCompiles(t *testing.T) {
+	Nushell.MustCompile("j")
+}

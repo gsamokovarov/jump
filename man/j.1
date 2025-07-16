@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JUMP" "1" "June 2025" "" ""
+.TH "JUMP" "1" "July 2025" "" ""
 .
 .SH "NAME"
 \fBjump\fR \- navigate faster by learning your habits
@@ -46,6 +46,19 @@ For PowerShell add the following to your profile, located by typing \fB$PROFILE\
 .nf
 
 Invoke\-Expression (&jump shell pwsh | Out\-String)
+.
+.fi
+.
+.IP "" 0
+.
+.P
+For Nushell add the following to \fB~/\.config/nushell/config\.nu\fR:
+.
+.IP "" 4
+.
+.nf
+
+jump shell nushell | save \-\-append $nu\.config\-path
 .
 .fi
 .

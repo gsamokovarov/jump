@@ -26,6 +26,10 @@ For PowerShell add the following to your profile, located by typing `$PROFILE`:
 
     Invoke-Expression (&jump shell pwsh | Out-String)
 
+For Nushell add the following to `~/.config/nushell/config.nu`:
+
+    jump shell nushell | save --append $nu.config-path
+
 Once integrated, **jump** will automatically directory changes and start
 building an internal database.
 

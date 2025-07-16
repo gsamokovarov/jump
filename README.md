@@ -60,6 +60,15 @@ Add the line below needs to your profile, located by typing `$PROFILE`:
 Invoke-Expression (&jump shell pwsh | Out-String)
 ```
 
+#### Nushell
+
+Run the command bellow to append the jump integration code to your Nushell
+config:
+
+```
+jump shell nushell | save --append $nu.config-path
+```
+
 Once integrated, Jump will automatically monitor directory changes and start
 building an internal database.
 

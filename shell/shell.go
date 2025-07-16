@@ -41,6 +41,8 @@ func Guess(hint string) Shell {
 		return Zsh
 	case "pwsh":
 		return Pwsh
+	case "nu", "nushell":
+		return Nushell
 	default:
 		return Bash
 	}
