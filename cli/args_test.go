@@ -62,3 +62,19 @@ func TestRest(t *testing.T) {
 	args = ParseArgs([]string{"program", "command", "arg"})
 	assert.Equal(t, []string{"arg"}, args.Rest())
 }
+
+func TestWithout(t *testing.T) {
+	t.Run("removes existing option", func(t *testing.T) {
+		args := ParseArgs([]string{"program", "command", "--option", "value"})
+		result := args.Without("--option")
+
+		assert.Equal(t, []string{"command", "value"}, []string(result))
+	})
+
+	t.Run("returns same args when option not found", func(t *testing.T) {
+		args := ParseArgs([]string{"program", "command"})
+		result := args.Without("--nonexistent")
+
+		assert.Equal(t, []string{"command"}, []string(result))
+	})
+}

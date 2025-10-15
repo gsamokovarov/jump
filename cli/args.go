@@ -1,6 +1,9 @@
 package cli
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 // Optional marks an --option value as optional. The value is the empty string,
 // if needed to be checked, but could be used purely for informational
@@ -79,6 +82,18 @@ func (a Args) Get(option, defaultValue string) string {
 	}
 
 	return defaultValue
+}
+
+// Without returns a new Args with the specified option removed if found.
+//
+// Returns the original Args unchanged if the option is not found.
+func (a Args) Without(option string) Args {
+	index := slices.Index(a, option)
+	if index == -1 {
+		return a
+	}
+
+	return append(a[:index], a[index+1:]...)
 }
 
 // CommandName extracts a command name out of all the arguments.

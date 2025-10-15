@@ -15,6 +15,7 @@ func topCmd(args cli.Args, conf config.Config) error {
 	}
 
 	showScore := args.Has("--score")
+	args = args.Without("--score")
 
 	if len(args) == 0 {
 		// We usually keep them reversely sort to optimize the fuzzy search.
