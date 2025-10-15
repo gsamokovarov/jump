@@ -24,11 +24,11 @@ Jump comes in packages for the following platforms.
 
 | Distribution | Command |
 | --- | --- |
-| Void | `xbps-install -S jump` |
+| Arch | `sudo yay -S jump` |
 | Ubuntu | `wget https://github.com/gsamokovarov/jump/releases/download/v0.51.0/jump_0.51.0_amd64.deb && sudo dpkg -i jump_0.51.0_amd64.deb` |
 | Debian | `wget https://github.com/gsamokovarov/jump/releases/download/v0.51.0/jump_0.51.0_amd64.deb && sudo dpkg -i jump_0.51.0_amd64.deb` |
 | Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.51.0/jump-0.51.0-1.x86_64.rpm && sudo rpm -i jump-0.51.0-1.x86_64.rpm` |
-
+| Void | `xbps-install -S jump` |
 </details>
 
 ### Integration
