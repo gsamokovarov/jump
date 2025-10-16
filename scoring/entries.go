@@ -1,6 +1,9 @@
 package scoring
 
-import "sort"
+import (
+	"sort"
+	"strings"
+)
 
 // Entries represents entries slice that supports sort.Interface.
 type Entries []*Entry
@@ -44,6 +47,19 @@ func (e *Entries) Remove(path string) bool {
 	}
 
 	return false
+}
+
+// Under selects entries within a specific path.
+func (e Entries) Under(path string) Entries {
+	var entries Entries
+
+	for _, entry := range e {
+		if strings.HasPrefix(entry.Path, path) && entry.Path != path {
+			entries = append(entries, entry)
+		}
+	}
+
+	return entries
 }
 
 // Sort sorts the entries collection.

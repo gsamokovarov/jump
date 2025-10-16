@@ -151,3 +151,70 @@ func Test_cdCmd_exactMatch_enoughLength(t *testing.T) {
 
 	assert.Equal(t, p2+"\n", output)
 }
+
+func Test_cdCmd_baseDir(t *testing.T) {
+	baseDir := p.Join(td, "client")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(p.Join(baseDir, "website"), &s.Score{Weight: 100, Age: s.Now}),
+			entry(p.Join(baseDir, "webtools"), &s.Score{Weight: 90, Age: s.Now}),
+			entry(p.Join(td, "web-console"), &s.Score{Weight: 200, Age: s.Now}), // Higher score but not under baseDir
+		},
+	}
+
+	t.Run("finds entry under base directory", func(t *testing.T) {
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, "website"}, conf))
+		})
+
+		assert.Equal(t, p.Join(baseDir, "website")+"\n", output)
+	})
+
+	t.Run("fuzzy matches under base directory", func(t *testing.T) {
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, "web"}, conf))
+		})
+
+		assert.Equal(t, p.Join(baseDir, "website")+"\n", output)
+	})
+
+	t.Run("returns base directory when no matches found", func(t *testing.T) {
+		conf := &config.InMemory{
+			Entries: s.Entries{},
+		}
+
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, "foo"}, conf))
+		})
+
+		assert.Equal(t, baseDir+"\n", output)
+	})
+
+	t.Run("ignores entries outside base directory", func(t *testing.T) {
+		// Even though web-console has higher score, it should not be returned
+		// because it's not under the base directory
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, "web"}, conf))
+		})
+
+		assert.NotEqual(t, p.Join(td, "web-console")+"\n", output)
+		assert.Equal(t, p.Join(baseDir, "website")+"\n", output)
+	})
+
+	t.Run("direct children", func(t *testing.T) {
+		baseDir := td
+		childDir := "web"
+
+		conf := &config.InMemory{
+			Entries: s.Entries{},
+		}
+
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
+		})
+
+		// Should return the direct child path since td/web exists
+		assert.Equal(t, p.Join(baseDir, childDir)+"\n", output)
+	})
+}

@@ -33,14 +33,24 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
 `
 
 func cdCmd(args cli.Args, conf config.Config) error {
-	term := termFromArgs(args, conf)
+	var entry *scoring.Entry
+	var err error
 
-	entry, err := cdEntry(term, conf)
+	if filepath.IsAbs(args.First()) && dirIsAccessible(args.First()) && len(args) > 1 {
+		baseDir := args.First()
+		term := termFromArgs(args.Rest(), conf)
+
+		entry, err = cdBaseDir(term, baseDir, conf)
+	} else {
+		term := termFromArgs(args, conf)
+
+		entry, err = cdEntry(term, conf)
+	}
+
 	if errors.Is(err, errNoEntries) {
 		cli.Errf(noEntriesMessage)
 		return nil
-	}
-	if err != nil {
+	} else if err != nil {
 		return err
 	}
 
@@ -118,6 +128,53 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 	return nil, errNoEntries
 }
 
+func cdBaseDir(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
+	entries, err := conf.ReadEntries()
+	if err != nil {
+		return nil, err
+	}
+
+	// If the directory exists under the base dir, just go there.
+	childDir := filepath.Join(baseDir, term)
+	if dirIsAccessible(childDir) {
+		return scoring.NewEntry(childDir), nil
+	}
+
+	settings := conf.ReadSettings()
+	fuzzyEntries := scoring.NewFuzzyEntries(entries.Under(baseDir), term)
+
+	// Prefer an exact match if it's in a reasonable proximity of the best
+	// match. Useful for jumping to (2...4) letter directories, which you
+	// may just type in their exact form anyway.
+	index := exactMatchInProximity(fuzzyEntries, term, 0)
+
+	for {
+		if entry, ok := fuzzyEntries.Select(index); ok {
+			// Remove the entries that no longer exists.
+			if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
+				entries.Remove(entry.Path)
+				conf.WriteEntries(entries)
+
+				index++
+				continue
+			}
+
+			// Jump to the next entry, if the jump is going to land on the
+			// current directory.
+			if fwdPathIsCwd(entry.Path) {
+				index++
+				continue
+			}
+
+			return entry, nil
+		}
+
+		break
+	}
+
+	return scoring.NewEntry(baseDir), nil
+}
+
 const exactMatchProximity = 5
 const exactMatchLenRequirement = 5
 
@@ -157,6 +214,15 @@ func fwdPathIsCwd(path string) bool {
 	}
 
 	return fwdPath == cwd
+}
+
+func dirIsAccessible(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+
+	return fi.IsDir()
 }
 
 func init() {
