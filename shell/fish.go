@@ -18,7 +18,7 @@ function __jump_hint
 end
 
 function {{.Bind}}
-  set -l dir (jump cd "$argv")
+  set -l dir (jump cd $argv)
   test -d "$dir"; and cd "$dir"
 end
 

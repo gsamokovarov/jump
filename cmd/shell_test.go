@@ -86,7 +86,7 @@ func Example_shellCmd_Fish() {
 	// end
 	//
 	// function j
-	//   set -l dir (jump cd "$argv")
+	//   set -l dir (jump cd $argv)
 	//   test -d "$dir"; and cd "$dir"
 	// end
 	//
