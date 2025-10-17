@@ -134,7 +134,16 @@ func cdBaseDir(term, baseDir string, conf config.Config) (*scoring.Entry, error)
 		return nil, err
 	}
 
-	// If the directory exists under the base dir, just go there.
+	// If the directory exists under the cwd, go there.
+	cwd, err := os.Getwd()
+	if err == nil {
+		relativeDir := filepath.Join(cwd, term)
+		if dirIsAccessible(relativeDir) {
+			return scoring.NewEntry(relativeDir), nil
+		}
+	}
+
+	// If not and the it exists under the base dir, do that.
 	childDir := filepath.Join(baseDir, term)
 	if dirIsAccessible(childDir) {
 		return scoring.NewEntry(childDir), nil

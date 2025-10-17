@@ -217,4 +217,22 @@ func Test_cdCmd_baseDir(t *testing.T) {
 		// Should return the direct child path since td/web exists
 		assert.Equal(t, p.Join(baseDir, childDir)+"\n", output)
 	})
+
+	t.Run("acts like cd", func(t *testing.T) {
+		baseDir := p.Join(td, "client")
+		childDir := "web"
+
+		conf := &config.InMemory{
+			Entries: s.Entries{},
+		}
+
+		inside(td, func() {
+			output := capture(&os.Stdout, func() {
+				assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
+			})
+
+			expectedPath := p.Join(td, childDir)
+			assert.Equal(t, expectedPath+"\n", output)
+		})
+	})
 }
