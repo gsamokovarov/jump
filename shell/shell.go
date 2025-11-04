@@ -11,7 +11,7 @@ import (
 // integration scripts.
 type Shell string
 
-// MustCompile compiles the shell template script to ready to execute (read
+// MustCompile compiles the shell template script to ready-to-execute (read
 // copy and paste) shell integration.
 func (s Shell) MustCompile(shortcut string) string {
 	var context struct{ Bind string }
