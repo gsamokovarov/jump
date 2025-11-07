@@ -7,16 +7,19 @@ import (
 	"text/template"
 )
 
+// Context holds the context for shell template compilation.
+type Context struct {
+	Bind      string
+	BasedBind string
+}
+
 // Shell is a small wrapper around string that can pretty print the shell
 // integration scripts.
 type Shell string
 
 // MustCompile compiles the shell template script to ready-to-execute (read
 // copy and paste) shell integration.
-func (s Shell) MustCompile(shortcut string) string {
-	var context struct{ Bind string }
-	context.Bind = shortcut
-
+func (s Shell) MustCompile(context Context) string {
 	outputBuffer := &bytes.Buffer{}
 
 	tmpl := template.Must(template.New("shell").Parse(string(s)))
