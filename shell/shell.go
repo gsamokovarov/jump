@@ -2,15 +2,30 @@ package shell
 
 import (
 	"bytes"
+	_ "embed"
 	"io"
 	"path/filepath"
 	"text/template"
 )
 
+//go:embed integration.zsh
+var zshScript string
+
+//go:embed integration.fish
+var fishScript string
+
+//go:embed integration.nu
+var nushellScript string
+
+//go:embed integration.ps1
+var pwshScript string
+
+//go:embed integration.bash
+var bashScript string
+
 // Context holds the context for shell template compilation.
 type Context struct {
-	Bind      string
-	BasedBind string
+	Bind string
 }
 
 // Shell is a small wrapper around string that can pretty print the shell
@@ -50,3 +65,18 @@ func Guess(hint string) Shell {
 		return Bash
 	}
 }
+
+// Bash is the bash shell integration.
+var Bash = Shell(bashScript)
+
+// Zsh is the zsh shell integration.
+var Zsh = Shell(zshScript)
+
+// Fish is the fish shell integration.
+var Fish = Shell(fishScript)
+
+// Nushell is the nushell shell integration.
+var Nushell = Shell(nushellScript)
+
+// Pwsh is the PowerShell shell integration.
+var Pwsh = Shell(pwshScript)

@@ -16,9 +16,8 @@ func shellCmd(args cli.Args, _ config.Config) error {
 
 	sh := shell.Guess(hint)
 	bind := args.Get("--bind", "j")
-	basedBind := args.Get("--based-bind", "")
 
-	cli.Outf("%s", sh.MustCompile(shell.Context{Bind: bind, BasedBind: basedBind}))
+	cli.Outf("%s", sh.MustCompile(shell.Context{Bind: bind}))
 
 	return nil
 }
