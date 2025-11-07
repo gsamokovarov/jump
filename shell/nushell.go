@@ -15,7 +15,7 @@ $env.config = ($env.config | upsert hooks {
 
 def jump-completer [context: string, position: int] {
   let cmd_line = $context | str substring 0..$position
-  let terms = $cmd_line | split row ' ' | skip 1 | str join ' ' | str trim
+  let terms = $cmd_line | split row ' ' | skip 1 | str join ' '
   let completions = jump hint $terms | lines
   {
     options: { case_sensitive: false, completion_algorithm: "fuzzy", sort: false },
@@ -24,9 +24,20 @@ def jump-completer [context: string, position: int] {
 }
 
 def --env {{.Bind}} [...terms: string@jump-completer] {
-  let dir = (jump cd ...$terms | str trim)
+  let dir = (jump cd ...$terms)
   if ($dir | path exists) {
     cd $dir
   }
 }
+
+{{if .BasedBind}}
+def --env {{.BasedBind}} [...args] {
+  let base_path = if ($env.JUMP_BASED_PATH? != null) {
+    $env.JUMP_BASED_PATH
+  } else {
+    try { git rev-parse --show-toplevel } catch { "" }
+  }
+  {{.Bind}} $base_path ...$args
+}
+{{end}
 `)

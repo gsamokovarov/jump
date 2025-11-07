@@ -22,6 +22,13 @@ __jump_hint() {
   test -d "$dir"  && cd "$dir"
 }
 
+{{if .BasedBind}}
+{{.BasedBind}}() {
+  local base_path="${JUMP_BASED_PATH:-$(command git rev-parse --show-toplevel 2>/dev/null)}"
+  {{.Bind}} "$base_path" $@
+}
+{{end}}
+
 [[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {
   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
 }

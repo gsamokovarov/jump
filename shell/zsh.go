@@ -20,6 +20,13 @@ jump_completion() {
   test -d "$dir" && cd "$dir"
 }
 
+{{if .BasedBind}}
+{{.BasedBind}}() {
+  local base_path="${JUMP_BASED_PATH:-$(command git rev-parse --show-toplevel 2>/dev/null)}"
+  {{.Bind}} "$base_path" $@
+}
+{{end}}
+
 typeset -gaU chpwd_functions
 chpwd_functions+=__jump_chpwd
 

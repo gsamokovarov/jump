@@ -22,5 +22,15 @@ function {{.Bind}}
   test -d "$dir"; and cd "$dir"
 end
 
+{{if .BasedBind}}
+function {{.BasedBind}}
+  set -l base_dir $JUMP_BASE_DIR
+  if test -z "$base_dir"
+    set base_dir "$(command git rev-parse --show-toplevel 2>/dev/null)"
+  end
+	{{.Bind}} "$base_dir" $argv
+end
+{{end}}
+
 complete --command {{.Bind}} --exclusive --arguments '(__jump_hint)'
 `)
