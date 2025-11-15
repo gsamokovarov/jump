@@ -2,7 +2,6 @@ package scoring
 
 import (
 	"fmt"
-	"math"
 	"time"
 )
 
@@ -43,7 +42,7 @@ func (s *Score) Relevance() float64 {
 
 // Calculate the final score from the score weight and the age.
 func (s *Score) Calculate() float64 {
-	return float64(s.Weight) * math.Log(s.Relevance())
+	return float64(s.Weight) * s.Relevance()
 }
 
 // String gives a string representation to Score. Useful for debugging.
