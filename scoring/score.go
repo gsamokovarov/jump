@@ -23,12 +23,22 @@ func (s *Score) Update(weight int64) {
 	s.Age = Now
 }
 
-// Relevance of a score is the quotient of the score age and the current time.
+// Relevance is a multiplier based on how recently the score was accessed.
 //
-// It is expected to be between 1 and 2. Can be more, though, if the age of
-// the score is in the future.
+// 4 if accessed within the last hour, 2 if within the last day, 0.5 if within
+// the last week, and 0.25 otherwise.
 func (s *Score) Relevance() float64 {
-	return 1 + float64(s.Age.Unix())/float64(Now.Unix())
+	timeSinceAccess := Now.Sub(s.Age)
+
+	if timeSinceAccess < time.Hour {
+		return 4.0
+	} else if timeSinceAccess < 24*time.Hour {
+		return 2.0
+	} else if timeSinceAccess < 7*24*time.Hour {
+		return 0.5
+	} else {
+		return 0.25
+	}
 }
 
 // Calculate the final score from the score weight and the age.
