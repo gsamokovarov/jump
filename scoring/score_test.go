@@ -11,13 +11,13 @@ func TestScoreCalculate(t *testing.T) {
 	score1 := Score{2, Now}
 	score2 := Score{4, Now}
 
-	assert.True(t, inDelta(1.38, score2.Calculate()-score1.Calculate()))
+	assert.Equal(t, 8, score2.Calculate()-score1.Calculate())
 }
 
 func TestScoreRelevance(t *testing.T) {
 	score := Score{2, Now}
 
-	assert.True(t, inDelta(2, score.Relevance()))
+	assert.Equal(t, 4.0, score.Relevance())
 }
 
 func TestScoreUpdate(t *testing.T) {
@@ -39,8 +39,4 @@ func TestNewScore(t *testing.T) {
 	str := fmt.Sprintf("{1 %s}", score.Age)
 
 	assert.Equal(t, str, score.String())
-}
-
-func inDelta(delta, expr float64) bool {
-	return delta-0.01 < expr && expr < delta+0.01
 }

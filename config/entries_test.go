@@ -24,6 +24,6 @@ func TestEntries(t *testing.T) {
 
 		assert.Len(t, 1, entries)
 		assert.Equal(t, "/test/dir", entries[0].Path)
-		assert.Equal(t, 0.6931471805599453, entries[0].Score.Calculate())
+		assert.Equal(t, 4, entries[0].Score.Calculate())
 	})
 }

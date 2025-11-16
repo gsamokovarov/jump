@@ -22,13 +22,13 @@ func TestZ(t *testing.T) {
 	assert.
 		Len(t, 4, conf.Entries).
 		// 0
-		Equal(t, "/Users/genadi/.go/src/github.com/gsamokovarov/jump", conf.Entries[0].Path).
+		Equal(t, "/Users/genadi/Development/masse", conf.Entries[0].Path).
 		Equal(t, 1, conf.Entries[0].Score.Weight).
-		Equal(t, time.Unix(1536272492, 0), conf.Entries[0].Score.Age).
+		Equal(t, time.Unix(1536272502, 0), conf.Entries[0].Score.Age).
 		// 1
-		Equal(t, "/Users/genadi/Development/masse", conf.Entries[1].Path).
+		Equal(t, "/Users/genadi/.go/src/github.com/gsamokovarov/jump", conf.Entries[1].Path).
 		Equal(t, 1, conf.Entries[1].Score.Weight).
-		Equal(t, time.Unix(1536272502, 0), conf.Entries[1].Score.Age).
+		Equal(t, time.Unix(1536272492, 0), conf.Entries[1].Score.Age).
 		// 2
 		Equal(t, "/Users/genadi/Development", conf.Entries[2].Path).
 		Equal(t, 3, conf.Entries[2].Score.Weight).
