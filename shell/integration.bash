@@ -1,7 +1,4 @@
-package shell
-
-// Bash is the bash shell integration.
-var Bash = Shell(`# Put the line below in ~/.bashrc or ~/bash_profile:
+# Put the line below in ~/.bashrc or ~/bash_profile:
 #
 #   eval "$(jump shell bash)"
 #
@@ -14,11 +11,25 @@ __jump_prompt_command() {
 
 __jump_hint() {
   local term="${COMP_LINE/#{{.Bind}} /}"
-  echo \'$(jump hint "$term")\'
+  jump hint $term
+}
+
+__jump_base_dir() {
+  local base_dir="$JUMP_BASED_PATH"
+  if [ -z "$base_dir" ]; then
+    base_dir="$(command git rev-parse --show-toplevel 2>/dev/null)"
+  fi
+  echo "$base_dir"
 }
 
 {{.Bind}}() {
-  local dir="$(jump cd "$@")"
+  local dir
+  if [ "$1" = "." ]; then
+    shift
+    dir="$(jump cd "$(__jump_base_dir)" $@)"
+  else
+    dir="$(jump cd $@)"
+  fi
   test -d "$dir"  && cd "$dir"
 }
 
@@ -27,4 +38,3 @@ __jump_hint() {
 }
 
 complete -o dirnames -C '__jump_hint' {{.Bind}}
-`)

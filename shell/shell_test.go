@@ -11,7 +11,7 @@ func TestGuessFish(t *testing.T) {
 }
 
 func TestFishCompiles(t *testing.T) {
-	Fish.MustCompile("j")
+	Fish.MustCompile(Context{Bind: "j"})
 }
 
 func TestGuessZsh(t *testing.T) {
@@ -19,7 +19,7 @@ func TestGuessZsh(t *testing.T) {
 }
 
 func TestZshCompiles(t *testing.T) {
-	Zsh.MustCompile("j")
+	Zsh.MustCompile(Context{Bind: "j"})
 }
 
 func TestGuessPwsh(t *testing.T) {
@@ -28,7 +28,7 @@ func TestGuessPwsh(t *testing.T) {
 }
 
 func TestPwshCompiles(t *testing.T) {
-	Pwsh.MustCompile("j")
+	Pwsh.MustCompile(Context{Bind: "j"})
 }
 
 func TestGuessBash(t *testing.T) {
@@ -37,7 +37,7 @@ func TestGuessBash(t *testing.T) {
 }
 
 func TestBashCompiles(t *testing.T) {
-	Bash.MustCompile("j")
+	Bash.MustCompile(Context{Bind: "j"})
 }
 
 func TestGuessNushell(t *testing.T) {
@@ -46,5 +46,5 @@ func TestGuessNushell(t *testing.T) {
 }
 
 func TestNushellCompiles(t *testing.T) {
-	Nushell.MustCompile("j")
+	Nushell.MustCompile(Context{Bind: "j"})
 }

@@ -181,6 +181,39 @@ $ pwd
 /Users/genadi/Development/society/website
 ```
 
+## Based Mode
+
+Sometimes you're working within a large project or monorepo and want to jump to
+directories relative to that project root. **Jump** can limit its fuzzy search
+to directories under your current git repository, making it super _based_.
+
+Use `j .` followed by a search term to search only within your current git
+repository root (or the `JUMP_BASED_PATH` environment variable if set):
+
+```bash
+# From anywhere in the rails/rails monorepo
+$ j . cable
+$ pwd
+/Users/genadi/Development/rails/rails/actioncable
+
+# Existing directories are navigated to directly
+$ j . actioncable/app
+$ pwd
+/Users/genadi/Development/rails/rails/actioncable/app
+
+# Just the dot with no search term - return to the repository root
+$ j .
+$ pwd
+/Users/genadi/Development/rails/rails
+```
+
+In _based_ mode, **jump** will first check if the search term exists as a direct
+subdirectory, if not, it falls back to fuzzy matching within that base directory.
+
+This is particularly useful when working in large monorepos where you want to
+quickly navigate between related directories without jumping to similarly-named
+directories elsewhere on your system.
+
 ## Reverse jump
 
 Bad jumps happen. Sometimes, we're looking for a directory that doesn't have the
