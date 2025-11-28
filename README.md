@@ -183,70 +183,36 @@ $ pwd
 
 ## Based Mode
 
-Sometimes you know exactly where you want to start your search from. **Jump** can
-limit its fuzzy search to directories under a specific base path, making it super
-_based_.
+Sometimes you're working within a large project or monorepo and want to jump to
+directories relative to that project root. **Jump** can limit its fuzzy search
+to directories under your current git repository, making it super _based_.
 
-When you provide an absolute path as the first argument followed by a search term,
-**jump** enters "based mode" and only looks for matches under that directory:
-
-```bash
-$ j /Users/genadi/Development web
-$ pwd
-/Users/genadi/Development/society/website
-```
-
-This is useful when you have projects scattered across different root
-directories but want to narrow down your search.
-
-In _based_ mode, **jump** will first check if the search term exists as a direct
-subdirectory, if not, it falls back to fuzzy matching within that base
-directory.
+Use `j .` followed by a search term to search only within your current git
+repository root (or the `JUMP_BASED_PATH` environment variable if set):
 
 ```bash
-# If /Users/genadi/Development/society/src exists, go there directly
-$ j /Users/genadi/Development/society src
-$ pwd
-/Users/genadi/Development/society/src
-
-```
-You know what's not based, though? Having to type that much. Jump is all about
-saving those keystrokes so we have a new function shortcut for based mode, `z`.
-
-### z is a new j, yo!
-
-To make the _based_ mode more accessible, **jump** introduces the `z` helper function.
-It works by inferring the base path from the current **git** working directory or
-the `JUMP_BASED_PATH` environment variable.
-
-Say you're working on the rails/rails monorepo located at
-`/Users/genadi/Development/rails/rails`:
-
-```bash
-# Fuzzy match - "cable" finds actioncable
-$ z cable
+# From anywhere in the rails/rails monorepo
+$ j . cable
 $ pwd
 /Users/genadi/Development/rails/rails/actioncable
 
 # Existing directories are navigated to directly
-$ z actioncable/app
+$ j . actioncable/app
 $ pwd
 /Users/genadi/Development/rails/rails/actioncable/app
 
-$ z # No arguments - return to Rails root
+# Just the dot with no search term - return to the repository root
+$ j .
 $ pwd
 /Users/genadi/Development/rails/rails
 ```
 
-To change the default binding of `z`, add the following to your shell integration:
+In _based_ mode, **jump** will first check if the search term exists as a direct
+subdirectory, if not, it falls back to fuzzy matching within that base directory.
 
-```bash
-$ jump shell --bind=j --based-bind=jz
-```
-```
-```
-```
-```
+This is particularly useful when working in large monorepos where you want to
+quickly navigate between related directories without jumping to similarly-named
+directories elsewhere on your system.
 
 ## Reverse jump
 
