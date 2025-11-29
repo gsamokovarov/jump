@@ -12,33 +12,36 @@ import (
 	s "github.com/gsamokovarov/jump/scoring"
 )
 
-func Test_hintCmd_short(t *testing.T) {
-	p1 := p.Join(td, "web-console")
-	p2 := p.Join(td, "/client/website")
+func Test_hintCmd(t *testing.T) {
+	t.Run("short input", func(t *testing.T) {
+		p1 := p.Join(td, "web-console")
+		p2 := p.Join(td, "/client/website")
 
-	conf := &config.InMemory{
-		Entries: s.Entries{
-			entry(p2, &s.Score{Weight: 90, Age: s.Now}),
-			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
-		},
-	}
+		conf := &config.InMemory{
+			Entries: s.Entries{
+				entry(p2, &s.Score{Weight: 90, Age: s.Now}),
+				entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+			},
+		}
 
-	output := capture(&os.Stdout, func() {
-		assert.Nil(t, hintCmd(cli.Args{"webcons"}, conf))
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, hintCmd(cli.Args{"webcons"}, conf))
+		})
+
+		lines := strings.Fields(output)
+		assert.Len(t, 2, lines)
+
+		assert.Equal(t, p1, lines[0])
+		assert.Equal(t, p2, lines[1])
 	})
 
-	lines := strings.Fields(output)
-	assert.Len(t, 1, lines)
+	t.Run("no entries", func(t *testing.T) {
+		conf := &config.InMemory{}
 
-	assert.Equal(t, p1, lines[0])
-}
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, hintCmd(cli.Args{"webcons"}, conf))
+		})
 
-func Test_hintCmd_noEntries(t *testing.T) {
-	conf := &config.InMemory{}
-
-	output := capture(&os.Stdout, func() {
-		assert.Nil(t, hintCmd(cli.Args{"webcons"}, conf))
+		assert.Equal(t, "", output)
 	})
-
-	assert.Equal(t, "", output)
 }
