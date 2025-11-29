@@ -13,7 +13,11 @@ __jump_hint() {
   [[ ${#COMP_WORDS[@]} -eq $((COMP_CWORD + 1)) ]] || return
 
   if [[ ${#COMP_WORDS[@]} -eq 2 ]]; then
-    mapfile -t COMPREPLY < <(compgen -A directory -- "${COMP_WORDS[COMP_CWORD]}")
+    local term="${COMP_WORDS[COMP_CWORD]}"
+    mapfile -t COMPREPLY < <(compgen -A directory -- "$term")
+    if [[ ${#COMPREPLY[@]} -eq 0 && "$term" != */* ]]; then
+      mapfile -t COMPREPLY < <(jump hint "${COMP_WORDS[@]:1}" | head -1)
+    fi
   else
     mapfile -t COMPREPLY < <(jump hint "${COMP_WORDS[@]:1}")
   fi
@@ -29,7 +33,7 @@ __jump_base_dir() {
 
 {{.Bind}}() {
   local dir
-  if [ "$1" = "." ]; then
+  if [[ "$1" == "." ]]; then
     shift
     dir="$(jump cd "$(__jump_base_dir)" $@)"
   else
