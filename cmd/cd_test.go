@@ -152,6 +152,24 @@ func Test_cdCmd_exactMatch_enoughLength(t *testing.T) {
 	assert.Equal(t, p2+"\n", output)
 }
 
+func Test_cdCmd_acts_like_cd(t *testing.T) {
+	baseDir := p.Join(td, "client")
+	childDir := "web/"
+
+	conf := &config.InMemory{
+		Entries: s.Entries{},
+	}
+
+	inside(td, func() {
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
+		})
+
+		expectedPath := p.Join(td, childDir)
+		assert.Equal(t, expectedPath+"\n", output)
+	})
+}
+
 func Test_cdCmd_baseDir(t *testing.T) {
 	baseDir := p.Join(td, "client")
 
@@ -204,23 +222,7 @@ func Test_cdCmd_baseDir(t *testing.T) {
 
 	t.Run("direct children", func(t *testing.T) {
 		baseDir := td
-		childDir := "web"
-
-		conf := &config.InMemory{
-			Entries: s.Entries{},
-		}
-
-		output := capture(&os.Stdout, func() {
-			assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
-		})
-
-		// Should return the direct child path since td/web exists
-		assert.Equal(t, p.Join(baseDir, childDir)+"\n", output)
-	})
-
-	t.Run("acts like cd", func(t *testing.T) {
-		baseDir := p.Join(td, "client")
-		childDir := "web"
+		childDir := "web/"
 
 		conf := &config.InMemory{
 			Entries: s.Entries{},
@@ -231,8 +233,8 @@ func Test_cdCmd_baseDir(t *testing.T) {
 				assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
 			})
 
-			expectedPath := p.Join(td, childDir)
-			assert.Equal(t, expectedPath+"\n", output)
+			// Should return the direct child path since td/web exists
+			assert.Equal(t, p.Join(baseDir, childDir)+"\n", output)
 		})
 	})
 }

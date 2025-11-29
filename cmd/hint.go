@@ -10,7 +10,7 @@ import (
 func hintCmd(args cli.Args, conf config.Config) error {
 	term := termFromArgs(args, conf)
 
-	entry, err := cdEntry(term, conf)
+	entry, err := cdEntry(term, "", conf)
 	if errors.Is(err, errNoEntries) {
 		return nil
 	}

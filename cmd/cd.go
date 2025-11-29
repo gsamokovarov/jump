@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
@@ -35,18 +36,16 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
 func cdCmd(args cli.Args, conf config.Config) error {
 	var entry *scoring.Entry
 	var err error
+	var term, baseDir string
 
 	if filepath.IsAbs(args.First()) && dirIsAccessible(args.First()) && len(args) > 1 {
-		baseDir := args.First()
-		term := termFromArgs(args.Rest(), conf)
-
-		entry, err = cdBaseDir(term, baseDir, conf)
+		baseDir = args.First()
+		term = termFromArgs(args.Rest(), conf)
 	} else {
-		term := termFromArgs(args, conf)
-
-		entry, err = cdEntry(term, conf)
+		term = termFromArgs(args, conf)
 	}
 
+	entry, err = cdEntry(term, baseDir, conf)
 	if errors.Is(err, errNoEntries) {
 		cli.Errf(noEntriesMessage)
 		return nil
@@ -59,10 +58,13 @@ func cdCmd(args cli.Args, conf config.Config) error {
 	return nil
 }
 
-func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
+func cdEntry(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
 	entries, err := conf.ReadEntries()
 	if err != nil {
 		return nil, err
+	}
+	if baseDir != "" {
+		entries = entries.Under(baseDir)
 	}
 
 	// If an auto-completion triggered a full path, just go there.
@@ -88,8 +90,16 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 		}
 	}
 
-	settings := conf.ReadSettings()
+	// If the directory exists under the cwd, go there.
+	cwd, err := os.Getwd()
+	if termIsRelative(term) && err == nil {
+		relativeDir := filepath.Join(cwd, term)
+		if dirIsAccessible(relativeDir) {
+			return scoring.NewEntry(relativeDir), nil
+		}
+	}
 
+	settings := conf.ReadSettings()
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
 
 	// Prefer an exact match if it's in a reasonable proximity of the best
@@ -115,73 +125,18 @@ func cdEntry(term string, conf config.Config) (*scoring.Entry, error) {
 				continue
 			}
 
-			if err := conf.WriteSearch(term, index); err != nil {
-				return nil, err
-			}
+			return entry, conf.WriteSearch(term, index)
+		}
 
-			return entry, nil
+		// If we're given a base directory, and there is no match, go to the base.
+		if baseDir != "" {
+			return scoring.NewEntry(baseDir), nil
 		}
 
 		break
 	}
 
 	return nil, errNoEntries
-}
-
-func cdBaseDir(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
-	entries, err := conf.ReadEntries()
-	if err != nil {
-		return nil, err
-	}
-
-	// If the directory exists under the cwd, go there.
-	cwd, err := os.Getwd()
-	if err == nil {
-		relativeDir := filepath.Join(cwd, term)
-		if dirIsAccessible(relativeDir) {
-			return scoring.NewEntry(relativeDir), nil
-		}
-	}
-
-	// If not and the it exists under the base dir, do that.
-	childDir := filepath.Join(baseDir, term)
-	if dirIsAccessible(childDir) {
-		return scoring.NewEntry(childDir), nil
-	}
-
-	settings := conf.ReadSettings()
-	fuzzyEntries := scoring.NewFuzzyEntries(entries.Under(baseDir), term)
-
-	// Prefer an exact match if it's in a reasonable proximity of the best
-	// match. Useful for jumping to (2...4) letter directories, which you
-	// may just type in their exact form anyway.
-	index := exactMatchInProximity(fuzzyEntries, term, 0)
-
-	for {
-		if entry, ok := fuzzyEntries.Select(index); ok {
-			// Remove the entries that no longer exists.
-			if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
-				entries.Remove(entry.Path)
-				conf.WriteEntries(entries)
-
-				index++
-				continue
-			}
-
-			// Jump to the next entry, if the jump is going to land on the
-			// current directory.
-			if fwdPathIsCwd(entry.Path) {
-				index++
-				continue
-			}
-
-			return entry, nil
-		}
-
-		break
-	}
-
-	return scoring.NewEntry(baseDir), nil
 }
 
 const exactMatchProximity = 5
@@ -232,6 +187,10 @@ func dirIsAccessible(path string) bool {
 	}
 
 	return fi.IsDir()
+}
+
+func termIsRelative(term string) bool {
+	return strings.HasSuffix(term, "/")
 }
 
 func init() {
