@@ -10,8 +10,13 @@ __jump_prompt_command() {
 }
 
 __jump_hint() {
-  local term="${COMP_LINE/#{{.Bind}} /}"
-  jump hint $term
+  [[ ${#COMP_WORDS[@]} -eq $((COMP_CWORD + 1)) ]] || return
+
+  if [[ ${#COMP_WORDS[@]} -eq 2 ]]; then
+    mapfile -t COMPREPLY < <(compgen -A directory -- "${COMP_WORDS[COMP_CWORD]}")
+  else
+    mapfile -t COMPREPLY < <(jump hint "${COMP_WORDS[@]:1}")
+  fi
 }
 
 __jump_base_dir() {
@@ -37,4 +42,4 @@ __jump_base_dir() {
   PROMPT_COMMAND="__jump_prompt_command;$PROMPT_COMMAND"
 }
 
-complete -o dirnames -C '__jump_hint' {{.Bind}}
+complete -F __jump_hint -o filenames -- {{.Bind}}
