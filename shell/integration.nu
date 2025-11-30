@@ -18,17 +18,7 @@ def __jump_base_dir [] {
   }
 }
 
-def jump-completer [context: string, position: int] {
-  let cmd_line = $context | str substring 0..$position
-  let terms = $cmd_line | split row ' ' | skip 1 | str join ' '
-  let completions = jump hint $terms | lines
-  {
-    options: { case_sensitive: false, completion_algorithm: "fuzzy", sort: false },
-    completions: $completions
-  }
-}
-
-def --env {{.Bind}} [...terms: string@jump-completer] {
+def --env {{.Bind}} [...terms: directory] {
   let dir = if (($terms | length) > 0 and ($terms | first) == '.') {
     let base_dir = (__jump_base_dir)
     let remaining = ($terms | skip 1)
