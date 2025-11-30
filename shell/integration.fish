@@ -10,8 +10,14 @@ function __jump_add --on-variable PWD
 end
 
 function __jump_hint
-    set -l term (string replace -r '^{{.Bind}} ' '' -- (commandline -cp))
-    jump hint "$term"
+    set -l term (commandline --cut-at-cursor --current-token)
+    set -l relative_dirs (complete --do-complete "cd $term" | string match --regex -- '.*/$')
+
+    if test (count $relative_dirs) -gt 0
+        printf '%s\n' $relative_dirs
+    else if not string match -q '*/*' -- $term
+        jump hint "$term" | head -1
+    end
 end
 
 function __jump_base_dir
@@ -32,4 +38,4 @@ function {{.Bind}}
     test -d "$dir"; and cd "$dir"
 end
 
-complete --command {{.Bind}} --exclusive --arguments '(__jump_hint)'
+complete --command {{.Bind}} --no-files --arguments '(__jump_hint)'
