@@ -8,8 +8,20 @@ __jump_chpwd() {
   jump chdir
 }
 
-jump_completion() {
-  reply="'$(jump hint "$@")'"
+function __jump_z_complete() {
+  [[ "${#words[@]}" -eq "${CURRENT}" ]] || return 0
+
+  if [[ "${#words[@]}" -eq 2 ]]; then
+    if [[ -n $(echo ${~words[2]}*(/N)) ]]; then
+      _cd -/
+    elif [[ "${words[2]}" != */* ]]; then
+      local hint="$(jump hint "${words[2]}" | head -1)"
+      [[ -n "$hint" ]] && compadd -U -S '' -- "$hint"
+    fi
+  else
+    local -a hints=("${(@f)$(jump hint "${words[2,-1]}")}")
+    [[ ${#hints[@]} -gt 0 ]] && compadd -U -S '' -a hints
+  fi
 }
 
 __jump_base_dir() {
@@ -22,7 +34,7 @@ __jump_base_dir() {
 
 {{.Bind}}() {
   local dir
-  if [ "$1" = "." ]; then
+  if [[ "$1" == "." ]]; then
     shift
     dir="$(jump cd "$(__jump_base_dir)" $@)"
   else
@@ -35,4 +47,4 @@ __jump_base_dir() {
 typeset -gaU chpwd_functions
 chpwd_functions+=__jump_chpwd
 
-compctl -U -K jump_completion {{.Bind}}
+[[ "${+functions[compdef]}" -ne 0 ]] && compdef __jump_z_complete {{.Bind}}
