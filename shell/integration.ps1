@@ -41,15 +41,6 @@ function __jump_base_dir
     return $BaseDir
 }
 
-if (Get-Command Register-ArgumentCompleter -ErrorAction Ignore) {
-    Register-ArgumentCompleter -CommandName '{{.Bind}}' -ScriptBlock {
-        param ($commandName, $wordToComplete, $commandAst, $fakeBoundParameter)
-        jump hint $wordToComplete | ForEach-Object {
-            if ($_ -match '\s') { "'$_'" } else { $_ }
-        }
-    }
-}
-
 function {{.Bind}}
 {
     $Path = $null
@@ -63,5 +54,32 @@ function {{.Bind}}
 
     if (Test-Path $Path) {
         Set-Location $Path
+    }
+}
+
+if (Get-Command Register-ArgumentCompleter -ErrorAction Ignore) {
+    Register-ArgumentCompleter -CommandName '{{.Bind}}' -ScriptBlock {
+        param ($commandName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+        $word = if ($wordToComplete -match '^j\s+(.*)$') { $Matches[1] } else { $wordToComplete }
+        $dirPrefix = if ($word -match '^(.+[/\\])[^/\\]*$') { $Matches[1] } else { "" }
+
+        $localDirs = @(Get-ChildItem -Directory -Path "$word*" -ErrorAction SilentlyContinue)
+
+        if ($localDirs) {
+            $localDirs | ForEach-Object {
+                [System.Management.Automation.CompletionResult]::new(
+                    "$dirPrefix$($_.Name)/",
+                    "$dirPrefix$($_.Name)/",
+                    'ParameterValue',
+                    $_.Name
+                )
+            }
+        } elseif ($word -notmatch '[/\\]') {
+            $hint = jump hint $word 2>$null | Select-Object -First 1
+            if ($hint) {
+                [System.Management.Automation.CompletionResult]::new($hint, $hint, 'ParameterValue', $hint)
+            }
+        }
     }
 }
