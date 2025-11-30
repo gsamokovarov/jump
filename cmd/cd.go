@@ -190,7 +190,7 @@ func dirIsAccessible(path string) bool {
 }
 
 func termIsRelative(term string) bool {
-	return strings.HasSuffix(term, "/")
+	return strings.Contains(term, "/")
 }
 
 func init() {
