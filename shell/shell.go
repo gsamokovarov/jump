@@ -57,7 +57,7 @@ func Guess(hint string) Shell {
 		return Fish
 	case "zsh":
 		return Zsh
-	case "pwsh":
+	case "pwsh", "powershell":
 		return Pwsh
 	case "nu", "nushell":
 		return Nushell
