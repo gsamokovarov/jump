@@ -34,10 +34,7 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
 `
 
 func cdCmd(args cli.Args, conf config.Config) error {
-	var entry *scoring.Entry
-	var err error
 	var term, baseDir string
-
 	if filepath.IsAbs(args.First()) && dirIsAccessible(args.First()) && len(args) > 1 {
 		baseDir = args.First()
 		term = termFromArgs(args.Rest(), conf)
@@ -45,7 +42,7 @@ func cdCmd(args cli.Args, conf config.Config) error {
 		term = termFromArgs(args, conf)
 	}
 
-	entry, err = cdEntry(term, baseDir, conf)
+	path, err := cdEntry(term, baseDir, conf)
 	if errors.Is(err, errNoEntries) {
 		cli.Errf(noEntriesMessage)
 		return nil
@@ -53,15 +50,15 @@ func cdCmd(args cli.Args, conf config.Config) error {
 		return err
 	}
 
-	cli.Outf("%s\n", entry.Path)
+	cli.Outf("%s\n", path)
 
 	return nil
 }
 
-func cdEntry(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
+func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 	entries, err := conf.ReadEntries()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	if baseDir != "" {
 		entries = entries.Under(baseDir)
@@ -69,7 +66,7 @@ func cdEntry(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
 
 	// If an auto-completion triggered a full path, just go there.
 	if filepath.IsAbs(term) {
-		return scoring.NewEntry(term), nil
+		return term, nil
 	}
 
 	index, search := 0, conf.ReadSearch()
@@ -85,7 +82,7 @@ func cdEntry(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
 			// Except if we land on the current directory again. Then
 			// ignore the term.
 			if !fwdPathIsCwd(dir) {
-				return scoring.NewEntry(dir), nil
+				return dir, nil
 			}
 		}
 	}
@@ -95,7 +92,7 @@ func cdEntry(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
 	if termIsRelative(term) && err == nil {
 		relativeDir := filepath.Join(cwd, term)
 		if dirIsAccessible(relativeDir) {
-			return scoring.NewEntry(relativeDir), nil
+			return relativeDir, nil
 		}
 	}
 
@@ -125,18 +122,18 @@ func cdEntry(term, baseDir string, conf config.Config) (*scoring.Entry, error) {
 				continue
 			}
 
-			return entry, conf.WriteSearch(term, index)
+			return entry.Path, conf.WriteSearch(term, index)
 		}
 
 		// If we're given a base directory, and there is no match, go to the base.
 		if baseDir != "" {
-			return scoring.NewEntry(baseDir), nil
+			return baseDir, nil
 		}
 
 		break
 	}
 
-	return nil, errNoEntries
+	return "", errNoEntries
 }
 
 const exactMatchProximity = 5
