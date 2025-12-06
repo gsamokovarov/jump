@@ -34,17 +34,17 @@ __jump_base_dir() {
 {{.Bind}}() {
   case "$1" in
     "..")
-      cd ..
+      builtin cd ..
       ;;
     "-")
-      cd -
+      builtin cd -
       ;;
     ".")
-      cd "$(jump cd "$(__jump_base_dir)" ${@:2})"
+      builtin cd "$(jump cd "$(__jump_base_dir)" ${@:2})"
       ;;
     *)
       local dir="$(jump cd $@)"
-      test -d "$dir" && cd "$dir"
+      test -d "$dir" && builtin cd "$dir"
       ;;
   esac
 }

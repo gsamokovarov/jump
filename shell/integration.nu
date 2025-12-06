@@ -18,19 +18,21 @@ def __jump_base_dir [] {
   }
 }
 
+alias builtin-cd = cd
+
 def --env {{.Bind}} [...terms: directory] {
   match ($terms | get 0?) {
-    ".." => { cd .. }
-    "-" => { cd - }
+    ".." => { builtin-cd .. }
+    "-" => { builtin-cd - }
     "." => {
       let base_dir = (__jump_base_dir)
       let remaining = ($terms | skip 1)
       let dir = (jump cd $base_dir ...$remaining)
-      if ($dir | path exists) { cd $dir }
+      if ($dir | path exists) { builtin-cd $dir }
     }
     _ => {
       let dir = (jump cd ...$terms)
-      if ($dir | path exists) { cd $dir }
+      if ($dir | path exists) { builtin-cd $dir }
     }
   }
 }

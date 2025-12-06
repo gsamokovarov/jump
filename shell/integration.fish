@@ -31,16 +31,16 @@ end
 function {{.Bind}}
     switch "$argv[1]"
         case ".."
-            cd ..
+            builtin cd ..
         case "-"
-            cd -
+            builtin cd -
         case "."
             set argv[1] (__jump_base_dir)
             set -l dir (jump cd $argv)
-            test -d "$dir"; and cd "$dir"
+            test -d "$dir"; and builtin cd "$dir"
         case '*'
             set -l dir (jump cd $argv)
-            test -d "$dir"; and cd "$dir"
+            test -d "$dir"; and builtin cd "$dir"
     end
 end
 
