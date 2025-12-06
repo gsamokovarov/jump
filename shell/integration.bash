@@ -32,14 +32,18 @@ __jump_base_dir() {
 }
 
 {{.Bind}}() {
-  local dir
-  if [[ "$1" == "." ]]; then
-    shift
-    dir="$(jump cd "$(__jump_base_dir)" $@)"
-  else
-    dir="$(jump cd $@)"
-  fi
-  test -d "$dir"  && cd "$dir"
+  case "$1" in
+    "..")
+      cd ..
+      ;;
+    ".")
+      cd "$(jump cd "$(__jump_base_dir)" ${@:2})"
+      ;;
+    *)
+      local dir="$(jump cd $@)"
+      test -d "$dir" && cd "$dir"
+      ;;
+  esac
 }
 
 [[ "$PROMPT_COMMAND" =~ __jump_prompt_command ]] || {

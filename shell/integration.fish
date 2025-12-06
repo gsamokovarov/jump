@@ -29,12 +29,16 @@ function __jump_base_dir
 end
 
 function {{.Bind}}
-    if test "$argv[1]" = "."
+    if test "$argv[1]" = ".."
+        cd ..
+    else if test "$argv[1]" = "."
         set argv[1] (__jump_base_dir)
+        set -l dir (jump cd $argv)
+        test -d "$dir"; and cd "$dir"
+    else
+        set -l dir (jump cd $argv)
+        test -d "$dir"; and cd "$dir"
     end
-    set -l dir (jump cd $argv)
-
-    test -d "$dir"; and cd "$dir"
 end
 
 complete --command {{.Bind}} --erase

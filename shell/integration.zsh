@@ -33,15 +33,19 @@ __jump_base_dir() {
 }
 
 {{.Bind}}() {
-  local dir
-  if [[ "$1" == "." ]]; then
-    shift
-    dir="$(jump cd "$(__jump_base_dir)" $@)"
-  else
-    dir="$(jump cd $@)"
-  fi
-
-  test -d "$dir" && cd "$dir"
+  case "$1" in
+    "..")
+      cd ..
+      ;;
+    ".")
+      local dir="$(jump cd "$(__jump_base_dir)" ${@:2})"
+      test -d "$dir" && cd "$dir"
+      ;;
+    *)
+      local dir="$(jump cd $@)"
+      test -d "$dir" && cd "$dir"
+      ;;
+  esac
 }
 
 typeset -gaU chpwd_functions

@@ -19,15 +19,17 @@ def __jump_base_dir [] {
 }
 
 def --env {{.Bind}} [...terms: directory] {
-  let dir = if (($terms | length) > 0 and ($terms | first) == '.') {
-    let base_dir = (__jump_base_dir)
-    let remaining = ($terms | skip 1)
-    jump cd $base_dir ...$remaining
-  } else {
-    jump cd ...$terms
-  }
-
-  if ($dir | path exists) {
-    cd $dir
+  match ($terms | get 0?) {
+    ".." => { cd .. }
+    "." => {
+      let base_dir = (__jump_base_dir)
+      let remaining = ($terms | skip 1)
+      let dir = (jump cd $base_dir ...$remaining)
+      if ($dir | path exists) { cd $dir }
+    }
+    _ => {
+      let dir = (jump cd ...$terms)
+      if ($dir | path exists) { cd $dir }
+    }
   }
 }

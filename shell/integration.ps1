@@ -39,18 +39,22 @@ function __jump_base_dir
 
 function {{.Bind}}
 {
-    $Path = if ($Args[0] -eq '.') {
-        $BaseDir = __jump_base_dir
-        if ($BaseDir) {
-            $RemainingArgs = if ($Args.Length -gt 1) { $Args[1..($Args.Length - 1)] } else { @() }
-            jump cd $BaseDir @RemainingArgs
+    switch ($Args[0]) {
+        '..' {
+            Set-Location ..
         }
-    } else {
-        jump cd $Args
-    }
-
-    if (Test-Path $Path) {
-        Set-Location $Path
+        '.' {
+            $BaseDir = __jump_base_dir
+            if ($BaseDir) {
+                $RemainingArgs = if ($Args.Length -gt 1) { $Args[1..($Args.Length - 1)] } else { @() }
+                $Path = jump cd $BaseDir @RemainingArgs
+                if (Test-Path $Path) { Set-Location $Path }
+            }
+        }
+        default {
+            $Path = jump cd $Args
+            if (Test-Path $Path) { Set-Location $Path }
+        }
     }
 }
 
