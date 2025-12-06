@@ -43,6 +43,9 @@ function {{.Bind}}
         '..' {
             Set-Location ..
         }
+        '-' {
+            Set-Location -
+        }
         '.' {
             $BaseDir = __jump_base_dir
             if ($BaseDir) {

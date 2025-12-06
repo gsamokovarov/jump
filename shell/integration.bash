@@ -36,6 +36,9 @@ __jump_base_dir() {
     "..")
       cd ..
       ;;
+    "-")
+      cd -
+      ;;
     ".")
       cd "$(jump cd "$(__jump_base_dir)" ${@:2})"
       ;;

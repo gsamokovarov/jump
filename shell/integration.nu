@@ -21,6 +21,7 @@ def __jump_base_dir [] {
 def --env {{.Bind}} [...terms: directory] {
   match ($terms | get 0?) {
     ".." => { cd .. }
+    "-" => { cd - }
     "." => {
       let base_dir = (__jump_base_dir)
       let remaining = ($terms | skip 1)

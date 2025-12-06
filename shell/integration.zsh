@@ -37,6 +37,9 @@ __jump_base_dir() {
     "..")
       cd ..
       ;;
+    "-")
+      cd -
+      ;;
     ".")
       local dir="$(jump cd "$(__jump_base_dir)" ${@:2})"
       test -d "$dir" && cd "$dir"

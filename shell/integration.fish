@@ -29,15 +29,18 @@ function __jump_base_dir
 end
 
 function {{.Bind}}
-    if test "$argv[1]" = ".."
-        cd ..
-    else if test "$argv[1]" = "."
-        set argv[1] (__jump_base_dir)
-        set -l dir (jump cd $argv)
-        test -d "$dir"; and cd "$dir"
-    else
-        set -l dir (jump cd $argv)
-        test -d "$dir"; and cd "$dir"
+    switch "$argv[1]"
+        case ".."
+            cd ..
+        case "-"
+            cd -
+        case "."
+            set argv[1] (__jump_base_dir)
+            set -l dir (jump cd $argv)
+            test -d "$dir"; and cd "$dir"
+        case '*'
+            set -l dir (jump cd $argv)
+            test -d "$dir"; and cd "$dir"
     end
 end
 
