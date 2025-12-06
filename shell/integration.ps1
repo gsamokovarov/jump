@@ -37,6 +37,10 @@ function __jump_base_dir
     if ($result) { $result.Trim() }
 }
 
+{{if eq .Bind "cd"}}
+Remove-Item Alias:cd -Force -ErrorAction SilentlyContinue
+{{end}}
+
 function {{.Bind}}
 {
     switch ($Args[0]) {
