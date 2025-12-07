@@ -83,4 +83,4 @@ man: ronn
 
 .PHONY: ronn
 ronn:
-	@which ronn > /dev/null || gem install ronn
+	@which ronn > /dev/null || gem install ronn-ng
