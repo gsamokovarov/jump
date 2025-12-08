@@ -10,8 +10,6 @@ directory for the shortest search term you type.
 
 ## Installation
 
-Jump comes in packages for the following platforms.
-
 | Platform | Command |
 | --- | --- |
 | macOS | `brew install jump` or `port install jump` |
@@ -33,8 +31,7 @@ Jump comes in packages for the following platforms.
 
 ### Integration
 
-You are using Jump through its shell helper function, `j`. To get it, you have
-to integrate Jump with your shell.
+Integrate Jump with your shell to use the `j` helper function.
 
 #### bash / zsh
 
@@ -54,7 +51,7 @@ jump shell fish | source
 
 #### PowerShell
 
-Add the line below needs to your profile, located by typing `$PROFILE`:
+Add to your profile (find it with `$PROFILE`):
 
 ```
 Invoke-Expression (&jump shell pwsh | Out-String)
@@ -62,74 +59,56 @@ Invoke-Expression (&jump shell pwsh | Out-String)
 
 #### Nushell
 
-Run the command bellow to append the jump integration code to your Nushell
-config:
+Append the integration to your config:
 
 ```
 jump shell nushell | save --append $nu.config-path
 ```
 
-Once integrated, Jump will automatically monitor directory changes and start
-building an internal database.
+Once integrated, Jump automatically monitors directory changes.
 
 #### Murex
 
-Jump bindings can be installed directly from Murex:
+Install directly from Murex (this doesn't install `jump` itself):
 
 ```
 murex-package install https://github.com/lmorg/murex-module-jump.git
 ```
 
-Please note that this doesn't install `jump` itself. You will still need to
-install the `jump` executable using the installation instructions above.
+### Custom Binding
 
-### But `j` is not my favorite letter!
-
-This is fine, you can bind jump to `z` with the following integration command:
+Bind jump to any name you like:
 
 ```bash
-eval "$(jump shell --bind=z)"
+eval "$(jump shell --bind=z)"      # z dir
+eval "$(jump shell --bind=goto)"   # goto dir
+eval "$(jump shell --bind=cd)"     # cd dir (replaces builtin cd!)
 ```
 
-Typing `z dir` would just work! This is only an example, you can bind it to
-_anything_. If you are one of those persons that likes to type a lot with their
-fingers, you can do:
-
-```bash
-eval "$(jump shell --bind=goto)"
-```
-
-Voila! `goto dir` becomes a thing. The possibilities are endless!
+You can even replace the builtin `cd` command. Jump handles `j ..` and `j -` just like the shell.
 
 ## Usage
 
-Once integrated, **jump** introduces the **j** helper. It accepts only search
-terms, and as a design goal, there are no arguments for **j**. Whatever you give
-it, it's treated as a search term.
+The `j` helper accepts only search terms and has no arguments. Jump uses fuzzy matching to find directories, requiring only a few consecutive characters.
 
-**Jump** uses fuzzy matching to find the desired directory to jump to. This
-means that your search terms are patterns that match the desired directory
-approximately rather than exactly. Typing **2** to **5** consecutive characters
-of the directory name is all that **jump** needs to find it.
+### Shell Shortcuts
 
-### Regular jump
-
-The default search behavior of **jump** is to match the
-directory name of a score. The match is case insensitive.
-
-If you visit the directory `/Users/genadi/Development/rails/web-console` often,
-you can jump to it by:
+Jump handles common shell navigation:
 
 ```bash
-$ j wc      # or...
-$ j webc    # or...
-$ j console # or...
-$ j b-c     # or...
+$ j ..      # Same as cd ..
+$ j -       # Same as cd - (previous directory)
 ```
 
-Using jump is all about saving keystrokes. However, if you made the effort to
-type a directory base name exactly, **jump** will try to find the exact match,
-rather than a fuzzy search.
+### Regular Jump
+
+Jump matches directory names using case-insensitive fuzzy search by default. For `/Users/genadi/Development/rails/web-console`:
+
+```bash
+$ j wc      # or webc, or console, or b-c
+```
+
+Exact matches take priority over fuzzy search:
 
 ```bash
 $ j web-console
@@ -137,20 +116,16 @@ $ pwd
 /Users/genadi/Development/rails/web-console
 ```
 
-### Deep jump
+### Deep Jump
 
-Given the following directories:
+For multiple directories with similar names:
 
 ```bash
 /Users/genadi/Development/society/website
 /Users/genadi/Development/chaos/website
 ```
 
-Typing `j site` matches only the base names of the directories. The base name
-of `/Users/genadi/Development/society/website` is `website`, the same as the
-other absolute path above. The jump above will land on the most-scored path,
-which is the `society` one, however, what if we wanted to land on the `chaos`
-website?
+Use parent directory hints to distinguish them:
 
 ```bash
 $ j ch site
@@ -158,257 +133,146 @@ $ pwd
 /Users/genadi/Development/chaos/website
 ```
 
-This instructs **jump** to look for a `site` match inside that is preceded by a
-`ch` match in the parent directory. The search is normalized only on the last
-two parts of the target paths. This will ensure a better match because of the
-shorter path to a fuzzy match.
-
-There are no depth limitations, though and a jump to
-`/Users/genadi/Development/society/website` can look like this:
+Chain multiple terms (spaces become path separators):
 
 ```bash
-$ j dev soc web
-$ pwd
-/Users/genadi/Development/society/website
-```
-
-Every space passed to `j` is converted to an OS separator. The last
-search term can be expressed as:
-
-```bash
-$ j dev/soc/web
+$ j dev/soc/web          # or: j dev soc web
 $ pwd
 /Users/genadi/Development/society/website
 ```
 
 ## Based Mode
 
-Sometimes you're working within a large project or monorepo and want to jump to
-directories relative to that project root. **Jump** can limit its fuzzy search
-to directories under your current git repository, making it super _based_.
-
-Use `j .` followed by a search term to search only within your current git
-repository root (or the `JUMP_BASED_PATH` environment variable if set):
+Use `j .` to search within your current git repository root (or `JUMP_BASED_PATH` env var):
 
 ```bash
-# From anywhere in the rails/rails monorepo
-$ j . cable
+$ j . cable              # From anywhere in rails/rails monorepo
 $ pwd
 /Users/genadi/Development/rails/rails/actioncable
 
-# Existing directories are navigated to directly
-$ j . actioncable/app
+$ j . actioncable/app    # Direct paths work too
 $ pwd
 /Users/genadi/Development/rails/rails/actioncable/app
 
-# Just the dot with no search term - return to the repository root
-$ j .
+$ j .                    # Return to repository root
 $ pwd
 /Users/genadi/Development/rails/rails
 ```
 
-In _based_ mode, **jump** will first check if the search term exists as a direct
-subdirectory, if not, it falls back to fuzzy matching within that base directory.
+## Relative Jump
 
-This is particularly useful when working in large monorepos where you want to
-quickly navigate between related directories without jumping to similarly-named
-directories elsewhere on your system.
-
-## Reverse jump
-
-Bad jumps happen. Sometimes, we're looking for a directory that doesn't have the
-best score at the moment. Let's work with the following following jump database:
+If a search ends on, or cointains a slash, like `j app/`, and the directory exists
+relative to the current directory, Jump will enter it just like cd would:
 
 ```bash
-/Users/genadi/Development/society/website
-/Users/genadi/Development/chaos/website
-/Users/genadi/Development/hack/website
+$ cd /Users/genadi/Development/balkan
+$ j app/                 # Searches within balkan/
+$ pwd
+/Users/genadi/Development/balkan/app
 ```
 
-Typing `j web` would lead to:
+## Reverse Jump
+
+If the first match isn't what you wanted, run `j` again without arguments to try the next match:
 
 ```bash
 $ j web
 $ pwd
 /Users/genadi/Development/society/website
-```
-
-If we didn't expect this result, instead of another search term, typing **j**
-without any arguments, will instruct **jump** to go to the second-best match.
-
-```bash
-$ j
+$ j         # Try next match
 $ pwd
 /Users/genadi/Development/chaos/website
 ```
 
-### Case-sensitive jump
+### Case-Sensitive Search
 
-To trigger a case-sensitive search, use a term that has a capital letter.
+Use a capital letter to trigger case-sensitive matching:
 
 ```bash
 $ j Dev
 $ pwd
-/Users/genadi/Development
+/Users/genadi/Development   # Preferred over /Users/genadi/Development/dev-tools
 ```
-
-The jump will resolve to `/Users/genadi/Development` even if there is
-`/Users/genadi/Development/dev-tools` that scores better.
 
 ### Pins
 
-For various reasons, Jump may not always find the directory you want, but don't
-worry—you can make it work!
-
-A pin forces an input to always go to a specific location. If you want `j r` to
-always go to `/Users/genadi/development/rails`, you can do:
+Pin a search term to always go to a specific directory:
 
 ```bash
 $ cd /Users/genadi/development/rails
 $ jump pin r
-$ cd
-$ j r # Skips the scoring and goes straight to the pinned directory.
+$ j r                       # Always jumps to rails, skipping fuzzy search
 $ pwd
 /Users/genadi/development/rails
 ```
 
-Notice the `jump` command instead of the `j` shell function helper. `j` will
-always treat its input as search terms. It may apply some heuristics to how the
-input looks, but it will never accept arguments or switches. Here is where the
-`jump` command comes in. It is bundled with lots of helpers to make your `j`
-life easier. The pins are one of them.
-
-To list all your pinned search terms:
+List all pins:
 
 ```bash
 $ jump pins
-```
-
-This displays your pins in a tab-separated format:
-
-```bash
 r    /Users/genadi/Development/rails
 w    /Users/genadi/Development/website
 ```
 
-To remove a pin:
+Remove a pin:
 
 ```bash
 $ jump unpin r
 ```
 
-This removes the pin for "r", so `j r` will go back to using fuzzy matching
-instead of jumping directly to the pinned directory.
-
 ## Database Management
 
-### Cleaning the Database
+### Clean
 
-Jump automatically tracks directories, but sometimes you need to clean up
-entries for directories that no longer exist:
+Remove entries for deleted directories:
 
 ```bash
 $ jump clean
 ```
 
-This command removes all database entries pointing to directories that have
-been deleted from your filesystem. Jump runs this automatically when you try to
-jump to a non-existent directory (unless you have `--preserve=true` set), but
-you can also run it manually to clean up your database.
+Jump runs this automatically when jumping to non-existent directories (unless `--preserve=true`).
 
-### Forgetting Directories
+### Forget
 
-If you want to remove the current directory from Jump's database:
+Remove a directory from the database:
 
 ```bash
-$ jump forget
+$ jump forget              # Current directory
+$ jump forget /path/to/dir # Specific path
 ```
 
-This is useful when you're in a directory you don't want Jump to remember or
-suggest in the future. You can also specify a path:
+### Top
+
+View highest-scored directories:
 
 ```bash
-$ jump forget /path/to/directory
+$ jump top                 # All directories
+$ jump top --score         # Show numeric scores
+$ jump top dev             # Filter by search term
 ```
-
-### Listing Top Directories
-
-See which directories Jump considers most important:
-
-```bash
-$ jump top
-```
-
-This shows all directories in your database, sorted by their calculated scores
-(highest first). Add the `--score` flag to see the actual numeric scores:
-
-```bash
-$ jump top --score
-/Users/genadi/Development/jump 45.67
-/Users/genadi/Development 23.45
-/Users/genadi/projects/website 12.34
-```
-
-You can also filter the results with a search term:
-
-```bash
-$ jump top dev
-```
-
-This shows only directories that match "dev", sorted by how well they match the fuzzy search.
 
 ## Is it like autojump or z?
 
-I was an avid autojump user, but it wasn't forgiving my sloppy fingers. That
-pushed me to create Jump with the goal of accepting fuzzy search terms. This
-lets you type a couple of letters and go to your project:
+Jump was created to be more forgiving with fuzzy search. Key differences:
 
-`j web` vs `j website`
+- **Fuzzy matching**: `j web` finds `website` (typos work too: `j wwebsite`)
+- **No arguments**: Everything is a search term
+- **Smart hints**: Mixed case (`j Dev`), path separators (`j soc/web`), reverse jump (`j` with no args)
+- **Shell integration**: Handles `j ..`, `j -`, and can even replace `cd`
 
-The fuzzy typing is your fingers-friendly. You can make a typo, and the jump
-would mostly work:
+Little hand-tuned details like these let jump read your mind with zero LLMs. If I wasn't humble, I'd call it artisan hard-crafted software, but I am, so I'll let you call it what you want. 😄
 
-`j wwebsite`
+## Migrate from autojump or z
 
-As a design goal, the `j` helper doesn't have any arguments. It's all about the search
-term. That said, you can use the search term itself to hint jump about the desired directory.
-
-Typing mixed case input would force a case-sensitive match:
-
-`j Dev` would prefer /Users/genadi/Development
-
-If you have multiple projects with the same name in umbrella directories you
-can hint with OS separators:
-
-`j soc/web` -> /society/website
-`j ra/web` -> /raketa/website
-
-If your input doesn’t give you the right dir, you can `j`. That will jump to
-the next entry with the previous input.
-
-Little hand-tuned details like those let `jump` read my mind with zero LLMs
-interaction. If I wasn't a humble developer, I'd call it artisan
-hard-crafted software, but I am, so I'll let you call it what you want. 😄
-
-## Migrate from `autojump` or `z`
-
-You can import your datafile from `autojump` or `z` with:
+Import your existing database:
 
 ```bash
-$ jump import
-```
-
-This will try `z` first, then `autojump`, so you can even combine all the
-entries from both tools.
-
-The command is safe to run on a pre-existing jump database, because if an entry
-exist in jump already, it won't be imported, and its score will remain
-unchanged. You can be explicit and choose to import `autojump` or `z` with:
-
-```bash
-$ jump import autojump
+$ jump import              # Tries z first, then autojump
+$ jump import autojump     # Explicit import
 $ jump import z
 ```
+
+Safe to run on existing Jump databases—won't overwrite scores.
 
 ## Thanks! 🙌
 

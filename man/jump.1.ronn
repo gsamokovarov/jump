@@ -13,250 +13,210 @@ directory for the shortest search term.
 
 ## USAGE
 
-Jump needs to be integrated with the shell. For `bash` and `zsh`, the the line
-below in needs to be in `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
+Integrate Jump with your shell:
+
+**bash/zsh**: Add to `~/.bashrc`, `~/bash_profile` or `~/.zshrc`:
 
     eval "$(jump shell)"
 
-For fish shell, put the line below needs to be in `~/.config/fish/config.fish`:
+**fish**: Add to `~/.config/fish/config.fish`:
 
     jump shell fish | source
 
-For PowerShell add the following to your profile, located by typing `$PROFILE`:
+**PowerShell**: Add to your profile (find with `$PROFILE`):
 
     Invoke-Expression (&jump shell pwsh | Out-String)
 
-For Nushell add the following to `~/.config/nushell/config.nu`:
+**Nushell**: Append to config:
 
     jump shell nushell | save --append $nu.config-path
 
-Once integrated, **jump** will automatically directory changes and start
-building an internal database.
+Once integrated, Jump automatically monitors directory changes.
+
+### CUSTOM BINDING
+
+Bind jump to any name:
+
+    eval "$(jump shell --bind=z)"      # z dir
+    eval "$(jump shell --bind=goto)"   # goto dir
+    eval "$(jump shell --bind=cd)"     # cd dir (replaces builtin cd!)
+
+You can replace the builtin `cd` command. Jump handles `cd ..` and `cd -` just like the shell.
 
 ### HELPER
 
-Once integrated, **jump** introduces the **j** helper. Every argument to **j**
-is treated as a search term. This is a design goal.
+The **j** helper accepts only search terms—no arguments. Jump uses fuzzy matching, requiring only **2-5** consecutive characters.
 
-**Jump** uses fuzzy matching to find the desired directory to jump to. This
-means that your search terms are patterns that match the desired directory
-approximately rather than exactly. Typing **2** to **5** consecutive characters
-of the base directory names is all that **jump** needs to find it.
+### SHELL SHORTCUTS
+
+Jump handles common shell navigation:
+
+    $ j ..      # Same as cd ..
+    $ j -       # Same as cd - (previous directory)
 
 ### REGULAR JUMP
 
-The default search behavior of **jump** is to case insensitively match only the
-base directory path of the scored directories. This is because absolute paths
-are long and short search terms can fuzzy match them easily, lead to bad
-matches.
+Jump matches directory names using case-insensitive fuzzy search. For `/Users/genadi/Development/rails/web-console`:
 
-If you visit the directory `/Users/genadi/Development/rails/web-console` often,
-you can jump to it by:
+    $ j wc      # or webc, or console, or b-c
 
-    $ j wc      # or...
-    $ j webc    # or...
-    $ j console # or...
-    $ j b-c     # or...
-
-Of course, `web-console` can be typed directly as a search term:
+Exact matches take priority:
 
     $ j web-console
     $ pwd
     /Users/genadi/Development/rails/web-console
 
-Using jump is all about saving key strokes. However, if you made the effort to
-type a directory base name exactly, **jump** will try to find the exact match,
-rather than fuzzy search.
-
 ### DEEP JUMP
 
-Given the following directories:
+For multiple directories with similar names, use parent directory hints:
 
     /Users/genadi/Development/society/website
     /Users/genadi/Development/chaos/website
-
-Can you be sure where `j web` will lead you? You can hint jump where you want
-to go.  To ensure a match of `/Users/genadi/Development/chaos/website`, use the
-search term:
 
     $ j ch web
     $ pwd
     /Users/genadi/Development/chaos/website
 
-This instructs **jump** to look for a `web` match inside that is preceded by a
-`ch` match in the parent directory.  The search is normalized only on the last
-two parts of the target paths. This will ensure a better match, because of the
-shorter path to fuzzy match on.
+Chain multiple terms (spaces become path separators):
 
-There are no depth limitations though and a jump to
-`/Users/genadi/Development/society/website` can look like:
-
-    $ j dev soc web
+    $ j dev/soc/web          # or: j dev soc web
     $ pwd
     /Users/genadi/Development/society/website
 
-In fact, every space passed to `j` is converted to an OS separator. The search
-term above can be expressed as:
+### BASED MODE
 
-    $ j dev/soc/web
+Use `j .` to search within your current git repository root (or `JUMP_BASED_PATH`):
+
+    $ j . cable              # From anywhere in rails/rails
     $ pwd
-    /Users/genadi/Development/society/website
+    /Users/genadi/Development/rails/rails/actioncable
+
+    $ j . actioncable/app    # Direct paths work
+    $ pwd
+    /Users/genadi/Development/rails/rails/actioncable/app
+
+    $ j .                    # Return to repository root
+    $ pwd
+    /Users/genadi/Development/rails/rails
+
+Based mode checks for direct subdirectories first, then falls back to fuzzy matching.
 
 ## REVERSE JUMP
 
-Sometimes bad jumps happen. Maybe the search has a better scored directory
-already. If we want to jump to `/Users/genadi/Development/hack/website` and we
-have the following entries in the database:
-
-    /Users/genadi/Development/society/website
-    /Users/genadi/Development/chaos/website
-    /Users/genadi/Development/hack/website
-
-Typing `j web` would lead to:
+If the first match isn't what you wanted, run `j` again without arguments:
 
     $ j web
     $ pwd
     /Users/genadi/Development/society/website
-
-Instead of typing another search term, typing **j** without a search term will
-instruct **jump** to the second best, third best and so on matches.
-
-    $ j
+    $ j         # Try next match
     $ pwd
     /Users/genadi/Development/chaos/website
 
-    $ j
-    $ pwd
-    /Users/genadi/Development/hack/website
+### CASE SENSITIVE SEARCH
 
-### CASE SENSITIVE JUMP
-
-To trigger a case-sensitive search, use a term that has a capital letter.
+Use a capital letter to trigger case-sensitive matching:
 
     $ j Dev
     $ pwd
-    /Users/genadi/Development
-
-The jump will resolve to `/Users/genadi/Development` even if there is
-`/Users/genadi/Development/dev-tools` that scores better.
+    /Users/genadi/Development   # Preferred over dev-tools
 
 ## PINS
 
-For various reasons, Jump may not always find the directory you want, but don't
-worry—you can make it work!
-
-A pin forces an input to always go to a specific location. If you want `j r` to
-always go to `/Users/genadi/development/rails`, you can do:
+Pin a search term to always go to a specific directory:
 
     $ cd /Users/genadi/development/rails
     $ jump pin r
-    $ cd
-    $ j r # Skips the scoring and goes straight to the pinned directory.
+    $ j r                       # Always jumps to rails
     $ pwd
     /Users/genadi/development/rails
-
-Notice the `jump` command instead of the `j` shell function helper. `j` will
-always treat its input as search terms. It may apply some heuristics to how the
-input looks, but it will never accept arguments or switches. Here is where the
-`jump` command comes in. It is bundled with lots of helpers to make your `j`
-life easier. The pins are one of them.
 
 ## COMMANDS
 
 ### jump clean
 
-Cleans the database of non-existent entries. Removes all database entries pointing to directories that have been deleted from your filesystem.
+Remove entries for deleted directories:
 
     $ jump clean
 
 ### jump forget [path]
 
-Removes the current directory (or specified path) from the database. Useful when you're in a directory you don't want Jump to remember or suggest in the future.
+Remove a directory from the database:
 
-    $ jump forget
-    $ jump forget /path/to/directory
+    $ jump forget              # Current directory
+    $ jump forget /path/to/dir # Specific path
 
 ### jump top [term] [--score]
 
-Lists the directories as they are scored, sorted by their calculated scores (highest first). Optionally filter with a search term or show numeric scores.
+View highest-scored directories:
 
-    $ jump top
-    $ jump top dev
-    $ jump top --score
+    $ jump top                 # All directories
+    $ jump top dev             # Filter by search term
+    $ jump top --score         # Show numeric scores
 
 ### jump pin <term>
 
-Pin a directory to a search term. The current directory will be permanently attached to the specified term.
+Pin the current directory to a search term:
 
     $ jump pin r
 
 ### jump pins
 
-Lists all the pinned search terms in tab-separated format.
+List all pins in tab-separated format:
 
     $ jump pins
 
 ### jump unpin <term>
 
-Unpin a search term, removing it from the pinned database.
+Remove a pin:
 
     $ jump unpin r
 
 ### jump import [autojump|z]
 
-Import autojump or z scores. Without arguments, tries z first, then autojump.
+Import existing databases:
 
-    $ jump import
+    $ jump import              # Tries z first, then autojump
     $ jump import autojump
     $ jump import z
 
 ### jump shell [shell] [--bind=<shortcut>]
 
-Display a shell integration script. Optionally specify shell type and key binding.
+Display shell integration script:
 
     $ jump shell
     $ jump shell bash
     $ jump shell --bind=z
+    $ jump shell --bind=cd     # Replace builtin cd
 
 ### jump cd <term>
 
-Fuzzy match a directory to jump to. This is the core command that `j` calls under the hood.
+Core fuzzy matching command (called by `j`):
 
     $ jump cd web
 
 ### jump hint <term>
 
-Hints relevant paths for jumping. Used internally for shell completion.
+Hint paths for shell completion:
 
     $ jump hint we
 
-## JUMP SETTINGS
-
-Jump is opinionated and we would recommend you to stick to the sweet hand-tuned
-defaults we have provided after years of research, however, we provide a few
-options that may be useful to hand-tune yourself:
+## SETTINGS
 
 ### --space (values: slash (default), ignore)
 
-The calls "j parent child" and "j parent/child" are equivalent by
-default because spaces are treated as OS separators (/ in Unix). You
-can choose to ignore spaces in searches by setting the "spaces" option
-to "ignore":
+Treat spaces as OS separators (`/`) or ignore them:
 
     jump settings --space=ignore
 
 ### --preserve (values: false (default), true)
 
-By default, landing in a directory that is no-longer available on disk
-will cause jump to remove that directory from its database. If a jump
-lands in unmounted drive, the changing of directory will timeout. This
-is why this is turned off (false) by default.
+Keep non-existent directories in database (useful for unmounted drives):
 
     jump settings --preserve=true
 
 ### --reset
 
-Reset jump settings to their default values.
+Reset to default values:
 
     jump settings --reset
 
