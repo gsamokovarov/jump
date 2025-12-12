@@ -40,7 +40,7 @@ clean:
 	@rm -f jump*
 
 .PHONY: pkg
-pkg: pkg.deb pkg.rpm pkg.linux pkg.linux.arm
+pkg: pkg.deb pkg.rpm pkg.linux pkg.linux.arm pkg.windows
 
 .PHONY: pkg.deb
 pkg.deb: man build.linux
@@ -75,6 +75,10 @@ pkg.linux: build.linux
 .PHONY: pkg.linux.arm
 pkg.linux.arm: man build.linux.arm
 	@mv jump jump_linux_arm_binary
+
+.PHONY: pkg.windows
+pkg.windows: man build.windows
+	@mv jump.exe jump_windows_amd64_binary.exe
 
 .PHONY: man
 man: ronn
