@@ -27,8 +27,8 @@ Packages are available on the following platforms:
 | Distribution | Command |
 | --- | --- |
 | Arch | `sudo yay -S jump` |
-| Ubuntu / Debian | `wget https://github.com/gsamokovarov/jump/releases/download/v0.51.0/jump_0.51.0_amd64.deb && sudo dpkg -i jump_0.51.0_amd64.deb` |
-| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.51.0/jump-0.51.0-1.x86_64.rpm && sudo rpm -i jump-0.51.0-1.x86_64.rpm` |
+| Ubuntu / Debian | `wget https://github.com/gsamokovarov/jump/releases/download/v0.67.0/jump_0.67.0_amd64.deb && sudo dpkg -i jump_0.67.0_amd64.deb` |
+| Fedora | `wget https://github.com/gsamokovarov/jump/releases/download/v0.67.0/jump-0.67.0-1.x86_64.rpm && sudo rpm -i jump-0.67.0-1.x86_64.rpm` |
 | Void | `xbps-install -S jump` |
 
 </details>
