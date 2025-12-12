@@ -1,454 +1,176 @@
-.\" generated with Ronn/v0.7.3
-.\" http://github.com/rtomayko/ronn/tree/0.7.3
-.
-.TH "JUMP" "1" "July 2025" "" ""
-.
-.SH "NAME"
-\fBjump\fR \- navigate faster by learning your habits
-.
-.SH "SYNOPSIS"
-\fBj\fR [term \.\.\.]
-.
-.SH "DESCRIPTION"
-\fBJump\fR integrates with the shell and learns about your navigational habits by keeping track of the directories you visit\. It strives to give you the best directory for the shortest search term\.
-.
-.SH "USAGE"
-Jump needs to be integrated with the shell\. For \fBbash\fR and \fBzsh\fR, the the line below in needs to be in \fB~/\.bashrc\fR, \fB~/bash_profile\fR or \fB~/\.zshrc\fR:
-.
-.IP "" 4
-.
-.nf
-
-eval "$(jump shell)"
-.
-.fi
-.
-.IP "" 0
-.
+.\" generated with Ronn-NG/v0.10.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.10.1
+.TH "JUMP" "1" "December 2025" ""
+jump – navigate the filesystem using fuzzy directory matching\fBj\fR \fIterm\fR
+.br
+\fBj\fR \fIterm\fR/\fIsubterm\fR
+.br
+\fBj\fR \. [term]
+.br
+\fBjump\fR \fIcommand\fR [options]\fBJump\fR is a directory navigation tool that learns the folders you visit and lets you return to them with short, fuzzy search terms\. It integrates with your shell through the helper function \fBj\fR, which accepts only search terms – no flags, no options\. Whatever you type becomes a pattern Jump matches against its directory database\.
 .P
-For fish shell, put the line below needs to be in \fB~/\.config/fish/config\.fish\fR:
-.
+Jump updates its scoring database automatically as you navigate\.Add Jump to your shell configuration:
 .IP "" 4
-.
 .nf
-
-jump shell fish | source
-.
+eval "$(jump shell)"                 # bash / zsh
+jump shell fish | source             # fish
+Invoke\-Expression (&jump shell pwsh) # PowerShell
+jump shell nushell | save \-\-append $nu\.config\-path # Nushell
+murex\-package install https://github\.com/lmorg/murex\-module\-jump\.git # Murex
 .fi
-.
 .IP "" 0
-.
 .P
-For PowerShell add the following to your profile, located by typing \fB$PROFILE\fR:
-.
+Jump begins tracking directories as soon as this integration is active\.
+.SH "Keybindings"
+Choose an alternative helper name instead of \fBj\fR:
 .IP "" 4
-.
 .nf
-
-Invoke\-Expression (&jump shell pwsh | Out\-String)
-.
+eval "$(jump shell \-\-bind=z)"        # bind to `z`
+eval "$(jump shell \-\-bind=goto)"     # bind to `goto`
+eval "$(jump shell \-\-bind=cd)"       # override `cd`
 .fi
-.
 .IP "" 0
-.
 .P
-For Nushell add the following to \fB~/\.config/nushell/config\.nu\fR:
-.
+Binding to \fBcd\fR makes directory changes behave like Jump searches:
 .IP "" 4
-.
 .nf
-
-jump shell nushell | save \-\-append $nu\.config\-path
-.
+cd project          # performs a fuzzy jump
+cd src/app          # performs a relative jump when the path exists
 .fi
-.
 .IP "" 0
-.
+.nf
+j wc               # Fuzzy Jump
+j web\-console      # Exact Match
+j dev/soc/web      # Deep Jump
+j ch site          # Multi\-Part Match
+j app/             # Relative Jump
+j \.                # Repo Root
+j \. cable          # Based Mode
+j \-                # cd \-
+j \.\.               # cd \.\.
+j \.\./\.\.            # cd \.\./\.\.
+j                  # Reverse Jump
+j Dev              # Case\-Sensitive
+.fi
+Fuzzy match against frequently visited directories:
+.IP "" 4
+.nf
+j wc               # \-> /Users/genadi/Development/rails/web\-console
+j console          # \-> /Users/genadi/Development/rails/web\-console
+j b\-c              # \-> /Users/genadi/Development/rails/web\-console
+.fi
+.IP "" 0
 .P
-Once integrated, \fBjump\fR will automatically directory changes and start building an internal database\.
-.
-.SS "HELPER"
-Once integrated, \fBjump\fR introduces the \fBj\fR helper\. Every argument to \fBj\fR is treated as a search term\. This is a design goal\.
-.
+Exact matches override fuzzy scoring:
+.IP "" 4
+.nf
+j web\-console      # \-> /Users/genadi/Development/rails/web\-console
+.fi
+.IP "" 0
+Jump can match across multiple path components:
+.IP "" 4
+.nf
+j ch site          # \-> /Users/genadi/Development/chaos/website
+j dev/soc/web      # \-> /Users/genadi/Development/society/website
+.fi
+.IP "" 0
 .P
-\fBJump\fR uses fuzzy matching to find the desired directory to jump to\. This means that your search terms are patterns that match the desired directory approximately rather than exactly\. Typing \fB2\fR to \fB5\fR consecutive characters of the base directory names is all that \fBjump\fR needs to find it\.
-.
-.SS "REGULAR JUMP"
-The default search behavior of \fBjump\fR is to case insensitively match only the base directory path of the scored directories\. This is because absolute paths are long and short search terms can fuzzy match them easily, lead to bad matches\.
-.
+Useful when many directories share similar names\.Limit fuzzy search to the current git repository root or \fB$JUMP_BASED_PATH\fR:
+.IP "" 4
+.nf
+j \. cable          # \-> /Users/genadi/Development/rails/rails/actioncable
+j \. actionview/app # \-> /Users/genadi/Development/rails/rails/actionview/app
+j \.                # \-> /Users/genadi/Development/rails/rails
+.fi
+.IP "" 0
 .P
-If you visit the directory \fB/Users/genadi/Development/rails/web\-console\fR often, you can jump to it by:
-.
+Ideal for monorepos with repeated directory names\.If the input contains or ends with a slash, Jump checks for an existing relative path:
 .IP "" 4
-.
 .nf
-
-$ j wc      # or\.\.\.
-$ j webc    # or\.\.\.
-$ j console # or\.\.\.
-$ j b\-c     # or\.\.\.
-.
+j actioncable/     # \-> \./actioncable
+j actionpack/app   # \-> \./actionpack/app
 .fi
-.
 .IP "" 0
-.
 .P
-Of course, \fBweb\-console\fR can be typed directly as a search term:
-.
+Jump also mirrors shell\-style movements:
 .IP "" 4
-.
 .nf
-
-$ j web\-console
-$ pwd
-/Users/genadi/Development/rails/web\-console
-.
+j \-                # \-> previous directory
+j \.\.               # \-> parent directory
+j \.\./\.\.            # \-> grandparent directory
 .fi
-.
 .IP "" 0
-.
 .P
-Using jump is all about saving key strokes\. However, if you made the effort to type a directory base name exactly, \fBjump\fR will try to find the exact match, rather than fuzzy search\.
-.
-.SS "DEEP JUMP"
-Given the following directories:
-.
+If the path does not exist, Jump falls back to fuzzy matching\.Repeat \fBj\fR with no arguments to jump to the next\-best match:
 .IP "" 4
-.
 .nf
-
-/Users/genadi/Development/society/website
-/Users/genadi/Development/chaos/website
-.
+j web              # \-> /Users/genadi/Development/society/website
+j                  # \-> /Users/genadi/Development/chaos/website
 .fi
-.
 .IP "" 0
-.
+Capital letters trigger case\-sensitive search:
+.IP "" 4
+.nf
+j Dev              # \-> /Users/genadi/Development
+.fi
+.IP "" 0
+Pins force a search term to always resolve to a specific directory:
+.IP "" 4
+.nf
+cd /Users/genadi/development/rails
+jump pin r
+j r                # \-> /Users/genadi/development/rails
+.fi
+.IP "" 0
 .P
-Can you be sure where \fBj web\fR will lead you? You can hint jump where you want to go\. To ensure a match of \fB/Users/genadi/Development/chaos/website\fR, use the search term:
-.
+Manage pins:
 .IP "" 4
-.
 .nf
-
-$ j ch web
-$ pwd
-/Users/genadi/Development/chaos/website
-.
+jump pins
+jump unpin r
 .fi
-.
 .IP "" 0
-.
+Jump maintains an internal scoring database\.
+.IP "" 4
+.nf
+jump clean         # remove stale entries
+jump forget        # forget the current directory
+jump top           # show ranked directories
+jump top \-\-score   # include numeric scores
+jump top dev       # filter by fuzzy term
+.fi
+.IP "" 0
+Import data from previous tools:
+.IP "" 4
+.nf
+jump import
+jump import autojump
+jump import z
+.fi
+.IP "" 0
 .P
-This instructs \fBjump\fR to look for a \fBweb\fR match inside that is preceded by a \fBch\fR match in the parent directory\. The search is normalized only on the last two parts of the target paths\. This will ensure a better match, because of the shorter path to fuzzy match on\.
-.
-.P
-There are no depth limitations though and a jump to \fB/Users/genadi/Development/society/website\fR can look like:
-.
+Existing scores are preserved during import\.Jump is opinionated, and we recommend sticking with the hand\-tuned defaults that have evolved over years of use\. Still, a few settings are available when tuning the behavior is helpful\. These options are managed with \fBjump settings\fR\.
+.SS "\-\-space"
+Control how spaces are interpreted\.
+.br
+Removing spaces allows more relaxed matching:
 .IP "" 4
-.
 .nf
-
-$ j dev soc web
-$ pwd
-/Users/genadi/Development/society/website
-.
-.fi
-.
-.IP "" 0
-.
-.P
-In fact, every space passed to \fBj\fR is converted to an OS separator\. The search term above can be expressed as:
-.
-.IP "" 4
-.
-.nf
-
-$ j dev/soc/web
-$ pwd
-/Users/genadi/Development/society/website
-.
-.fi
-.
-.IP "" 0
-.
-.SH "REVERSE JUMP"
-Sometimes bad jumps happen\. Maybe the search has a better scored directory already\. If we want to jump to \fB/Users/genadi/Development/hack/website\fR and we have the following entries in the database:
-.
-.IP "" 4
-.
-.nf
-
-/Users/genadi/Development/society/website
-/Users/genadi/Development/chaos/website
-/Users/genadi/Development/hack/website
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Typing \fBj web\fR would lead to:
-.
-.IP "" 4
-.
-.nf
-
-$ j web
-$ pwd
-/Users/genadi/Development/society/website
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Instead of typing another search term, typing \fBj\fR without a search term will instruct \fBjump\fR to the second best, third best and so on matches\.
-.
-.IP "" 4
-.
-.nf
-
-$ j
-$ pwd
-/Users/genadi/Development/chaos/website
-
-$ j
-$ pwd
-/Users/genadi/Development/hack/website
-.
-.fi
-.
-.IP "" 0
-.
-.SS "CASE SENSITIVE JUMP"
-To trigger a case\-sensitive search, use a term that has a capital letter\.
-.
-.IP "" 4
-.
-.nf
-
-$ j Dev
-$ pwd
-/Users/genadi/Development
-.
-.fi
-.
-.IP "" 0
-.
-.P
-The jump will resolve to \fB/Users/genadi/Development\fR even if there is \fB/Users/genadi/Development/dev\-tools\fR that scores better\.
-.
-.SH "PINS"
-For various reasons, Jump may not always find the directory you want, but don\'t worry—you can make it work!
-.
-.P
-A pin forces an input to always go to a specific location\. If you want \fBj r\fR to always go to \fB/Users/genadi/development/rails\fR, you can do:
-.
-.IP "" 4
-.
-.nf
-
-$ cd /Users/genadi/development/rails
-$ jump pin r
-$ cd
-$ j r # Skips the scoring and goes straight to the pinned directory\.
-$ pwd
-/Users/genadi/development/rails
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Notice the \fBjump\fR command instead of the \fBj\fR shell function helper\. \fBj\fR will always treat its input as search terms\. It may apply some heuristics to how the input looks, but it will never accept arguments or switches\. Here is where the \fBjump\fR command comes in\. It is bundled with lots of helpers to make your \fBj\fR life easier\. The pins are one of them\.
-.
-.SH "COMMANDS"
-.
-.SS "jump clean"
-Cleans the database of non\-existent entries\. Removes all database entries pointing to directories that have been deleted from your filesystem\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump clean
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump forget [path]"
-Removes the current directory (or specified path) from the database\. Useful when you\'re in a directory you don\'t want Jump to remember or suggest in the future\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump forget
-$ jump forget /path/to/directory
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump top [term] [\-\-score]"
-Lists the directories as they are scored, sorted by their calculated scores (highest first)\. Optionally filter with a search term or show numeric scores\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump top
-$ jump top dev
-$ jump top \-\-score
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump pin <var>term</var>"
-Pin a directory to a search term\. The current directory will be permanently attached to the specified term\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump pin r
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump pins"
-Lists all the pinned search terms in tab\-separated format\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump pins
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump unpin <var>term</var>"
-Unpin a search term, removing it from the pinned database\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump unpin r
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump import [autojump|z]"
-Import autojump or z scores\. Without arguments, tries z first, then autojump\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump import
-$ jump import autojump
-$ jump import z
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump shell [shell] [\-\-bind=<var>shortcut</var>]"
-Display a shell integration script\. Optionally specify shell type and key binding\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump shell
-$ jump shell bash
-$ jump shell \-\-bind=z
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump cd <var>term</var>"
-Fuzzy match a directory to jump to\. This is the core command that \fBj\fR calls under the hood\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump cd web
-.
-.fi
-.
-.IP "" 0
-.
-.SS "jump hint <var>term</var>"
-Hints relevant paths for jumping\. Used internally for shell completion\.
-.
-.IP "" 4
-.
-.nf
-
-$ jump hint we
-.
-.fi
-.
-.IP "" 0
-.
-.SH "JUMP SETTINGS"
-Jump is opinionated and we would recommend you to stick to the sweet hand\-tuned defaults we have provided after years of research, however, we provide a few options that may be useful to hand\-tune yourself:
-.
-.SS "\-\-space (values: slash (default), ignore)"
-The calls "j parent child" and "j parent/child" are equivalent by default because spaces are treated as OS separators (/ in Unix)\. You can choose to ignore spaces in searches by setting the "spaces" option to "ignore":
-.
-.IP "" 4
-.
-.nf
-
 jump settings \-\-space=ignore
-.
 .fi
-.
 .IP "" 0
-.
-.SS "\-\-preserve (values: false (default), true)"
-By default, landing in a directory that is no\-longer available on disk will cause jump to remove that directory from its database\. If a jump lands in unmounted drive, the changing of directory will timeout\. This is why this is turned off (false) by default\.
-.
+.SS "\-\-preserve"
+Prevent automatic cleanup of missing directories:
 .IP "" 4
-.
 .nf
-
 jump settings \-\-preserve=true
-.
 .fi
-.
 .IP "" 0
-.
 .SS "\-\-reset"
-Reset jump settings to their default values\.
-.
+Reset all settings to defaults:
 .IP "" 4
-.
 .nf
-
 jump settings \-\-reset
-.
 .fi
-.
 .IP "" 0
-.
-.SH "COPYRIGHT"
-The MIT License (MIT)
-.
-.P
-Copyright (c) 2015\-2025 Genadi Samokovarov
-.
-.SH "SEE ALSO"
-autojump(1), z(1), pushd(1), popd(1)
+Genadi Samokovarovautojump(1), z(1), pushd(1), popd(1)
