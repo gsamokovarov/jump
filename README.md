@@ -230,8 +230,4 @@ Imports merge into your existing database without overwriting scores.
 
 # Why Jump?
 
-Jump embraces fuzzy matching, forgiving inputs, expressive hints (`Dev`, `soc/web`, tapping `j` again), and natural relative path handling.
-
-It is designed to save keystrokes without giving up control.
-
-If it feels hand-crafted… that is for you to call. 😄
+Cause it's good!
