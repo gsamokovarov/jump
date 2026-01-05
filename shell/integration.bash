@@ -25,10 +25,13 @@ __jump_hint() {
 
 __jump_base_dir() {
   local base_dir="$JUMP_BASED_PATH"
-  if [ -z "$base_dir" ]; then
-    base_dir="$(command git rev-parse --show-toplevel 2>/dev/null)"
+  if [ -n "$base_dir" ]; then
+    echo "$base_dir"
+  elif base_dir="$(command git rev-parse --show-toplevel 2>/dev/null)" && [ -n "$base_dir" ]; then
+    echo "$base_dir"
+  else
+    pwd
   fi
-  echo "$base_dir"
 }
 
 {{.Bind}}() {

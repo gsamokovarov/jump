@@ -14,7 +14,7 @@ def __jump_base_dir [] {
   if ($env.JUMP_BASED_PATH? != null) {
     $env.JUMP_BASED_PATH
   } else {
-    try { git rev-parse --show-toplevel } catch { "" }
+    try { git rev-parse --show-toplevel } catch { $env.PWD }
   }
 }
 

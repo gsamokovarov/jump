@@ -22,10 +22,13 @@ end
 
 function __jump_base_dir
     set -l base_dir $JUMP_BASE_DIR
-    if test -z "$base_dir"
-        set base_dir "$(command git rev-parse --show-toplevel 2>/dev/null)"
+    if test -n "$base_dir"
+        echo "$base_dir"
+    else if set -l git_dir (command git rev-parse --show-toplevel 2>/dev/null)
+        echo "$git_dir"
+    else
+        pwd
     end
-    echo "$base_dir"
 end
 
 function {{.Bind}}

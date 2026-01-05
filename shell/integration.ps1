@@ -32,9 +32,14 @@ function Push-Location {
 
 function __jump_base_dir
 {
-    if ($env:JUMP_BASED_PATH) { return $env:JUMP_BASED_PATH }
+    if ($env:JUMP_BASED_PATH) {
+        return $env:JUMP_BASED_PATH
+    }
     $result = git rev-parse --show-toplevel 2>$null
-    if ($result) { $result.Trim() }
+    if ($result) {
+        return $result.Trim()
+    }
+    return $PWD.Path
 }
 
 {{if eq .Bind "cd"}}
