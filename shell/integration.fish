@@ -33,9 +33,13 @@ end
 
 function __jump_cd
     set -l previous $PWD
-    builtin cd $argv
-    and test "$PWD" != "$previous"
-    and set -gx OLDPWD $previous
+    builtin cd $argv; or return
+    test "$PWD" = "$previous"; and return
+
+    status --is-command-substitution; and return
+    set -g dirprev $dirprev[-24..-1] $previous
+    set -e dirnext
+    set -g __fish_cd_direction prev
 end
 
 function {{.Bind}}
@@ -43,7 +47,12 @@ function {{.Bind}}
         case ".."
             __jump_cd ..
         case -
-            test -n "$OLDPWD"; and __jump_cd $OLDPWD
+            set -q dirprev[1]; or set -q dirnext[1]; or return
+            if test "$__fish_cd_direction" = next
+                nextd
+            else
+                prevd
+            end
         case "."
             set argv[1] (__jump_base_dir)
             set -l dir (jump cd $argv)
