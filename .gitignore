@@ -3,5 +3,4 @@ jump*
 **/testdata/.tmp*
 
 .tags
-.vagrant/
 .DS_Store

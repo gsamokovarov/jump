@@ -1,0 +1,31 @@
+# nfpm config for building Linux .deb and .rpm packages.
+# Docs: https://nfpm.goreleaser.com/configuration/
+#
+# Driven by the Makefile: VERSION and ARCH are passed in via the environment
+# so the Makefile stays the single source of truth. Build with:
+#
+#   make pkg.deb pkg.rpm
+#
+name: jump
+arch: ${ARCH}
+platform: linux
+version: ${VERSION}
+maintainer: "Genadi Samokovarov <gsamokovarov@gmail.com>"
+description: Jump helps you navigate faster by learning your habits.
+vendor: "Genadi Samokovarov"
+homepage: https://github.com/gsamokovarov/jump
+license: MIT
+
+contents:
+  - src: ./jump
+    dst: /usr/bin/jump
+  - src: ./man/jump.1
+    dst: /usr/share/man/man1/jump.1
+  - src: ./man/j.1
+    dst: /usr/share/man/man1/j.1
+
+deb:
+  compression: xz
+
+rpm:
+  compression: xz

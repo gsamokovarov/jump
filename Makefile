@@ -52,29 +52,19 @@ pkg: pkg.deb pkg.rpm pkg.linux pkg.linux.arm pkg.windows pkg.osx pkg.osx.arm
 
 .PHONY: pkg.deb
 pkg.deb: man build.linux
-	@fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a amd64 \
-		--deb-compression bzip2 \
-		--url $(HOMEPAGE) \
-		--description $(DESCRIPTION) \
-		--vendor $(AUTHOR) \
-		--license $(LICENSE) \
-		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
-		./jump=/usr/bin/jump \
-		./man/jump.1=/usr/share/man/man1/jump.1 \
-		./man/j.1=/usr/share/man/man1/j.1
+	@env VERSION=$(VERSION) ARCH=amd64 nfpm package --config nfpm.yaml --packager deb --target .
+
+.PHONY: pkg.deb.arm
+pkg.deb.arm: man build.linux.arm
+	@env VERSION=$(VERSION) ARCH=arm64 nfpm package --config nfpm.yaml --packager deb --target .
 
 .PHONY: pkg.rpm
 pkg.rpm: man build.linux
-	@fpm -s dir -t rpm -n $(NAME) -v $(VERSION) -a amd64 \
-		--rpm-compression bzip2 \
-		--url $(HOMEPAGE) \
-		--description $(DESCRIPTION) \
-		--vendor $(AUTHOR) \
-		--license $(LICENSE) \
-		-m "Genadi Samokovarov <gsamokovarov@gmail.com>" \
-		./jump=/usr/bin/jump \
-		./man/jump.1=/usr/share/man/man1/jump.1 \
-		./man/j.1=/usr/share/man/man1/j.1
+	@env VERSION=$(VERSION) ARCH=amd64 nfpm package --config nfpm.yaml --packager rpm --target .
+
+.PHONY: pkg.rpm.arm
+pkg.rpm.arm: man build.linux.arm
+	@env VERSION=$(VERSION) ARCH=arm64 nfpm package --config nfpm.yaml --packager rpm --target .
 
 .PHONY: pkg.linux
 pkg.linux: build.linux
