@@ -115,6 +115,31 @@ func TestZoxideTruncatedPath(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
+func TestZoxideTooLarge(t *testing.T) {
+	// A structurally valid but oversized database must be rejected up front,
+	// mirroring zoxide's own 32 MiB deserialization limit. The header is valid
+	// (version + count=0) and the trailing bytes would be ignored, so without
+	// the size guard this would parse successfully — this isolates the guard.
+	data := make([]byte, zoxideMaxDBSize+1)
+	binary.LittleEndian.PutUint32(data[0:], zoxideVersion)
+	binary.LittleEndian.PutUint64(data[4:], 0) // count = 0
+
+	_, err := parseZoxideDB(data)
+	assert.NotNil(t, err)
+}
+
+func TestZoxideAtSizeLimit(t *testing.T) {
+	// A database exactly at the limit is allowed (the guard rejects only what
+	// is strictly larger). Valid header + count=0 + padding parses to nothing.
+	data := make([]byte, zoxideMaxDBSize)
+	binary.LittleEndian.PutUint32(data[0:], zoxideVersion)
+	binary.LittleEndian.PutUint64(data[4:], 0) // count = 0
+
+	entries, err := parseZoxideDB(data)
+	assert.Nil(t, err)
+	assert.Len(t, 0, entries)
+}
+
 func TestZoxideCorruptPathLength(t *testing.T) {
 	// A wildly out-of-range path length must be rejected by the guard rather
 	// than panicking on a slice expression or exhausting memory.

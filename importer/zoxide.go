@@ -16,6 +16,10 @@ import (
 // we.
 const zoxideVersion uint32 = 3
 
+// zoxideMaxDBSize mirrors the 32 MiB limit zoxide enforces when deserializing
+// db.zo. Anything larger is treated as corrupt rather than parsed.
+const zoxideMaxDBSize = 32 << 20
+
 var zoxideDefaultConfigPaths = []string{
 	"$_ZO_DATA_DIR/db.zo",
 	"$XDG_DATA_HOME/zoxide/db.zo",
@@ -88,6 +92,10 @@ func (i *zoxide) parseConfig() (scoring.Entries, error) {
 //
 // Duplicate paths are left in place; the caller de-duplicates while merging.
 func parseZoxideDB(data []byte) (scoring.Entries, error) {
+	if len(data) > zoxideMaxDBSize {
+		return nil, fmt.Errorf("importer: zoxide database is %d bytes, larger than the %d byte limit", len(data), zoxideMaxDBSize)
+	}
+
 	r := zoxideDBReader{data: data}
 
 	version, err := r.uint32()
