@@ -144,13 +144,14 @@ Jump maintains an internal scoring database.
     jump top --score   # include numeric scores
     jump top dev       # filter by fuzzy term
 
-# IMPORTING FROM AUTOJUMP OR Z
+# IMPORTING FROM AUTOJUMP, Z OR ZOXIDE
 
 Import data from previous tools:
 
     jump import
     jump import autojump
     jump import z
+    jump import zoxide
 
 Existing scores are preserved during import.
 
@@ -185,4 +186,4 @@ Genadi Samokovarov
 
 # SEE ALSO
 
-autojump(1), z(1), pushd(1), popd(1)
+autojump(1), z(1), zoxide(1), pushd(1), popd(1)

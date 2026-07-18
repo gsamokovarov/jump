@@ -9,7 +9,7 @@ import (
 )
 
 // ErrNotFound is an error returned when the importing tool is not found.
-var ErrNotFound = errors.New("importer: cannot find autojump or z data files")
+var ErrNotFound = errors.New("importer: cannot find autojump, z or zoxide data files")
 
 // Callback is called on every import.
 type Callback func(*scoring.Entry)
@@ -35,9 +35,11 @@ func Guess(hint string, conf config.Config) Importer {
 		imp = Autojump(conf)
 	case "z":
 		imp = Z(conf)
+	case "zoxide":
+		imp = Zoxide(conf)
 	default:
-		// First try z, then try autojump.
-		imp = multiImporter{Z(conf), Autojump(conf)}
+		// Try each known tool, importing from whichever ones are present.
+		imp = multiImporter{Z(conf), Autojump(conf), Zoxide(conf)}
 	}
 
 	return imp

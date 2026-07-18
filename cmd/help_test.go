@@ -18,7 +18,7 @@ func Example_helpCmd() {
 	//   clean        Cleans the database of non-existent entries.
 	//   forget       Removes the current directory from the database.
 	//   hint         Hints relevant paths for jumping.
-	//   import       Import autojump or z scores.
+	//   import       Import autojump, z or zoxide scores.
 	//   pin          Pin a directory to a search term.
 	//   pins         Lists all the pinned search terms.
 	//   settings     Configure jump settings.

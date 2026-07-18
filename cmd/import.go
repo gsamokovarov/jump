@@ -16,5 +16,5 @@ func importCmd(args cli.Args, conf config.Config) error {
 }
 
 func init() {
-	cli.RegisterCommand("import", "Import autojump or z scores.", importCmd)
+	cli.RegisterCommand("import", "Import autojump, z or zoxide scores.", importCmd)
 }

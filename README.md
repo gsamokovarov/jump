@@ -230,12 +230,13 @@ jump top dev       # fuzzy filtered list
 
 ---
 
-## Importing from `autojump` or `z`
+## Importing from `autojump`, `z` or `zoxide`
 
 ```bash
 jump import
 jump import autojump
 jump import z
+jump import zoxide
 ```
 
 Imports merge into your existing database without overwriting scores.

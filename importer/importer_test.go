@@ -25,6 +25,13 @@ func TestGuess_Z(t *testing.T) {
 	assert.True(t, ok)
 }
 
+func TestGuess_Zoxide(t *testing.T) {
+	imp := Guess("zoxide", &config.InMemory{})
+
+	_, ok := imp.(*zoxide)
+	assert.True(t, ok)
+}
+
 func TestGuess_Both(t *testing.T) {
 	imp := Guess("", &config.InMemory{})
 
