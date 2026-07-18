@@ -46,17 +46,21 @@ func Guess(hint string, conf config.Config) Importer {
 }
 
 func readConfig(paths []string) (string, error) {
+	raw, err := readConfigBytes(paths)
+	if err != nil {
+		return "", err
+	}
+
+	return string(raw), nil
+}
+
+func readConfigBytes(paths []string) ([]byte, error) {
 	path, err := findPath(paths)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	bytes, err := os.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
+	return os.ReadFile(path)
 }
 
 func findPath(paths []string) (string, error) {

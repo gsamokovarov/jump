@@ -1,7 +1,6 @@
 package importer
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -65,12 +64,12 @@ func (i *zoxide) Import(fn Callback) error {
 }
 
 func (i *zoxide) parseConfig() (scoring.Entries, error) {
-	content, err := readConfig(i.configPaths)
+	data, err := readConfigBytes(i.configPaths)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseZoxideDB([]byte(content))
+	return parseZoxideDB(data)
 }
 
 // parseZoxideDB decodes the binary db.zo database.
@@ -86,32 +85,30 @@ func (i *zoxide) parseConfig() (scoring.Entries, error) {
 //	  u8  path[len(path)]  (UTF-8)
 //	  f64 rank
 //	  u64 last_accessed    (Unix seconds)
+//
+// Duplicate paths are left in place; the caller de-duplicates while merging.
 func parseZoxideDB(data []byte) (scoring.Entries, error) {
-	r := bytes.NewReader(data)
+	r := zoxideDBReader{data: data}
 
-	var version uint32
-	if err := binary.Read(r, binary.LittleEndian, &version); err != nil {
+	version, err := r.uint32()
+	if err != nil {
 		return nil, fmt.Errorf("importer: cannot read zoxide database version: %w", err)
 	}
 	if version != zoxideVersion {
 		return nil, fmt.Errorf("importer: unsupported zoxide database version %d, jump supports %d", version, zoxideVersion)
 	}
 
-	var count uint64
-	if err := binary.Read(r, binary.LittleEndian, &count); err != nil {
+	count, err := r.uint64()
+	if err != nil {
 		return nil, fmt.Errorf("importer: cannot read zoxide entry count: %w", err)
 	}
 
 	var entries scoring.Entries
 
 	for n := uint64(0); n < count; n++ {
-		entry, err := readZoxideEntry(r)
+		entry, err := readZoxideEntry(&r)
 		if err != nil {
 			return nil, err
-		}
-
-		if _, found := entries.Find(entry.Path); found {
-			continue
 		}
 
 		entries = append(entries, entry)
@@ -120,37 +117,88 @@ func parseZoxideDB(data []byte) (scoring.Entries, error) {
 	return entries, nil
 }
 
-func readZoxideEntry(r *bytes.Reader) (*scoring.Entry, error) {
-	var pathLen uint64
-	if err := binary.Read(r, binary.LittleEndian, &pathLen); err != nil {
-		return nil, fmt.Errorf("importer: cannot read zoxide entry path length: %w", err)
-	}
-
-	// Guard against a corrupt length before allocating for it.
-	if pathLen > uint64(r.Len()) {
-		return nil, fmt.Errorf("importer: zoxide entry path length %d exceeds remaining data", pathLen)
-	}
-
-	path := make([]byte, pathLen)
-	if _, err := io.ReadFull(r, path); err != nil {
+func readZoxideEntry(r *zoxideDBReader) (*scoring.Entry, error) {
+	path, err := r.str()
+	if err != nil {
 		return nil, fmt.Errorf("importer: cannot read zoxide entry path: %w", err)
 	}
 
-	var rank float64
-	if err := binary.Read(r, binary.LittleEndian, &rank); err != nil {
+	rank, err := r.float64()
+	if err != nil {
 		return nil, fmt.Errorf("importer: cannot read zoxide entry rank: %w", err)
 	}
 
-	var lastAccessed uint64
-	if err := binary.Read(r, binary.LittleEndian, &lastAccessed); err != nil {
+	lastAccessed, err := r.uint64()
+	if err != nil {
 		return nil, fmt.Errorf("importer: cannot read zoxide entry timestamp: %w", err)
 	}
 
 	return &scoring.Entry{
-		Path: string(path),
+		Path: path,
 		Score: &scoring.Score{
 			Weight: int64(math.Round(rank)),
 			Age:    time.Unix(int64(lastAccessed), 0),
 		},
 	}, nil
+}
+
+// zoxideDBReader consumes fixed-width little-endian values from a db.zo byte
+// slice without copying it. Reads past the end return io.ErrUnexpectedEOF.
+type zoxideDBReader struct {
+	data []byte
+	pos  int
+}
+
+func (r *zoxideDBReader) next(n int) ([]byte, error) {
+	// n is either a constant width (4/8) or a length already bounds-checked
+	// against the remaining data, so it can never be negative here.
+	if n > len(r.data)-r.pos {
+		return nil, io.ErrUnexpectedEOF
+	}
+
+	b := r.data[r.pos : r.pos+n]
+	r.pos += n
+	return b, nil
+}
+
+func (r *zoxideDBReader) uint32() (uint32, error) {
+	b, err := r.next(4)
+	if err != nil {
+		return 0, err
+	}
+	return binary.LittleEndian.Uint32(b), nil
+}
+
+func (r *zoxideDBReader) uint64() (uint64, error) {
+	b, err := r.next(8)
+	if err != nil {
+		return 0, err
+	}
+	return binary.LittleEndian.Uint64(b), nil
+}
+
+func (r *zoxideDBReader) float64() (float64, error) {
+	b, err := r.uint64()
+	if err != nil {
+		return 0, err
+	}
+	return math.Float64frombits(b), nil
+}
+
+func (r *zoxideDBReader) str() (string, error) {
+	length, err := r.uint64()
+	if err != nil {
+		return "", err
+	}
+
+	// Guard against a corrupt length before slicing for it.
+	if length > uint64(len(r.data)-r.pos) {
+		return "", fmt.Errorf("importer: zoxide entry path length %d exceeds remaining data", length)
+	}
+
+	b, err := r.next(int(length))
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
 }

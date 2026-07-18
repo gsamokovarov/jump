@@ -81,3 +81,48 @@ func TestZoxideTruncated(t *testing.T) {
 	_, err := parseZoxideDB(buf.Bytes())
 	assert.NotNil(t, err)
 }
+
+func TestZoxideEmpty(t *testing.T) {
+	// A valid header with no directories yields no entries and no error.
+	var buf bytes.Buffer
+	binary.Write(&buf, binary.LittleEndian, zoxideVersion)
+	binary.Write(&buf, binary.LittleEndian, uint64(0))
+
+	entries, err := parseZoxideDB(buf.Bytes())
+	assert.Nil(t, err)
+	assert.Len(t, 0, entries)
+}
+
+func TestZoxideTruncatedHeader(t *testing.T) {
+	// The version is present, but the entry count is cut short.
+	var buf bytes.Buffer
+	binary.Write(&buf, binary.LittleEndian, zoxideVersion)
+	buf.Write([]byte{0x01, 0x00}) // 2 of the 8 count bytes
+
+	_, err := parseZoxideDB(buf.Bytes())
+	assert.NotNil(t, err)
+}
+
+func TestZoxideTruncatedPath(t *testing.T) {
+	// An entry declares a 23-byte path but supplies fewer bytes.
+	var buf bytes.Buffer
+	binary.Write(&buf, binary.LittleEndian, zoxideVersion)
+	binary.Write(&buf, binary.LittleEndian, uint64(1))
+	binary.Write(&buf, binary.LittleEndian, uint64(23))
+	buf.WriteString("/short")
+
+	_, err := parseZoxideDB(buf.Bytes())
+	assert.NotNil(t, err)
+}
+
+func TestZoxideCorruptPathLength(t *testing.T) {
+	// A wildly out-of-range path length must be rejected by the guard rather
+	// than panicking on a slice expression or exhausting memory.
+	var buf bytes.Buffer
+	binary.Write(&buf, binary.LittleEndian, zoxideVersion)
+	binary.Write(&buf, binary.LittleEndian, uint64(1))
+	binary.Write(&buf, binary.LittleEndian, uint64(1)<<63)
+
+	_, err := parseZoxideDB(buf.Bytes())
+	assert.NotNil(t, err)
+}
