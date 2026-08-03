@@ -38,8 +38,9 @@ function __jump_cd
 
     status --is-command-substitution; and return
     set -g dirprev $dirprev[-24..-1] $previous
-    set -e dirnext
+    set -q dirnext; and set -e dirnext
     set -g __fish_cd_direction prev
+    true
 end
 
 function {{.Bind}}
