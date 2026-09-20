@@ -1,5 +1,5 @@
 name: jump
-version: '0.51.0'
+version: '0.69.0'
 summary: Jump helps you navigate faster by learning your habits.
 description: |
   **Jump** integrates with your shell and learns about your navigational habits by
@@ -24,6 +24,26 @@ description: |
   For PowerShell, the line below needs to be in your profile, located by typing $PROFILE:
 
   `Invoke-Expression (&jump shell pwsh | Out-String)`
+
+  For Nushell, append the integration to your config with:
+
+  `jump shell nushell | save --append $nu.config-path`
+
+  For Murex, install the community module:
+
+  `murex-package install https://github.com/lmorg/murex-module-jump.git`
+
+  ### Custom binding
+
+  The letter **j** is the default binding for **jump**. If that's not your jam,
+  you can bind it to anything you like:
+
+  `eval "$(jump shell --bind=z)"` or `eval "$(jump shell --bind=goto)"`
+
+  You can even bind it directly to `cd`, so that `cd project` performs a fuzzy
+  jump:
+
+  `eval "$(jump shell --bind=cd)"`
 
   ## Usage
 
@@ -83,7 +103,42 @@ description: |
 
   `$ j dev/soc/web # -> /Users/genadi/society/website`
 
-  ## Reverse jump
+  ### Based mode
+
+  Monorepos are full of repeated directory names, and a fuzzy search across the
+  whole database can land you in the wrong repository. Start a search term with
+  `.` and **jump** will look only under the current base directory:
+
+  `$ j . cable # -> /Users/genadi/rails/rails/actioncable`
+
+  `$ j . actionview/app # -> /Users/genadi/rails/rails/actionview/app`
+
+  Typing `j .` alone takes you to the base itself:
+
+  `$ j . # -> /Users/genadi/rails/rails`
+
+  The base is the `$JUMP_BASED_PATH` environment variable if set, otherwise the
+  root of the current git repository, otherwise the current directory. This
+  means `j .` works everywhere, even outside of git repositories.
+
+  ### Relative jump
+
+  If your search term contains or ends with a slash, **jump** first checks
+  whether it names a directory relative to where you are. While in
+  `/Users/genadi/rails/rails`:
+
+  `$ j actioncable/ # -> ./actioncable`
+
+  `$ j actionpack/app # -> ./actionpack/app`
+
+  The familiar shell movements work as you would expect them to:
+
+  `j -` goes to the previous directory, `j ..` to the parent and `j ../..` to
+  the grandparent.
+
+  If the relative path doesn't exist, **jump** falls back to fuzzy search.
+
+  ### Reverse jump
 
   Bad jumps happen. Sometimes we're looking for a directory that doesn't have the
   best score at the moment. Let's work with the following following jump database:
@@ -112,11 +167,40 @@ description: |
   The jump will resolve to `/Users/genadi/Development` even if there is
   `/Users/genadi/dev-tools` that scores better.
 
-  ## Is it like autojump or z?
+  ### Pins
 
-  Yes, it is! You can import your datafile from `autojump` or `z` with:
+  Some directories deserve a name of their own. Pin the current directory to a
+  short term and **jump** will always take you there, no matter the score:
+
+  `$ cd /Users/genadi/rails`
+
+  `$ jump pin r`
+
+  `$ j r # -> /Users/genadi/rails`
+
+  List your pins with `jump pins` and remove one with `jump unpin r`.
+
+  ## Database tools
+
+  **Jump** learns from you, but you can also tell it a thing or two:
+
+  `jump clean` removes entries for directories that no longer exist.
+
+  `jump forget` forgets the current directory.
+
+  `jump top` shows your directories ranked by score, `jump top --score` shows
+  the numbers behind the ranking and `jump top dev` filters the list with a
+  fuzzy search term.
+
+  ## Is it like autojump, z or zoxide?
+
+  Yes, it is! You can import your datafile from `autojump`, `z` or `zoxide` with:
 
   `$ jump import`
+
+  Or pick the source explicitly with `jump import autojump`, `jump import z` or
+  `jump import zoxide`. Imports merge into your existing database without
+  overwriting scores.
 
 confinement: strict
 base: core20
