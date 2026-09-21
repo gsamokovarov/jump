@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv='content-type' value='text/html;charset=utf8'>
-  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>jump(1) - navigate faster by learning your habits</title>
+  <meta http-equiv='content-type' content='text/html;charset=utf-8'>
+  <meta name='generator' content='Ronn-NG/v0.10.1 (http://github.com/apjanke/ronn-ng/tree/0.10.1)'>
+  <title>jump(1) - jump(1) – navigate faster by learning your habits</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -64,13 +64,7 @@
   <div class='mp' id='man'>
 
   <div class='man-navigation' style='display:none'>
-    <a href="#NAME">NAME</a>
-    <a href="#SYNOPSIS">SYNOPSIS</a>
-    <a href="#DESCRIPTION">DESCRIPTION</a>
-    <a href="#USAGE">USAGE</a>
-    <a href="#REVERSE-JUMP">REVERSE JUMP</a>
-    <a href="#COPYRIGHT">COPYRIGHT</a>
-    <a href="#SEE-ALSO">SEE ALSO</a>
+    <a href="#KEYBINDINGS">Keybindings</a>
   </div>
 
   <ol class='man-decor man-head man head'>
@@ -79,169 +73,218 @@
     <li class='tr'>jump(1)</li>
   </ol>
 
-  <h2 id="NAME">NAME</h2>
-<p class="man-name">
-  <code>jump</code> - <span class="man-whatis">navigate faster by learning your habits</span>
-</p>
+  
 
-<h2 id="SYNOPSIS">SYNOPSIS</h2>
+<h1 id="jump-1-navigate-faster-by-learning-your-habits">jump(1) – navigate faster by learning your habits</h1>
+<h1 id="NAME">NAME</h1>
 
-<p><strong>j</strong> [term ...]</p>
+<p>jump – navigate the filesystem using fuzzy directory matching</p>
 
-<h2 id="DESCRIPTION">DESCRIPTION</h2>
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
 
-<p><strong>Jump</strong> integrates with the shell and learns about your navigational habits by
-keeping track of the directories you visit. It strives to give you the best
-directory for the shortest search term.</p>
+<p><strong>j</strong> <var>term</var><br>
+<strong>j</strong> <var>term</var>/<var>subterm</var><br>
+<strong>j</strong> . [term]<br>
+<strong>jump</strong> <var>command</var> [options]</p>
 
-<h2 id="USAGE">USAGE</h2>
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>Jump needs to be integrated with the shell. For <code>bash</code> and <code>zsh</code>, the the line
-below in needs to be in <code>~/.bashrc</code>, <code>~/bash_profile</code> or <code>~/.zshrc</code>:</p>
+<p><strong>Jump</strong> is a directory navigation tool that learns the folders you visit and
+lets you return to them with short, fuzzy search terms. It integrates with your
+shell through the helper function <strong>j</strong>, which accepts only search terms – no
+flags, no options. Whatever you type becomes a pattern Jump matches against its
+directory database.</p>
 
-<pre><code>eval "$(jump shell)"
+<p>Jump updates its scoring database automatically as you navigate.</p>
+
+<h1 id="SHELL-INTEGRATION">SHELL INTEGRATION</h1>
+
+<p>Add Jump to your shell configuration:</p>
+
+<pre><code>eval "$(jump shell)"                 # bash / zsh
+jump shell fish | source             # fish
+Invoke-Expression (&amp;jump shell pwsh) # PowerShell
+jump shell nushell | save --append $nu.config-path # Nushell
+murex-package install https://github.com/lmorg/murex-module-jump.git # Murex
 </code></pre>
 
-<p>For fish shell, put the line below needs to be in <code>~/.config/fish/config.fish</code>:</p>
+<p>Jump begins tracking directories as soon as this integration is active.</p>
 
-<pre><code>status --is-interactive; and . (jump shell | psub)
+<h2 id="Keybindings">Keybindings</h2>
+
+<p>Choose an alternative helper name instead of <code>j</code>:</p>
+
+<pre><code>eval "$(jump shell --bind=z)"        # bind to `z`
+eval "$(jump shell --bind=goto)"     # bind to `goto`
+eval "$(jump shell --bind=cd)"       # override `cd`
 </code></pre>
 
-<p>Once integrated, <strong>jump</strong> will automatically directory changes and start
-building an internal database.</p>
+<p>Binding to <code>cd</code> makes directory changes behave like Jump searches:</p>
 
-<h3 id="HELPER">HELPER</h3>
-
-<p>Once integrated, <strong>jump</strong> introduces the <strong>j</strong> helper. It accepts only search
-terms and as a design goal there are no arguments to <strong>j</strong>. Whatever you give
-it, it's treated as search term.</p>
-
-<p><strong>Jump</strong> uses fuzzy matching to find the desired directory to jump to. This
-means that your search terms are patterns that match the desired directory
-approximately rather than exactly. Typing <strong>2</strong> to <strong>5</strong> consecutive characters
-of the base directory names is all that <strong>jump</strong> needs to find it.</p>
-
-<h3 id="REGULAR-JUMP">REGULAR JUMP</h3>
-
-<p>The default search behavior of <strong>jump</strong> is to case insensitively match only the
-base directory path of the scored directories. This is because absolute paths
-are long and short search terms can fuzzy match them easily, lead to bad
-matches.</p>
-
-<p>If you visit the directory <code>/Users/genadi/Development/rails/web-console</code> often,
-you can jump to it by:</p>
-
-<pre><code>$ j wc      # or...
-$ j webc    # or...
-$ j console # or...
-$ j b-c     # or...
+<pre><code>cd project          # performs a fuzzy jump
+cd src/app          # performs a relative jump when the path exists
 </code></pre>
 
-<p>Of course, <code>web-console</code> can be typed directly as a search term:</p>
+<h1 id="SUMMARY">SUMMARY</h1>
 
-<pre><code>$ j web-console
-$ pwd
-/Users/genadi/Development/rails/web-console
+<pre><code>j wc               # Fuzzy Jump
+j web-console      # Exact Match
+j dev/soc/web      # Deep Jump
+j ch site          # Multi-Part Match
+j app/             # Relative Jump
+j .                # Repo Root
+j . cable          # Based Mode
+j -                # cd -
+j ..               # cd ..
+j ../..            # cd ../..
+j                  # Reverse Jump
+j Dev              # Case-Sensitive
 </code></pre>
 
-<p>Using jump is all about saving key strokes. However, if you made the effort to
-type a directory base name exactly, <strong>jump</strong> will try to find the exact match,
-rather than fuzzy search.</p>
+<h1 id="REGULAR-JUMPING">REGULAR JUMPING</h1>
 
-<h3 id="DEEP-JUMP">DEEP JUMP</h3>
+<p>Fuzzy match against frequently visited directories:</p>
 
-<p>Given the following directories:</p>
-
-<pre><code>/Users/genadi/Development/society/website
-/Users/genadi/Development/chaos/website
+<pre><code>j wc               # -&gt; /Users/genadi/Development/rails/web-console
+j console          # -&gt; /Users/genadi/Development/rails/web-console
+j b-c              # -&gt; /Users/genadi/Development/rails/web-console
 </code></pre>
 
-<p>Can you be sure where <code>j web</code> will lead you? You can hint jump where you want
-to go.  To ensure a match of <code>/Users/genadi/Development/chaos/website</code>, use the
-search term:</p>
+<p>Exact matches override fuzzy scoring:</p>
 
-<pre><code>$ j ch web
-$ pwd
-/Users/genadi/Development/chaos/website
+<pre><code>j web-console      # -&gt; /Users/genadi/Development/rails/web-console
 </code></pre>
 
-<p>This instructs <strong>jump</strong> to look for a <code>web</code> match inside that is preceded by a
-<code>ch</code> match in the parent directory.  The search is normalized only on the last
-two parts of the target paths. This will ensure a better match, because of the
-shorter path to fuzzy match on.</p>
+<h1 id="DEEP-JUMPING">DEEP JUMPING</h1>
 
-<p>There are no depth limitations though and a jump to
-<code>/Users/genadi/Development/society/website</code> can look like:</p>
+<p>Jump can match across multiple path components:</p>
 
-<pre><code>$ j dev soc web
-$ pwd
-/Users/genadi/Development/society/website
+<pre><code>j ch site          # -&gt; /Users/genadi/Development/chaos/website
+j dev/soc/web      # -&gt; /Users/genadi/Development/society/website
 </code></pre>
 
-<p>In fact, every spaces passed to <code>j</code> are converted to OS separators. The search
-term above can be expressed as:</p>
+<p>Useful when many directories share similar names.</p>
 
-<pre><code>$ j dev/soc/web
-$ pwd
-/Users/genadi/Development/society/website
+<h1 id="BASED-MODE-REPO-AWARE-SEARCH-">BASED MODE (REPO-AWARE SEARCH)</h1>
+
+<p>Limit fuzzy search to the current git repository root or <code>$JUMP_BASED_PATH</code>:</p>
+
+<pre><code>j . cable          # -&gt; /Users/genadi/Development/rails/rails/actioncable
+j . actionview/app # -&gt; /Users/genadi/Development/rails/rails/actionview/app
+j .                # -&gt; /Users/genadi/Development/rails/rails
 </code></pre>
 
-<h2 id="REVERSE-JUMP">REVERSE JUMP</h2>
+<p>Ideal for monorepos with repeated directory names.</p>
 
-<p>Sometimes bad jumps happen. Maybe the search has a better scored directory
-already. If we want to jump to <code>/Users/genadi/Development/hack/website</code> and we
-have the following entries in the database:</p>
+<h1 id="RELATIVE-JUMPING">RELATIVE JUMPING</h1>
 
-<pre><code>/Users/genadi/Development/society/website
-/Users/genadi/Development/chaos/website
-/Users/genadi/Development/hack/website
+<p>If the input contains or ends with a slash, Jump checks for an existing relative path:</p>
+
+<pre><code>j actioncable/     # -&gt; ./actioncable
+j actionpack/app   # -&gt; ./actionpack/app
 </code></pre>
 
-<p>Typing <code>j web</code> would lead to:</p>
+<p>Jump also mirrors shell-style movements:</p>
 
-<pre><code>$ j web
-$ pwd
-/Users/genadi/Development/society/website
+<pre><code>j -                # -&gt; previous directory
+j ..               # -&gt; parent directory
+j ../..            # -&gt; grandparent directory
 </code></pre>
 
-<p>Instead of typing another search term, typing <strong>j</strong> without a search term will
-instruct <strong>jump</strong> to the second best, third best and so on matches.</p>
+<p>If the path does not exist, Jump falls back to fuzzy matching.</p>
 
-<pre><code>$ j
-$ pwd
-/Users/genadi/Development/chaos/website
+<h1 id="REVERSE-JUMPING">REVERSE JUMPING</h1>
 
-$ j
-$ pwd
-/Users/genadi/Development/hack/website
+<p>Repeat <code>j</code> with no arguments to jump to the next-best match:</p>
+
+<pre><code>j web              # -&gt; /Users/genadi/Development/society/website
+j                  # -&gt; /Users/genadi/Development/chaos/website
 </code></pre>
 
-<h3 id="CASE-SENSITIVE-JUMP">CASE SENSITIVE JUMP</h3>
+<h1 id="CASE-SENSITIVE-MATCHING">CASE-SENSITIVE MATCHING</h1>
 
-<p>To trigger a case-sensitive search, use a term that has a capital letter.</p>
+<p>Capital letters trigger case-sensitive search:</p>
 
-<pre><code>$ j Dev
-$ pwd
-/Users/genadi/Development
+<pre><code>j Dev              # -&gt; /Users/genadi/Development
 </code></pre>
 
-<p>The jump will resolve to <code>/Users/genadi/Development</code> even if there is
-<code>/Users/genadi/Development/dev-tools</code> that scores better.</p>
+<h1 id="PINS">PINS</h1>
 
-<h2 id="COPYRIGHT">COPYRIGHT</h2>
+<p>Pins force a search term to always resolve to a specific directory:</p>
 
-<p>The MIT License (MIT)</p>
+<pre><code>cd /Users/genadi/development/rails
+jump pin r
+j r                # -&gt; /Users/genadi/development/rails
+</code></pre>
 
-<p>Copyright (c) 2015-2018 Genadi Samokovarov</p>
+<p>Manage pins:</p>
 
-<h2 id="SEE-ALSO">SEE ALSO</h2>
+<pre><code>jump pins
+jump unpin r
+</code></pre>
 
-<p><span class="man-ref">autojump<span class="s">(1)</span></span>, <span class="man-ref">z<span class="s">(1)</span></span>, <span class="man-ref">pushd<span class="s">(1)</span></span>, <span class="man-ref">popd<span class="s">(1)</span></span></p>
+<h1 id="DATABASE-MANAGEMENT">DATABASE MANAGEMENT</h1>
 
+<p>Jump maintains an internal scoring database.</p>
+
+<pre><code>jump clean         # remove stale entries
+jump forget        # forget the current directory
+jump top           # show ranked directories
+jump top --score   # include numeric scores
+jump top dev       # filter by fuzzy term
+</code></pre>
+
+<h1 id="IMPORTING-FROM-AUTOJUMP-Z-OR-ZOXIDE">IMPORTING FROM AUTOJUMP, Z OR ZOXIDE</h1>
+
+<p>Import data from previous tools:</p>
+
+<pre><code>jump import
+jump import autojump
+jump import z
+jump import zoxide
+</code></pre>
+
+<p>Existing scores are preserved during import.</p>
+
+<h1 id="JUMP-SETTINGS">JUMP SETTINGS</h1>
+
+<p>Jump is opinionated, and we recommend sticking with the hand-tuned defaults that
+have evolved over years of use. Still, a few settings are available when tuning
+the behavior is helpful. These options are managed with <strong>jump settings</strong>.</p>
+
+<h3 id="-space">--space</h3>
+
+<p>Control how spaces are interpreted.<br>
+Removing spaces allows more relaxed matching:</p>
+
+<pre><code>jump settings --space=ignore
+</code></pre>
+
+<h3 id="-preserve">--preserve</h3>
+
+<p>Prevent automatic cleanup of missing directories:</p>
+
+<pre><code>jump settings --preserve=true
+</code></pre>
+
+<h3 id="-reset">--reset</h3>
+
+<p>Reset all settings to defaults:</p>
+
+<pre><code>jump settings --reset
+</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Genadi Samokovarov</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><span class="man-ref">autojump<span class="s">(1)</span></span>, <span class="man-ref">z<span class="s">(1)</span></span>, <span class="man-ref">zoxide<span class="s">(1)</span></span>, <span class="man-ref">pushd<span class="s">(1)</span></span>, <span class="man-ref">popd<span class="s">(1)</span></span></p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>January 2018</li>
+    <li class='tc'>September 2026</li>
     <li class='tr'>jump(1)</li>
   </ol>
 
