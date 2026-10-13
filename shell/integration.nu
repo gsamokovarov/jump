@@ -23,6 +23,7 @@ alias builtin-cd = cd
 def --env {{.Bind}} [...terms: directory] {
   match ($terms | get 0?) {
     ".." => { builtin-cd .. }
+    "..." => { builtin-cd ../.. }
     "-" => { builtin-cd - }
     "." => {
       let base_dir = (__jump_base_dir)

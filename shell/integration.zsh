@@ -40,6 +40,9 @@ __jump_base_dir() {
     "..")
       builtin cd ..
       ;;
+    "...")
+      builtin cd ../..
+      ;;
     "-")
       builtin cd -
       ;;

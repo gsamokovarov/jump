@@ -47,6 +47,8 @@ function {{.Bind}}
     switch "$argv[1]"
         case ".."
             __jump_cd ..
+        case "..."
+            __jump_cd ../..
         case -
             set -q dirprev[1]; or set -q dirnext[1]; or return
             if test "$__fish_cd_direction" = next

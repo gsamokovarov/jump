@@ -52,6 +52,9 @@ function {{.Bind}}
         '..' {
             Set-Location ..
         }
+        '...' {
+            Set-Location ../..
+        }
         '-' {
             Set-Location -
         }
