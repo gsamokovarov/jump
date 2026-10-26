@@ -86,15 +86,10 @@ func Test_topCmd(t *testing.T) {
 	})
 
 	t.Run("jump top neuv --score", func(t *testing.T) {
-		wc := p.Join(td, "web-console")
-		neu := p.Join(td, "neuvents")
+		wc := entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now})
+		neu := entry(p.Join(td, "neuvents"), &s.Score{Weight: 90, Age: s.Now})
 
-		conf := &config.InMemory{
-			Entries: s.Entries{
-				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
-				entry(neu, &s.Score{Weight: 90, Age: s.Now}),
-			},
-		}
+		conf := &config.InMemory{Entries: s.Entries{wc, neu}}
 
 		output := capture(&os.Stdout, func() {
 			assert.Nil(t, topCmd(cli.Args{"neuv", "--score"}, conf))
@@ -103,8 +98,8 @@ func Test_topCmd(t *testing.T) {
 		lines := strings.Split(output, "\n")
 		assert.Len(t, 3, lines)
 
-		assert.Equal(t, f("%s %.2f", neu, conf.Entries[0].CalculateScore()), lines[0])
-		assert.Equal(t, f("%s %.2f", wc, conf.Entries[1].CalculateScore()), lines[1])
+		assert.Equal(t, f("%s %.2f", neu.Path, neu.CalculateScore()), lines[0])
+		assert.Equal(t, f("%s %.2f", wc.Path, wc.CalculateScore()), lines[1])
 		assert.Equal(t, "", lines[2])
 	})
 }

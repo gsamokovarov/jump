@@ -242,3 +242,25 @@ func Test_cdCmd(t *testing.T) {
 		})
 	})
 }
+
+func Test_cdCmd_staleEntryInBasedMode(t *testing.T) {
+	baseDir := p.Join(td, "client")
+	stale := p.Join(baseDir, "gone")
+	other := p.Join(td, "web-console")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(other, &s.Score{Weight: 100, Age: s.Now}),
+			entry(stale, &s.Score{Weight: 90, Age: s.Now}),
+		},
+	}
+
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{baseDir, "gone"}, conf))
+	})
+
+	// The stale entry is removed, but the entries outside the base must stay.
+	assert.Equal(t, baseDir+"\n", output)
+	assert.Len(t, 1, conf.Entries)
+	assert.Equal(t, other, conf.Entries[0].Path)
+}

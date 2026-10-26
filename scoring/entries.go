@@ -1,28 +1,15 @@
 package scoring
 
 import (
-	"sort"
+	"cmp"
+	"slices"
 	"strings"
+
+	"github.com/gsamokovarov/jump/fuzzy"
 )
 
-// Entries represents entries slice that supports sort.Interface.
+// Entries represents the scored directories in the database.
 type Entries []*Entry
-
-// Len returns the length of the entries slice.
-func (e Entries) Len() int {
-	return len(e)
-}
-
-// Swap swaps the values at two indexes in the entries slice.
-func (e Entries) Swap(i, j int) {
-	e[i], e[j] = e[j], e[i]
-}
-
-// Less compares two indexes in the entries and returns true if the value at i
-// is less than the value at j.
-func (e Entries) Less(i, j int) bool {
-	return (e)[i].CalculateScore() < (e)[j].CalculateScore()
-}
 
 // Find finds an entry by a given path.
 //
@@ -62,7 +49,25 @@ func (e Entries) Under(path string) Entries {
 	return entries
 }
 
-// Sort sorts the entries collection.
-func (e *Entries) Sort() {
-	sort.Sort(e)
+// Ranked returns a copy of the entries ordered by how well they match the
+// term, best match first. Entries that match equally well are ordered by
+// their score, so the more frequently visited one comes first.
+func (e Entries) Ranked(term string) Entries {
+	ranked := slices.Clone(e)
+	slices.SortStableFunc(ranked, func(a, b *Entry) int {
+		return cmp.Or(
+			cmp.Compare(fuzzy.Score(term, b.Path), fuzzy.Score(term, a.Path)),
+			cmp.Compare(b.CalculateScore(), a.CalculateScore()),
+		)
+	})
+
+	return ranked
+}
+
+// Sort orders the entries by their score, lightest first. The database is
+// kept in that order on disk.
+func (e Entries) Sort() {
+	slices.SortFunc(e, func(a, b *Entry) int {
+		return cmp.Compare(a.CalculateScore(), b.CalculateScore())
+	})
 }

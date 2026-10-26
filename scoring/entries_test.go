@@ -14,25 +14,6 @@ func TestEntriesLen(t *testing.T) {
 	assert.Len(t, 2, entries)
 }
 
-func TestEntriesSwap(t *testing.T) {
-	e1 := &Entry{"/foo", &Score{100, Now}}
-	e2 := &Entry{"/foo/bar", &Score{200, Now}}
-
-	entries := Entries{e1, e2}
-	entries.Swap(0, 1)
-
-	assert.Equal(t, Entries{e2, e1}, entries)
-}
-
-func TestEntriesLess(t *testing.T) {
-	e1 := &Entry{"/foo", &Score{100, Now}}
-	e2 := &Entry{"/foo/bar", &Score{200, Now}}
-
-	entries := Entries{e1, e2}
-
-	assert.True(t, entries.Less(0, 1))
-}
-
 func TestEntriesFind(t *testing.T) {
 	e1 := &Entry{"/foo", &Score{100, Now}}
 	e2 := &Entry{"/foo/bar", &Score{200, Now}}
@@ -99,5 +80,41 @@ func TestEntriesUnder(t *testing.T) {
 		for _, entry := range result {
 			assert.NotEqual(t, "/home/user", entry.Path)
 		}
+	})
+}
+
+func TestEntriesRanked(t *testing.T) {
+	t.Run("best match first", func(t *testing.T) {
+		e1 := &Entry{"/Development/web-console", &Score{100, Now}}
+		e2 := &Entry{"/Development/website", &Score{200, Now}}
+
+		ranked := Entries{e1, e2}.Ranked("wc")
+
+		assert.Equal(t, Entries{e1, e2}, ranked)
+	})
+
+	t.Run("heavier entry first among equal matches", func(t *testing.T) {
+		e1 := &Entry{"/Development/web-client", &Score{100, Now}}
+		e2 := &Entry{"/Development/web-console", &Score{200, Now}}
+
+		assert.Equal(t, Entries{e2, e1}, Entries{e1, e2}.Ranked("wc"))
+		assert.Equal(t, Entries{e2, e1}, Entries{e2, e1}.Ranked("wc"))
+	})
+
+	t.Run("empty term orders by score alone", func(t *testing.T) {
+		e1 := &Entry{"/Development/web-client", &Score{100, Now}}
+		e2 := &Entry{"/Development/web-console", &Score{200, Now}}
+
+		assert.Equal(t, Entries{e2, e1}, Entries{e1, e2}.Ranked(""))
+	})
+
+	t.Run("leaves the entries untouched", func(t *testing.T) {
+		e1 := &Entry{"/Development/web-client", &Score{100, Now}}
+		e2 := &Entry{"/Development/web-console", &Score{200, Now}}
+
+		entries := Entries{e1, e2}
+		entries.Ranked("wc")
+
+		assert.Equal(t, Entries{e1, e2}, entries)
 	})
 }

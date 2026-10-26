@@ -8,7 +8,6 @@ import (
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
-	"github.com/gsamokovarov/jump/scoring"
 )
 
 var errNoEntries = errors.New("no entries in the database")
@@ -59,9 +58,6 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if baseDir != "" {
-		entries = entries.Under(baseDir)
-	}
 
 	index, search := 0, conf.ReadSearch()
 
@@ -90,36 +86,36 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 		}
 	}
 
+	candidates := entries
+	if baseDir != "" {
+		candidates = entries.Under(baseDir)
+	}
+
 	settings := conf.ReadSettings()
-	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
+	ranked := candidates.Ranked(term)
 
-	for {
-		if entry, ok := fuzzyEntries.Select(index); ok {
-			// Remove the entries that no longer exists.
-			if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
-				entries.Remove(entry.Path)
-				conf.WriteEntries(entries)
+	for ; index < len(ranked); index++ {
+		entry := ranked[index]
 
-				index++
-				continue
-			}
-
-			// Jump to the next entry, if the jump is going to land on the
-			// current directory.
-			if fwdPathIsCwd(entry.Path) {
-				index++
-				continue
-			}
-
-			return entry.Path, conf.WriteSearch(term, index)
+		// Remove the entries that no longer exists.
+		if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
+			entries.Remove(entry.Path)
+			conf.WriteEntries(entries)
+			continue
 		}
 
-		// If we're given a base directory, and there is no match, go to the base.
-		if baseDir != "" {
-			return baseDir, nil
+		// Jump to the next entry, if the jump is going to land on the
+		// current directory.
+		if fwdPathIsCwd(entry.Path) {
+			continue
 		}
 
-		break
+		return entry.Path, conf.WriteSearch(term, index)
+	}
+
+	// If we're given a base directory, and there is no match, go to the base.
+	if baseDir != "" {
+		return baseDir, nil
 	}
 
 	return "", errNoEntries
