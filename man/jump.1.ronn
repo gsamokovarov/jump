@@ -81,7 +81,9 @@ Jump can match across multiple path components:
     j ch site          # -> /Users/genadi/Development/chaos/website
     j dev/soc/web      # -> /Users/genadi/Development/society/website
 
-Useful when many directories share similar names.
+Each part is matched against one path component, starting from the end: the
+last part against the directory name, the one before it against its parent
+and so on. Useful when many directories share similar names.
 
 # BASED MODE (REPO-AWARE SEARCH)
 

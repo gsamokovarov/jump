@@ -16,9 +16,7 @@ type FuzzyEntries struct {
 // Less compares the Longest Subsequence Length between the term string and
 // every entry. The entries with greater LCS come first.
 func (fe *FuzzyEntries) Less(i, j int) bool {
-	norm := fuzzy.NewNormalizer(fe.Term)
-
-	return norm.Score(fe.Entries[i].Path) >= norm.Score(fe.Entries[j].Path)
+	return fuzzy.Score(fe.Term, fe.Entries[i].Path) >= fuzzy.Score(fe.Term, fe.Entries[j].Path)
 }
 
 // Sort sorts the entries collection.

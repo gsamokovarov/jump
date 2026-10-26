@@ -8,7 +8,6 @@ import (
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
-	"github.com/gsamokovarov/jump/fuzzy"
 	"github.com/gsamokovarov/jump/scoring"
 )
 
@@ -83,8 +82,9 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 	}
 
 	// If the term names an existing directory, like a completed path or one
-	// under the cwd, act like cd and just go there.
-	if strings.Contains(term, osSeparator) {
+	// under the cwd, act like cd and just go there. On Windows the path can
+	// be typed with either kind of separator.
+	if strings.Contains(filepath.ToSlash(term), "/") {
 		if path, err := filepath.Abs(term); err == nil && dirIsAccessible(path) {
 			return path, nil
 		}
@@ -92,11 +92,6 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 
 	settings := conf.ReadSettings()
 	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
-
-	// Prefer an exact match if it's in a reasonable proximity of the best
-	// match. Useful for jumping to (2...4) letter directories, which you
-	// may just type in their exact form anyway.
-	index = exactMatchInProximity(fuzzyEntries, term, index)
 
 	for {
 		if entry, ok := fuzzyEntries.Select(index); ok {
@@ -128,32 +123,6 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 	}
 
 	return "", errNoEntries
-}
-
-const exactMatchProximity = 5
-const exactMatchLenRequirement = 5
-
-func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
-	// Take only the base part, if you wanna do a deep search like Dev/nes.
-	baseTerm := filepath.Base(term)
-	if len(baseTerm) < exactMatchLenRequirement {
-		return offset
-	}
-
-	norm := fuzzy.NewNormalizer(baseTerm)
-
-	for index := offset; index <= offset+exactMatchProximity; index++ {
-		entry, ok := entries.Select(index)
-		if !ok {
-			continue
-		}
-
-		if norm.NormalizeBase(entry.Path) == baseTerm {
-			return index
-		}
-	}
-
-	return offset
 }
 
 func fwdPathIsCwd(path string) bool {
