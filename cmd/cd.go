@@ -64,11 +64,6 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 		entries = entries.Under(baseDir)
 	}
 
-	// If an auto-completion triggered a full path, just go there.
-	if filepath.IsAbs(term) {
-		return term, nil
-	}
-
 	index, search := 0, conf.ReadSearch()
 
 	// If we happen to match the last term, e.g. j is called with no
@@ -87,12 +82,11 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 		}
 	}
 
-	// If the directory exists under the cwd, go there.
-	cwd, err := os.Getwd()
-	if termIsRelative(term) && err == nil {
-		relativeDir := filepath.Join(cwd, term)
-		if dirIsAccessible(relativeDir) {
-			return relativeDir, nil
+	// If the term names an existing directory, like a completed path or one
+	// under the cwd, act like cd and just go there.
+	if strings.Contains(term, osSeparator) {
+		if path, err := filepath.Abs(term); err == nil && dirIsAccessible(path) {
+			return path, nil
 		}
 	}
 
@@ -140,12 +134,13 @@ const exactMatchProximity = 5
 const exactMatchLenRequirement = 5
 
 func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
-	norm := fuzzy.NewNormalizer(filepath.Base(term))
-	normalizedTerm := norm.NormalizeTerm()
-
-	if len(normalizedTerm) < exactMatchLenRequirement {
+	// Take only the base part, if you wanna do a deep search like Dev/nes.
+	baseTerm := filepath.Base(term)
+	if len(baseTerm) < exactMatchLenRequirement {
 		return offset
 	}
+
+	norm := fuzzy.NewNormalizer(baseTerm)
 
 	for index := offset; index <= offset+exactMatchProximity; index++ {
 		entry, ok := entries.Select(index)
@@ -153,9 +148,7 @@ func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset in
 			continue
 		}
 
-		// Take only the base part, if you wanna do a deep search like Dev/nes.
-		basePath := filepath.Base(norm.NormalizePath(entry.Path))
-		if basePath == normalizedTerm {
+		if norm.NormalizeBase(entry.Path) == baseTerm {
 			return index
 		}
 	}
@@ -184,10 +177,6 @@ func dirIsAccessible(path string) bool {
 	}
 
 	return fi.IsDir()
-}
-
-func termIsRelative(term string) bool {
-	return strings.Contains(term, "/")
 }
 
 func init() {

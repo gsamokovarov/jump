@@ -17,12 +17,8 @@ type FuzzyEntries struct {
 // every entry. The entries with greater LCS come first.
 func (fe *FuzzyEntries) Less(i, j int) bool {
 	norm := fuzzy.NewNormalizer(fe.Term)
-	term := norm.NormalizeTerm()
 
-	pathI := norm.NormalizePath(fe.Entries[i].Path)
-	pathJ := norm.NormalizePath(fe.Entries[j].Path)
-
-	return fuzzy.Length(pathI, term) >= fuzzy.Length(pathJ, term)
+	return norm.Score(fe.Entries[i].Path) >= norm.Score(fe.Entries[j].Path)
 }
 
 // Sort sorts the entries collection.

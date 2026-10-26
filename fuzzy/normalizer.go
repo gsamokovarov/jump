@@ -13,39 +13,15 @@ type Normalizer struct {
 	term string
 }
 
-// NormalizePath normalizes a path for fuzzy searching.
-//
-// We wanna do this because paths are long and a small fuzzy term is quite
-// likely to match almost any path. Most of the times we are either looking for
-// the base name of the path or for the last important bits of it.
-//
-// We apply a couple of conventions:
-//
-// - If the term has capital letter , do a case sensitive search. By default
-//   we do a case insensitive one to save keystrokes.
-//
-// - If the term contains an OS separator, we extract the very last bits of the
-//   path that contains that many separators. This helps us to keep the
-//   searchable path in a reasonable size, guided by the idea that you may
-//   store projects in product/component or client/project kind of structure.
-//
-// - If the term doesn't contain any OS separators, match on the base name of
-//   the path.
-func (m Normalizer) NormalizePath(path string) string {
+// NormalizeBase returns the base name of the path, folded to the case of
+// the term. The term is matched case insensitively unless it has a capital
+// letter in it, to save keystrokes.
+func (m Normalizer) NormalizeBase(path string) string {
 	if caseInsensitiveSearch(m.term) {
 		path = strings.ToLower(path)
 	}
 
-	if containsOsSeparators(m.term) {
-		return finalChunks(path, strings.Count(m.term, osSeparator))
-	}
-
 	return filepath.Base(path)
-}
-
-// NormalizeTerm normalizes the search term.
-func (m Normalizer) NormalizeTerm() string {
-	return m.term
 }
 
 // NewNormalizer create a new normalizer from a stringy term.
@@ -57,18 +33,30 @@ func caseInsensitiveSearch(str string) bool {
 	return strings.ToLower(str) == str
 }
 
-func containsOsSeparators(str string) bool {
-	return strings.ContainsAny(str, osSeparator)
-}
-
-func finalChunks(path string, sepCount int) string {
-	var chunk string
-
-	for i := 0; i <= sepCount; i++ {
-		dir, file := filepath.Split(path)
-		chunk = file + chunk
-		path = strings.TrimSuffix(dir, osSeparator)
+// Score computes how well the path matches the term.
+//
+// Both the term and the path are split into their components and compared
+// right-aligned, component by component. The last term component is matched
+// against the path's base name, the one before it against the parent and so
+// on. The score is the sum of the LCS lengths of every pair.
+//
+// Keeping the components apart means a term like Dev/jum has to find "Dev"
+// in the parent and "jum" in the base name, instead of anywhere in the
+// concatenated tail of the path. It also means that an absolute term, as
+// produced by a shell expanding ~/Dow, lines up with the entries under the
+// same prefix without any special treatment.
+func (m Normalizer) Score(path string) uint64 {
+	if caseInsensitiveSearch(m.term) {
+		path = strings.ToLower(path)
 	}
 
-	return chunk
+	termParts := strings.Split(m.term, osSeparator)
+	pathParts := strings.Split(path, osSeparator)
+
+	var score uint64
+	for i, j := len(termParts)-1, len(pathParts)-1; i >= 0 && j >= 0; i, j = i-1, j-1 {
+		score += Length(pathParts[j], termParts[i])
+	}
+
+	return score
 }

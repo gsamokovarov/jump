@@ -61,11 +61,13 @@ func Test_cdCmd(t *testing.T) {
 			},
 		}
 
+		absolutePath := p.Join(td, "client")
+
 		output := capture(&os.Stdout, func() {
-			assert.Nil(t, cdCmd(cli.Args{"/absolute/path"}, conf))
+			assert.Nil(t, cdCmd(cli.Args{absolutePath}, conf))
 		})
 
-		assert.Equal(t, "/absolute/path\n", output)
+		assert.Equal(t, absolutePath+"\n", output)
 	})
 
 	t.Run("exact match with insufficient length", func(t *testing.T) {
