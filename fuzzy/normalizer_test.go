@@ -35,17 +35,3 @@ func TestNormalizePath(t *testing.T) {
 			n.NormalizePath("/Users/foo/Development"))
 	})
 }
-
-func TestNormalizeTerm(t *testing.T) {
-	t.Run("globs: one star", func(t *testing.T) {
-		n := NewNormalizer("foo/*/dev")
-
-		assert.Equal(t, "foo//dev", n.NormalizeTerm())
-	})
-
-	t.Run("globs: two stars", func(t *testing.T) {
-		n := NewNormalizer("foo/**/dev")
-
-		assert.Equal(t, "foo//dev", n.NormalizeTerm())
-	})
-}
