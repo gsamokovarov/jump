@@ -16,8 +16,8 @@ func Length(left, right string) uint64 {
 	current := make([]uint64, shorterLen+1)
 	previous := make([]uint64, shorterLen+1)
 
-	for i := 0; i < longerLen; i++ {
-		for j := 0; j < shorterLen; j++ {
+	for i := range longerLen {
+		for j := range shorterLen {
 			if shorter[j] == longer[i] {
 				current[j+1] = previous[j] + 1
 			} else {
@@ -25,7 +25,7 @@ func Length(left, right string) uint64 {
 			}
 		}
 
-		for j := 0; j < shorterLen; j++ {
+		for j := range shorterLen {
 			previous[j+1] = current[j+1]
 		}
 	}

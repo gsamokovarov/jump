@@ -49,7 +49,7 @@ func (a Args) Rest() Args {
 // No distinction is made between arguments or options. Everything is matched
 // as is.
 func (a Args) Has(option string) bool {
-	for i := 0; i < len(a); i++ {
+	for i := range a {
 		name, _, _ := strings.Cut(a[i], "=")
 		if name == option {
 			return true
@@ -65,7 +65,7 @@ func (a Args) Has(option string) bool {
 // currently no concept of optional arguments, as we haven't got the need for
 // them.
 func (a Args) Get(option, defaultValue string) string {
-	for i := 0; i < len(a); i++ {
+	for i := range a {
 		name, value, _ := strings.Cut(a[i], "=")
 
 		if name == option {
@@ -100,7 +100,7 @@ func (a Args) Without(option string) Args {
 //
 // A command cannot start with --. We think of those arguments as options.
 func (a Args) CommandName() string {
-	for i := 0; i < len(a); i++ {
+	for i := range a {
 		if !strings.HasPrefix(a[i], "--") {
 			return a[i]
 		}

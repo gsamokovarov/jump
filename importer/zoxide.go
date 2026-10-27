@@ -113,7 +113,7 @@ func parseZoxideDB(data []byte) (scoring.Entries, error) {
 
 	var entries scoring.Entries
 
-	for n := uint64(0); n < count; n++ {
+	for range count {
 		entry, err := readZoxideEntry(&r)
 		if err != nil {
 			return nil, err
