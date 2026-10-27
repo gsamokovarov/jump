@@ -2,6 +2,8 @@ package scoring
 
 import (
 	"cmp"
+	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 
@@ -37,11 +39,18 @@ func (e *Entries) Remove(path string) bool {
 }
 
 // Under selects entries within a specific path.
+//
+// The path itself and its siblings sharing the same prefix, like repo-old
+// next to repo, are left out.
 func (e Entries) Under(path string) Entries {
-	var entries Entries
+	prefix := filepath.Clean(path)
+	if !strings.HasSuffix(prefix, string(os.PathSeparator)) {
+		prefix += string(os.PathSeparator)
+	}
 
+	var entries Entries
 	for _, entry := range e {
-		if strings.HasPrefix(entry.Path, path) && entry.Path != path {
+		if len(entry.Path) > len(prefix) && strings.HasPrefix(entry.Path, prefix) {
 			entries = append(entries, entry)
 		}
 	}

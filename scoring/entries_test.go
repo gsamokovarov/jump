@@ -81,6 +81,27 @@ func TestEntriesUnder(t *testing.T) {
 			assert.NotEqual(t, "/home/user", entry.Path)
 		}
 	})
+
+	t.Run("excludes siblings sharing the prefix", func(t *testing.T) {
+		repo := &Entry{"/work/repo", &Score{100, Now}}
+		lib := &Entry{"/work/repo/lib", &Score{200, Now}}
+		old := &Entry{"/work/repo-old", &Score{300, Now}}
+		oldLib := &Entry{"/work/repo-old/lib", &Score{400, Now}}
+
+		result := Entries{repo, lib, old, oldLib}.Under("/work/repo")
+		assert.Equal(t, Entries{lib}, result)
+	})
+
+	t.Run("ignores a trailing separator", func(t *testing.T) {
+		assert.Equal(t, entries.Under("/home/user"), entries.Under("/home/user/"))
+	})
+
+	t.Run("root includes everything but itself", func(t *testing.T) {
+		root := &Entry{"/", &Score{100, Now}}
+
+		result := append(Entries{root}, entries...).Under("/")
+		assert.Equal(t, entries, result)
+	})
 }
 
 func TestEntriesRanked(t *testing.T) {
