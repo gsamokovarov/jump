@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
-
-	"github.com/gsamokovarov/jump/fuzzy"
 )
 
 // Entries represents the scored directories in the database.
@@ -65,7 +63,7 @@ func (e Entries) Ranked(term string) Entries {
 	ranked := slices.Clone(e)
 	slices.SortStableFunc(ranked, func(a, b *Entry) int {
 		return cmp.Or(
-			cmp.Compare(fuzzy.Score(term, b.Path), fuzzy.Score(term, a.Path)),
+			cmp.Compare(match(term, b.Path), match(term, a.Path)),
 			cmp.Compare(b.CalculateScore(), a.CalculateScore()),
 		)
 	})
