@@ -94,13 +94,14 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 	settings := conf.ReadSettings()
 	ranked := candidates.Ranked(term)
 
-	for ; index < len(ranked); index++ {
+	for removed := 0; index < len(ranked); index++ {
 		entry := ranked[index]
 
 		// Remove the entries that no longer exists.
 		if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
 			entries.Remove(entry.Path)
 			conf.WriteEntries(entries)
+			removed++
 			continue
 		}
 
@@ -110,7 +111,10 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 			continue
 		}
 
-		return entry.Path, conf.WriteSearch(term, index)
+		// The removed entries won't be ranked the next time around, so the
+		// saved index has to account for them to keep the reverse jumping
+		// on track.
+		return entry.Path, conf.WriteSearch(term, index-removed)
 	}
 
 	// If we're given a base directory, and there is no match, go to the base.

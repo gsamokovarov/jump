@@ -264,3 +264,33 @@ func Test_cdCmd_staleEntryInBasedMode(t *testing.T) {
 	assert.Len(t, 1, conf.Entries)
 	assert.Equal(t, other, conf.Entries[0].Path)
 }
+
+func Test_cdCmd_staleEntryKeepsReverseJumping(t *testing.T) {
+	stale := p.Join(td, "web-gone")
+	console := p.Join(td, "web-console")
+	web := p.Join(td, "web")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(stale, &s.Score{Weight: 300, Age: s.Now}),
+			entry(console, &s.Score{Weight: 200, Age: s.Now}),
+			entry(web, &s.Score{Weight: 100, Age: s.Now}),
+		},
+	}
+
+	// The stale entry ranks first, gets removed and the next one is picked.
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{"web"}, conf))
+	})
+
+	assert.Equal(t, console+"\n", output)
+	assert.Len(t, 2, conf.Entries)
+	assert.Equal(t, 0, conf.Search.Index)
+
+	// A bare j continues from the entry after the one just picked.
+	output = capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{}, conf))
+	})
+
+	assert.Equal(t, web+"\n", output)
+}
