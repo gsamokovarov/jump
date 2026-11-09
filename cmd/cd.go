@@ -8,8 +8,6 @@ import (
 
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
-	"github.com/gsamokovarov/jump/fuzzy"
-	"github.com/gsamokovarov/jump/scoring"
 )
 
 var errNoEntries = errors.New("no entries in the database")
@@ -60,14 +58,6 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if baseDir != "" {
-		entries = entries.Under(baseDir)
-	}
-
-	// If an auto-completion triggered a full path, just go there.
-	if filepath.IsAbs(term) {
-		return term, nil
-	}
 
 	index, search := 0, conf.ReadSearch()
 
@@ -87,80 +77,52 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 		}
 	}
 
-	// If the directory exists under the cwd, go there.
-	cwd, err := os.Getwd()
-	if termIsRelative(term) && err == nil {
-		relativeDir := filepath.Join(cwd, term)
-		if dirIsAccessible(relativeDir) {
-			return relativeDir, nil
+	// If the term names an existing directory, like a completed path or one
+	// under the cwd, act like cd and just go there. On Windows the path can
+	// be typed with either kind of separator.
+	if strings.Contains(filepath.ToSlash(term), "/") {
+		if path, err := filepath.Abs(term); err == nil && dirIsAccessible(path) {
+			return path, nil
 		}
+	}
+
+	candidates := entries
+	if baseDir != "" {
+		candidates = entries.Under(baseDir)
 	}
 
 	settings := conf.ReadSettings()
-	fuzzyEntries := scoring.NewFuzzyEntries(entries, term)
+	ranked := candidates.Ranked(term)
 
-	// Prefer an exact match if it's in a reasonable proximity of the best
-	// match. Useful for jumping to (2...4) letter directories, which you
-	// may just type in their exact form anyway.
-	index = exactMatchInProximity(fuzzyEntries, term, index)
+	for removed := 0; index < len(ranked); index++ {
+		entry := ranked[index]
 
-	for {
-		if entry, ok := fuzzyEntries.Select(index); ok {
-			// Remove the entries that no longer exists.
-			if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
-				entries.Remove(entry.Path)
-				conf.WriteEntries(entries)
-
-				index++
-				continue
-			}
-
-			// Jump to the next entry, if the jump is going to land on the
-			// current directory.
-			if fwdPathIsCwd(entry.Path) {
-				index++
-				continue
-			}
-
-			return entry.Path, conf.WriteSearch(term, index)
-		}
-
-		// If we're given a base directory, and there is no match, go to the base.
-		if baseDir != "" {
-			return baseDir, nil
-		}
-
-		break
-	}
-
-	return "", errNoEntries
-}
-
-const exactMatchProximity = 5
-const exactMatchLenRequirement = 5
-
-func exactMatchInProximity(entries *scoring.FuzzyEntries, term string, offset int) int {
-	norm := fuzzy.NewNormalizer(filepath.Base(term))
-	normalizedTerm := norm.NormalizeTerm()
-
-	if len(normalizedTerm) < exactMatchLenRequirement {
-		return offset
-	}
-
-	for index := offset; index <= offset+exactMatchProximity; index++ {
-		entry, ok := entries.Select(index)
-		if !ok {
+		// Remove the entries that no longer exists.
+		if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
+			entries.Remove(entry.Path)
+			conf.WriteEntries(entries)
+			removed++
 			continue
 		}
 
-		// Take only the base part, if you wanna do a deep search like Dev/nes.
-		basePath := filepath.Base(norm.NormalizePath(entry.Path))
-		if basePath == normalizedTerm {
-			return index
+		// Jump to the next entry, if the jump is going to land on the
+		// current directory.
+		if fwdPathIsCwd(entry.Path) {
+			continue
 		}
+
+		// The removed entries won't be ranked the next time around, so the
+		// saved index has to account for them to keep the reverse jumping
+		// on track.
+		return entry.Path, conf.WriteSearch(term, index-removed)
 	}
 
-	return offset
+	// If we're given a base directory, and there is no match, go to the base.
+	if baseDir != "" {
+		return baseDir, nil
+	}
+
+	return "", errNoEntries
 }
 
 func fwdPathIsCwd(path string) bool {
@@ -184,10 +146,6 @@ func dirIsAccessible(path string) bool {
 	}
 
 	return fi.IsDir()
-}
-
-func termIsRelative(term string) bool {
-	return strings.Contains(term, "/")
 }
 
 func init() {

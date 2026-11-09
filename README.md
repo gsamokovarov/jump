@@ -137,7 +137,9 @@ j ch site          # -> /Users/genadi/Development/chaos/website
 j dev/soc/web      # -> /Users/genadi/Development/society/website
 ```
 
-Spaces and slashes work interchangeably.
+Spaces and slashes work interchangeably. Each part is matched against one
+path component, starting from the end: the last part against the directory
+name, the one before it against its parent and so on.
 
 ---
 

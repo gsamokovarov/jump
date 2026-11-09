@@ -61,11 +61,13 @@ func Test_cdCmd(t *testing.T) {
 			},
 		}
 
+		absolutePath := p.Join(td, "client")
+
 		output := capture(&os.Stdout, func() {
-			assert.Nil(t, cdCmd(cli.Args{"/absolute/path"}, conf))
+			assert.Nil(t, cdCmd(cli.Args{absolutePath}, conf))
 		})
 
-		assert.Equal(t, "/absolute/path\n", output)
+		assert.Equal(t, absolutePath+"\n", output)
 	})
 
 	t.Run("exact match with insufficient length", func(t *testing.T) {
@@ -239,4 +241,56 @@ func Test_cdCmd(t *testing.T) {
 			})
 		})
 	})
+}
+
+func Test_cdCmd_staleEntryInBasedMode(t *testing.T) {
+	baseDir := p.Join(td, "client")
+	stale := p.Join(baseDir, "gone")
+	other := p.Join(td, "web-console")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(other, &s.Score{Weight: 100, Age: s.Now}),
+			entry(stale, &s.Score{Weight: 90, Age: s.Now}),
+		},
+	}
+
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{baseDir, "gone"}, conf))
+	})
+
+	// The stale entry is removed, but the entries outside the base must stay.
+	assert.Equal(t, baseDir+"\n", output)
+	assert.Len(t, 1, conf.Entries)
+	assert.Equal(t, other, conf.Entries[0].Path)
+}
+
+func Test_cdCmd_staleEntryKeepsReverseJumping(t *testing.T) {
+	stale := p.Join(td, "web-gone")
+	console := p.Join(td, "web-console")
+	web := p.Join(td, "web")
+
+	conf := &config.InMemory{
+		Entries: s.Entries{
+			entry(stale, &s.Score{Weight: 300, Age: s.Now}),
+			entry(console, &s.Score{Weight: 200, Age: s.Now}),
+			entry(web, &s.Score{Weight: 100, Age: s.Now}),
+		},
+	}
+
+	// The stale entry ranks first, gets removed and the next one is picked.
+	output := capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{"web"}, conf))
+	})
+
+	assert.Equal(t, console+"\n", output)
+	assert.Len(t, 2, conf.Entries)
+	assert.Equal(t, 0, conf.Search.Index)
+
+	// A bare j continues from the entry after the one just picked.
+	output = capture(&os.Stdout, func() {
+		assert.Nil(t, cdCmd(cli.Args{}, conf))
+	})
+
+	assert.Equal(t, web+"\n", output)
 }
