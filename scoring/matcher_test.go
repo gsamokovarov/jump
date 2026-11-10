@@ -6,6 +6,10 @@ import (
 	"github.com/gsamokovarov/assert"
 )
 
+func match(term, path string) uint64 {
+	return newMatcher(term).match(path)
+}
+
 func TestMatch(t *testing.T) {
 	t.Run("no separators matches the base name only", func(t *testing.T) {
 		assert.Equal(t, 3, match("soc", "/Users/foo/Development/society"))
@@ -58,10 +62,10 @@ func TestMatch(t *testing.T) {
 
 func TestLCS(t *testing.T) {
 	t.Run("two naive strings", func(t *testing.T) {
-		assert.Equal(t, 2, lcs("fd", "falcon-dev"))
+		assert.Equal(t, 2, new(matcher).lcs("fd", "falcon-dev"))
 	})
 
 	t.Run("longer after shorter", func(t *testing.T) {
-		assert.Equal(t, lcs("falcon-dev", "fd"), lcs("fd", "falcon-dev"))
+		assert.Equal(t, new(matcher).lcs("falcon-dev", "fd"), new(matcher).lcs("fd", "falcon-dev"))
 	})
 }

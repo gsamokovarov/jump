@@ -59,14 +59,33 @@ func (e Entries) Under(path string) Entries {
 // Ranked returns a copy of the entries ordered by how well they match the
 // term, best match first. Entries that match equally well are ordered by
 // their score, so the more frequently visited one comes first.
+//
+// The match and the score of every entry are computed once, before sorting.
 func (e Entries) Ranked(term string) Entries {
-	ranked := slices.Clone(e)
-	slices.SortStableFunc(ranked, func(a, b *Entry) int {
+	type rank struct {
+		entry *Entry
+		match uint64
+		score float64
+	}
+
+	matcher := newMatcher(term)
+
+	ranks := make([]rank, len(e))
+	for i, entry := range e {
+		ranks[i] = rank{entry, matcher.match(entry.Path), entry.CalculateScore()}
+	}
+
+	slices.SortStableFunc(ranks, func(a, b rank) int {
 		return cmp.Or(
-			cmp.Compare(match(term, b.Path), match(term, a.Path)),
-			cmp.Compare(b.CalculateScore(), a.CalculateScore()),
+			cmp.Compare(b.match, a.match),
+			cmp.Compare(b.score, a.score),
 		)
 	})
+
+	ranked := make(Entries, len(ranks))
+	for i, rank := range ranks {
+		ranked[i] = rank.entry
+	}
 
 	return ranked
 }
