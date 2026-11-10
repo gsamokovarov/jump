@@ -285,9 +285,11 @@ func Test_cdCmd_staleEntryKeepsReverseJumping(t *testing.T) {
 
 	assert.Equal(t, console+"\n", output)
 	assert.Len(t, 2, conf.Entries)
-	assert.Equal(t, 0, conf.Search.Index)
 
-	// A bare j continues from the entry after the one just picked.
+	// A bare j continues from the entry after the one just picked. The shell
+	// remembers the search and counts the retries.
+	conf.Search = config.Search{Term: "web", Index: 1}
+
 	output = capture(&os.Stdout, func() {
 		assert.Nil(t, cdCmd(cli.Args{}, conf))
 	})

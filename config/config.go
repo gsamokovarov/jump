@@ -13,7 +13,6 @@ import (
 
 const (
 	defaultScoreFile    = "scores.json"
-	defaultSearchFile   = "search.json"
 	defaultSettingsFile = "settings.json"
 	defaultPinsFile     = "pins.json"
 	defaultHomeDir      = ".jump"
@@ -27,7 +26,6 @@ type Config interface {
 	WriteEntries(scoring.Entries) error
 
 	ReadSearch() Search
-	WriteSearch(string, int) error
 
 	ReadPins() (map[string]string, error)
 	FindPin(string) (string, bool)
@@ -41,7 +39,6 @@ type Config interface {
 type fileConfig struct {
 	Dir      string
 	Scores   string
-	Search   string
 	Pins     string
 	Settings string
 }
@@ -59,7 +56,6 @@ func Setup(dir string) (Config, error) {
 	return &fileConfig{
 		Dir:      dir,
 		Scores:   filepath.Join(dir, defaultScoreFile),
-		Search:   filepath.Join(dir, defaultSearchFile),
 		Pins:     filepath.Join(dir, defaultPinsFile),
 		Settings: filepath.Join(dir, defaultSettingsFile),
 	}, nil

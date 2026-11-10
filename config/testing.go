@@ -40,13 +40,6 @@ func (c *InMemory) ReadSearch() Search {
 	return c.Search
 }
 
-// WriteSearch implements the Config interface.
-func (c *InMemory) WriteSearch(term string, index int) error {
-	c.Search.Term = term
-	c.Search.Index = index
-	return nil
-}
-
 // ReadPins implements the Config interface.
 func (c *InMemory) ReadPins() (map[string]string, error) {
 	return c.Pins, nil

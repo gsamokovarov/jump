@@ -60,9 +60,10 @@ func cdEntry(term, baseDir string, settings config.Settings, conf config.Config)
 	index, search := 0, conf.ReadSearch()
 
 	// If we happen to match the last term, e.g. j is called with no
-	// arguments then jump to the previous search.
+	// arguments then retry the previous search. The shell remembers the
+	// arguments of the last jump separated by spaces and counts the retries.
 	if term == "" {
-		term, index = search.Term, search.Index+1
+		term, index = termFromArgs(strings.Fields(search.Term), settings), search.Index
 	} else {
 		// If there is a term given, first see if there is a pin for
 		// it and if so, always follow it.
@@ -98,14 +99,14 @@ func cdEntry(term, baseDir string, settings config.Settings, conf config.Config)
 
 	ranked := candidates.Ranked(term)
 
-	removed := 0
+	removed := false
 	for ; index < len(ranked); index++ {
 		entry := ranked[index]
 
 		// Remove the entries that no longer exists.
 		if _, err := os.Stat(entry.Path); errors.Is(err, fs.ErrNotExist) && !settings.Preserve {
 			entries.Remove(entry.Path)
-			removed++
+			removed = true
 			continue
 		}
 
@@ -117,22 +118,12 @@ func cdEntry(term, baseDir string, settings config.Settings, conf config.Config)
 	}
 
 	// Save the entries once, no matter how many of them were removed.
-	if removed > 0 {
+	if removed {
 		conf.WriteEntries(entries)
 	}
 
 	if index < len(ranked) {
-		// The removed entries won't be ranked the next time around, so the
-		// saved index has to account for them to keep the reverse jumping
-		// on track.
-		path, index := ranked[index].Path, index-removed
-
-		// Jumping to the same place again leaves the search as it is.
-		if search.Term == term && search.Index == index {
-			return path, nil
-		}
-
-		return path, conf.WriteSearch(term, index)
+		return ranked[index].Path, nil
 	}
 
 	// If we're given a base directory, and there is no match, go to the base.

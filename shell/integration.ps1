@@ -48,6 +48,16 @@ Remove-Item Alias:cd -Force -ErrorAction SilentlyContinue
 
 function {{.Bind}}
 {
+    if ($Args.Length -eq 0) {
+        $global:__jump_try++
+        $env:JUMP_TERM = $global:__jump_term
+        $env:JUMP_TRY = $global:__jump_try
+        $Path = jump cd
+        if (Test-Path $Path) { Set-Location $Path }
+        $env:JUMP_TERM = $env:JUMP_TRY = $null
+        return
+    }
+
     switch ($Args[0]) {
         '..' {
             Set-Location ..
@@ -63,11 +73,17 @@ function {{.Bind}}
             if ($BaseDir) {
                 $RemainingArgs = if ($Args.Length -gt 1) { $Args[1..($Args.Length - 1)] } else { @() }
                 $Path = jump cd $BaseDir @RemainingArgs
+                if ($RemainingArgs) {
+                    $global:__jump_term = "$RemainingArgs"
+                    $global:__jump_try = 0
+                }
                 if (Test-Path $Path) { Set-Location $Path }
             }
         }
         default {
             $Path = jump cd $Args
+            $global:__jump_term = "$Args"
+            $global:__jump_try = 0
             if (Test-Path $Path) { Set-Location $Path }
         }
     }

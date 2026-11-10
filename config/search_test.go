@@ -7,15 +7,23 @@ import (
 )
 
 func TestSearch(t *testing.T) {
-	t.Run("save and read last search term from a file", func(t *testing.T) {
-		conf := tempConfig(t)
+	t.Run("read the last search from the environment", func(t *testing.T) {
+		t.Setenv("JUMP_TERM", "app")
+		t.Setenv("JUMP_TRY", "2")
 
-		err := conf.WriteSearch("app", 2)
-		assert.Nil(t, err)
-
-		s := conf.ReadSearch()
+		s := tempConfig(t).ReadSearch()
 
 		assert.Equal(t, 2, s.Index)
 		assert.Equal(t, "app", s.Term)
+	})
+
+	t.Run("no last search", func(t *testing.T) {
+		t.Setenv("JUMP_TERM", "")
+		t.Setenv("JUMP_TRY", "bogus")
+
+		s := tempConfig(t).ReadSearch()
+
+		assert.Equal(t, 0, s.Index)
+		assert.Equal(t, "", s.Term)
 	})
 }
