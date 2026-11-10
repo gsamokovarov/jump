@@ -1,7 +1,9 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -103,4 +105,50 @@ func findConfigDir(dir string) (string, error) {
 	}
 
 	return configDir, nil
+}
+
+// readFile decodes the JSON in the named file into v.
+//
+// A missing or an empty file leaves v as it is.
+func readFile(name string, v any) error {
+	file, err := os.Open(name)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	} else if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	for {
+		if err := decoder.Decode(v); errors.Is(err, io.EOF) {
+			return nil
+		} else if err != nil {
+			return err
+		}
+	}
+}
+
+// writeFile encodes v as JSON into the named file.
+//
+// The value is written to a temporary file that is then renamed over the
+// named one, so a concurrent reader never sees a half-written file.
+func writeFile(name string, v any) error {
+	tmp, err := os.CreateTemp(filepath.Dir(name), ".jump")
+	if err != nil {
+		return err
+	}
+
+	err = json.NewEncoder(tmp).Encode(v)
+	if closeErr := tmp.Close(); err == nil {
+		err = closeErr
+	}
+	if err == nil {
+		err = os.Rename(tmp.Name(), name)
+	}
+	if err != nil {
+		os.Remove(tmp.Name())
+	}
+
+	return err
 }

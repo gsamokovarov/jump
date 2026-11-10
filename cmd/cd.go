@@ -125,7 +125,14 @@ func cdEntry(term, baseDir string, settings config.Settings, conf config.Config)
 		// The removed entries won't be ranked the next time around, so the
 		// saved index has to account for them to keep the reverse jumping
 		// on track.
-		return ranked[index].Path, conf.WriteSearch(term, index-removed)
+		path, index := ranked[index].Path, index-removed
+
+		// Jumping to the same place again leaves the search as it is.
+		if search.Term == term && search.Index == index {
+			return path, nil
+		}
+
+		return path, conf.WriteSearch(term, index)
 	}
 
 	// If we're given a base directory, and there is no match, go to the base.

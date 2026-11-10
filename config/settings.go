@@ -1,10 +1,5 @@
 package config
 
-import (
-	"github.com/gsamokovarov/jump/config/atom"
-	"github.com/gsamokovarov/jump/config/jsonio"
-)
-
 // SpaceSetting controls how space in a jump term is treated.
 type SpaceSetting int
 
@@ -40,26 +35,14 @@ type Settings struct {
 
 // ReadSettings reads the current user settings.
 //
-// If the last search doesn't exist, a zero value Search is returned.
+// If the settings don't exist, the zero value Settings is returned.
 func (c *fileConfig) ReadSettings() (settings Settings) {
-	file, err := atom.Open(c.Settings)
-	if err != nil {
-		return
-	}
-	defer file.Close()
-
-	jsonio.Decode(file, &settings)
+	readFile(c.Settings, &settings)
 
 	return
 }
 
 // WriteSettings preserves the user settings.
 func (c *fileConfig) WriteSettings(settings Settings) error {
-	file, err := atom.Open(c.Settings)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	return jsonio.Encode(file, settings)
+	return writeFile(c.Settings, settings)
 }
