@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -94,7 +96,7 @@ func findConfigDir(dir string) (string, error) {
 	}
 
 	configDir := filepath.Join(home, defaultHomeDir)
-	if _, err := os.Stat(configDir); os.IsNotExist(err) {
+	if _, err := os.Stat(configDir); errors.Is(err, fs.ErrNotExist) {
 		if xdgHome := os.Getenv("XDG_CONFIG_HOME"); xdgHome != "" {
 			configDir = filepath.Join(xdgHome, defaultXDGDir)
 		}

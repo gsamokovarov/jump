@@ -1,23 +1,12 @@
 package config
 
-import (
-	"os"
-	"path"
-	"testing"
-)
-
-var td string
+import "testing"
 
 func tempConfig(t *testing.T) Config {
-	conf, err := Temporary(td, ".tmp")
+	conf, err := Setup(t.TempDir())
 	if err != nil {
 		t.Fatalf("Cannot setup temporary testing config: %v", err)
 	}
 
 	return conf
-}
-
-func init() {
-	cwd, _ := os.Getwd()
-	td = path.Join(cwd, "testdata")
 }

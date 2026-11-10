@@ -2,6 +2,7 @@ package importer
 
 import (
 	"errors"
+	"io/fs"
 	"os"
 
 	"github.com/gsamokovarov/jump/config"
@@ -67,7 +68,7 @@ func findPath(paths []string) (string, error) {
 	for _, path := range paths {
 		path = os.ExpandEnv(path)
 
-		if _, err := os.Stat(path); !os.IsNotExist(err) {
+		if _, err := os.Stat(path); !errors.Is(err, fs.ErrNotExist) {
 			return path, nil
 		}
 	}

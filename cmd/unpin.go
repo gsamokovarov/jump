@@ -5,7 +5,7 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
-var unpinUsage = `Usage: jump unpin term
+const unpinUsage = `Usage: jump unpin term
 
 No term specified. Please specify a term to be removed from the pinned
 database.

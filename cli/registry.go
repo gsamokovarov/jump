@@ -1,6 +1,9 @@
 package cli
 
-import "sort"
+import (
+	"maps"
+	"slices"
+)
 
 // Registry holds every command that gets saved in this global commands
 // registry.
@@ -44,12 +47,5 @@ func (c commandRegistry) Options() []Command {
 }
 
 func (c commandRegistry) sortedKeys() []string {
-	var keys []string
-
-	for key := range c {
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-
-	return keys
+	return slices.Sorted(maps.Keys(c))
 }

@@ -10,10 +10,7 @@ import (
 )
 
 func Test_importCmd_autojump(t *testing.T) {
-	oldHOME := os.Getenv("HOME")
-	defer os.Setenv("HOME", oldHOME)
-
-	os.Setenv("HOME", td)
+	t.Setenv("HOME", td)
 
 	conf := &config.InMemory{}
 
@@ -33,10 +30,7 @@ Importing /Users/genadi/Development/gloat
 }
 
 func Test_importCmd_z(t *testing.T) {
-	oldHOME := os.Getenv("HOME")
-	defer os.Setenv("HOME", oldHOME)
-
-	os.Setenv("HOME", td)
+	t.Setenv("HOME", td)
 
 	conf := &config.InMemory{}
 
@@ -54,10 +48,7 @@ Importing /Users/genadi/.go/src/github.com/gsamokovarov/jump
 }
 
 func Test_importCmd_itALL(t *testing.T) {
-	oldHOME := os.Getenv("HOME")
-	defer os.Setenv("HOME", oldHOME)
-
-	os.Setenv("HOME", td)
+	t.Setenv("HOME", td)
 
 	conf := &config.InMemory{}
 

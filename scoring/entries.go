@@ -28,7 +28,7 @@ func (e Entries) Find(path string) (*Entry, bool) {
 func (e *Entries) Remove(path string) bool {
 	for i, entry := range *e {
 		if entry.Path == path {
-			*e = append((*e)[:i], (*e)[i+1:]...)
+			*e = slices.Delete(*e, i, i+1)
 			return true
 		}
 	}

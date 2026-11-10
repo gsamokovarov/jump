@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+	"io/fs"
 	"os"
 
 	"github.com/gsamokovarov/jump/cli"
@@ -19,7 +21,7 @@ func cleanCmd(args cli.Args, conf config.Config) error {
 
 	for _, entry := range entries {
 		// Remove the entries that no longer exists.
-		if _, err := os.Stat(entry.Path); os.IsNotExist(err) {
+		if _, err := os.Stat(entry.Path); errors.Is(err, fs.ErrNotExist) {
 			cli.Outf("Cleaning %s\n", entry.Path)
 			cleanEntries.Remove(entry.Path)
 		}

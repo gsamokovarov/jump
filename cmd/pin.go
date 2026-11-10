@@ -7,7 +7,7 @@ import (
 	"github.com/gsamokovarov/jump/config"
 )
 
-var pinUsage = `Usage: jump pin term
+const pinUsage = `Usage: jump pin term
 
 No term specified. Please specify a term that will be permanently
 attached to the current directory. If the term contains spaces, they

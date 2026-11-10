@@ -93,7 +93,7 @@ func (a Args) Without(option string) Args {
 		return a
 	}
 
-	return append(a[:index], a[index+1:]...)
+	return slices.Delete(a, index, index+1)
 }
 
 // CommandName extracts a command name out of all the arguments.

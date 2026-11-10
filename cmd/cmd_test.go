@@ -13,7 +13,7 @@ import (
 var td string
 
 func tempConfig(t *testing.T) config.Config {
-	conf, err := config.Temporary(td, ".tmp")
+	conf, err := config.Setup(t.TempDir())
 	if err != nil {
 		t.Fatalf("Cannot setup temporary testing config: %v", err)
 	}
@@ -40,21 +40,6 @@ func capture(stream **os.File, fn func()) string {
 	out, _ := io.ReadAll(r)
 
 	return string(out)
-}
-
-func inside(dir string, fn func()) {
-	previousCwd, err := os.Getwd()
-	if err != nil {
-		return
-	}
-
-	if os.Chdir(dir) != nil {
-		return
-	}
-
-	fn()
-
-	os.Chdir(previousCwd)
 }
 
 func init() {

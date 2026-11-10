@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -98,7 +99,7 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 		entry := ranked[index]
 
 		// Remove the entries that no longer exists.
-		if _, err := os.Stat(entry.Path); os.IsNotExist(err) && !settings.Preserve {
+		if _, err := os.Stat(entry.Path); errors.Is(err, fs.ErrNotExist) && !settings.Preserve {
 			entries.Remove(entry.Path)
 			conf.WriteEntries(entries)
 			removed++

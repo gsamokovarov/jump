@@ -42,7 +42,9 @@ func Test_pinCmd_normalizedTerms(t *testing.T) {
 		},
 	}
 
-	inside(p2, func() {
+	// Pin from inside the directory, but jump from outside of it.
+	t.Run("pin", func(t *testing.T) {
+		t.Chdir(p2)
 		assert.Nil(t, pinCmd(cli.Args{"w b"}, conf))
 	})
 

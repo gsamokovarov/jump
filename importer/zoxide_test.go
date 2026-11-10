@@ -3,7 +3,6 @@ package importer
 import (
 	"bytes"
 	"encoding/binary"
-	"os"
 	p "path"
 	"testing"
 	"time"
@@ -50,10 +49,7 @@ func TestZoxide(t *testing.T) {
 func TestZoxideCustomEnv(t *testing.T) {
 	conf := &config.InMemory{}
 
-	os.Setenv("_ZO_DATA_DIR", p.Join(td, "zoxide"))
-	defer func() {
-		os.Unsetenv("_ZO_DATA_DIR")
-	}()
+	t.Setenv("_ZO_DATA_DIR", p.Join(td, "zoxide"))
 
 	imp := Zoxide(conf)
 

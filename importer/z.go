@@ -67,7 +67,7 @@ func (i *z) parseConfig() (scoring.Entries, error) {
 
 	var entries scoring.Entries
 
-	for _, line := range strings.Split(content, "\n") {
+	for line := range strings.SplitSeq(content, "\n") {
 		entry, err := i.newEntryFromLine(line)
 		if errors.Is(err, io.EOF) {
 			continue

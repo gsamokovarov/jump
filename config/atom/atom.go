@@ -1,7 +1,9 @@
 package atom
 
 import (
+	"errors"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -29,7 +31,7 @@ func Open(name string) (File, error) {
 	}
 
 	// Copy the contents of the input file, so we can read it from the temporary.
-	if _, err := os.Stat(name); !os.IsNotExist(err) {
+	if _, err := os.Stat(name); !errors.Is(err, fs.ErrNotExist) {
 		file, err := os.OpenFile(name, os.O_RDWR, 0644)
 		if err != nil {
 			return nil, err

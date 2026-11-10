@@ -1,7 +1,6 @@
 package importer
 
 import (
-	"os"
 	p "path"
 	"testing"
 	"time"
@@ -75,10 +74,7 @@ func TestZAged(t *testing.T) {
 func TestZCustomEnv(t *testing.T) {
 	conf := &config.InMemory{}
 
-	os.Setenv("Z_DATA", p.Join(td, "z-aged.txt"))
-	defer func() {
-		os.Unsetenv("Z_DATA")
-	}()
+	t.Setenv("Z_DATA", p.Join(td, "z-aged.txt"))
 
 	imp := Z(conf)
 

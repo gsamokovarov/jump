@@ -163,14 +163,14 @@ func Test_cdCmd(t *testing.T) {
 			Entries: s.Entries{},
 		}
 
-		inside(td, func() {
-			output := capture(&os.Stdout, func() {
-				assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
-			})
+		t.Chdir(td)
 
-			expectedPath := p.Join(td, childDir)
-			assert.Equal(t, expectedPath+"\n", output)
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
 		})
+
+		expectedPath := p.Join(td, childDir)
+		assert.Equal(t, expectedPath+"\n", output)
 	})
 
 	t.Run("based mode", func(t *testing.T) {
@@ -231,14 +231,14 @@ func Test_cdCmd(t *testing.T) {
 				Entries: s.Entries{},
 			}
 
-			inside(td, func() {
-				output := capture(&os.Stdout, func() {
-					assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
-				})
+			t.Chdir(td)
 
-				// Should return the direct child path since td/web exists
-				assert.Equal(t, p.Join(baseDir, childDir)+"\n", output)
+			output := capture(&os.Stdout, func() {
+				assert.Nil(t, cdCmd(cli.Args{baseDir, childDir}, conf))
 			})
+
+			// Should return the direct child path since td/web exists
+			assert.Equal(t, p.Join(baseDir, childDir)+"\n", output)
 		})
 	})
 }

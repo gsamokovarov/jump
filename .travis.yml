@@ -2,11 +2,10 @@ dist: bionic
 language: go
 
 go:
-  - 1.15.x
+  - 1.27.x
   - master
 
 script:
-  - go get github.com/gsamokovarov/assert
   - make test
 
 matrix:
