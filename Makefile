@@ -40,7 +40,7 @@ test:
 
 .PHONY: lint
 lint:
-	@go vet ./... && golint ./...
+	@go vet ./... && go fix -diff ./...
 
 .PHONY: clean
 clean:
