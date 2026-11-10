@@ -6,7 +6,8 @@
 
 $env.config = ($env.config | upsert hooks {
   pre_prompt: ($env.config.hooks.pre_prompt? | default [] | append {||
-    jump chdir
+    with-env { JUMP_TRY: ($env.__jump_boost? | default "") } { jump chdir }
+    $env.__jump_boost = ""
   })
 })
 
@@ -29,10 +30,24 @@ def --env {{.Bind}} [...terms: directory] {
       let base_dir = (__jump_base_dir)
       let remaining = ($terms | skip 1)
       let dir = (jump cd $base_dir ...$remaining)
+      if ($remaining | is-not-empty) {
+        $env.__jump_term = ($remaining | str join " ")
+        $env.__jump_try = "0"
+      }
       if ($dir | path exists) { builtin-cd $dir }
+    }
+    null => {
+      $env.__jump_try = (($env.__jump_try? | default "0" | into int) + 1 | into string)
+      let dir = (with-env { JUMP_TERM: ($env.__jump_term? | default ""), JUMP_TRY: $env.__jump_try } { jump cd })
+      if ($dir | path exists) {
+        builtin-cd $dir
+        $env.__jump_boost = $env.__jump_try
+      }
     }
     _ => {
       let dir = (jump cd ...$terms)
+      $env.__jump_term = ($terms | str join " ")
+      $env.__jump_try = "0"
       if ($dir | path exists) { builtin-cd $dir }
     }
   }

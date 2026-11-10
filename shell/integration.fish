@@ -59,9 +59,19 @@ function {{.Bind}}
         case "."
             set argv[1] (__jump_base_dir)
             set -l dir (jump cd $argv)
+            if test (count $argv) -gt 1
+                set -g __jump_term "$argv[2..-1]"
+                set -g __jump_try 0
+            end
             test -d "$dir"; and __jump_cd "$dir"
+        case ""
+            set -g __jump_try (math "0$__jump_try + 1")
+            set -l dir (JUMP_TERM=$__jump_term JUMP_TRY=$__jump_try jump cd)
+            test -d "$dir"; and JUMP_TRY=$__jump_try __jump_cd "$dir"
         case '*'
             set -l dir (jump cd $argv)
+            set -g __jump_term "$argv"
+            set -g __jump_try 0
             test -d "$dir"; and __jump_cd "$dir"
     end
 end

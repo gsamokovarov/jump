@@ -16,7 +16,7 @@ func topCmd(args cli.Args, conf config.Config) error {
 	args = args.Without("--score")
 
 	// Without a term, the entries are ranked by their score alone.
-	term := termFromArgs(args, conf)
+	term := termFromArgs(args, conf.ReadSettings())
 	for _, entry := range entries.Ranked(term) {
 		topCmdShowEntry(entry, showScore)
 	}
