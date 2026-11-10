@@ -33,15 +33,17 @@ const noEntriesMessage = `Jump's database is empty. This could mean:
 `
 
 func cdCmd(args cli.Args, conf config.Config) error {
+	settings := conf.ReadSettings()
+
 	var term, baseDir string
 	if filepath.IsAbs(args.First()) && dirIsAccessible(args.First()) && len(args) > 1 {
 		baseDir = args.First()
-		term = termFromArgs(args.Rest(), conf)
+		term = termFromArgs(args.Rest(), settings)
 	} else {
-		term = termFromArgs(args, conf)
+		term = termFromArgs(args, settings)
 	}
 
-	path, err := cdEntry(term, baseDir, conf)
+	path, err := cdEntry(term, baseDir, settings, conf)
 	if errors.Is(err, errNoEntries) {
 		cli.Errf(noEntriesMessage)
 		return nil
@@ -54,12 +56,7 @@ func cdCmd(args cli.Args, conf config.Config) error {
 	return nil
 }
 
-func cdEntry(term, baseDir string, conf config.Config) (string, error) {
-	entries, err := conf.ReadEntries()
-	if err != nil {
-		return "", err
-	}
-
+func cdEntry(term, baseDir string, settings config.Settings, conf config.Config) (string, error) {
 	index, search := 0, conf.ReadSearch()
 
 	// If we happen to match the last term, e.g. j is called with no
@@ -87,35 +84,48 @@ func cdEntry(term, baseDir string, conf config.Config) (string, error) {
 		}
 	}
 
+	// The entries are read only now, as the pins and the existing
+	// directories above don't need them.
+	entries, err := conf.ReadEntries()
+	if err != nil {
+		return "", err
+	}
+
 	candidates := entries
 	if baseDir != "" {
 		candidates = entries.Under(baseDir)
 	}
 
-	settings := conf.ReadSettings()
 	ranked := candidates.Ranked(term)
 
-	for removed := 0; index < len(ranked); index++ {
+	removed := 0
+	for ; index < len(ranked); index++ {
 		entry := ranked[index]
 
 		// Remove the entries that no longer exists.
 		if _, err := os.Stat(entry.Path); errors.Is(err, fs.ErrNotExist) && !settings.Preserve {
 			entries.Remove(entry.Path)
-			conf.WriteEntries(entries)
 			removed++
 			continue
 		}
 
 		// Jump to the next entry, if the jump is going to land on the
 		// current directory.
-		if fwdPathIsCwd(entry.Path) {
-			continue
+		if !fwdPathIsCwd(entry.Path) {
+			break
 		}
+	}
 
+	// Save the entries once, no matter how many of them were removed.
+	if removed > 0 {
+		conf.WriteEntries(entries)
+	}
+
+	if index < len(ranked) {
 		// The removed entries won't be ranked the next time around, so the
 		// saved index has to account for them to keep the reverse jumping
 		// on track.
-		return entry.Path, conf.WriteSearch(term, index-removed)
+		return ranked[index].Path, conf.WriteSearch(term, index-removed)
 	}
 
 	// If we're given a base directory, and there is no match, go to the base.

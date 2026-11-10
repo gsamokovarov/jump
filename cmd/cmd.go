@@ -19,9 +19,7 @@ func cwdFromArgs(args cli.Args) (string, error) {
 	return filepath.Abs(args.CommandName())
 }
 
-func termFromArgs(args cli.Args, conf config.Config) string {
-	settings := conf.ReadSettings()
-
+func termFromArgs(args cli.Args, settings config.Settings) string {
 	if settings.Space == config.SpaceSlash {
 		return strings.Join(args.Raw(), osSeparator)
 	}

@@ -8,7 +8,7 @@ import (
 const hintLimit = 5
 
 func hintCmd(args cli.Args, conf config.Config) error {
-	term := termFromArgs(args, conf)
+	term := termFromArgs(args, conf.ReadSettings())
 
 	entries, err := conf.ReadEntries()
 	if err != nil {

@@ -12,7 +12,7 @@ database.
 `
 
 func unpinCmd(args cli.Args, conf config.Config) error {
-	term := termFromArgs(args, conf)
+	term := termFromArgs(args, conf.ReadSettings())
 	if term == "" {
 		cli.Exitf(1, unpinUsage)
 	}
