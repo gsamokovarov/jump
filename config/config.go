@@ -7,16 +7,9 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/gsamokovarov/jump/scoring"
-)
-
-const (
-	defaultScoreFile    = "scores.json"
-	defaultSettingsFile = "settings.json"
-	defaultPinsFile     = "pins.json"
-	defaultHomeDir      = ".jump"
-	defaultXDGDir       = "jump"
 )
 
 // Config represents the config directory and all the miscellaneous
@@ -36,11 +29,44 @@ type Config interface {
 	WriteSettings(Settings) error
 }
 
-type fileConfig struct {
-	Dir      string
-	Scores   string
-	Pins     string
-	Settings string
+// SpaceSetting controls how space in a jump term is treated.
+type SpaceSetting int
+
+const (
+	// SpaceSlash treats `j receipt app` like `j receipt/app`, which issues a
+	// deep search.
+	SpaceSlash SpaceSetting = iota
+
+	// SpaceIgnore treats `j receipt app` like `j receiptapp`, which mimics z
+	// space behavior, because of the fuzzy matching offered in jump.
+	SpaceIgnore
+)
+
+// String implements the fmt.Stringer interface.
+func (s SpaceSetting) String() string {
+	switch s {
+	case SpaceSlash:
+		return "slash"
+	case SpaceIgnore:
+		return "ignore"
+	default:
+		return ""
+	}
+}
+
+// Settings represents user configurable behaviours for jump.
+//
+// Keep the default setting values the zero value of their type.
+type Settings struct {
+	Space    SpaceSetting
+	Preserve bool
+}
+
+// Search represents a search term used for advancing through the entries of
+// the same term.
+type Search struct {
+	Term  string
+	Index int
 }
 
 // Setup setups the config folder from a directory path.
@@ -71,6 +97,112 @@ func SetupDefault(dir string) (Config, error) {
 	}
 
 	return Setup(dir)
+}
+
+const (
+	defaultScoreFile    = "scores.json"
+	defaultSettingsFile = "settings.json"
+	defaultPinsFile     = "pins.json"
+	defaultHomeDir      = ".jump"
+	defaultXDGDir       = "jump"
+)
+
+type fileConfig struct {
+	Dir      string
+	Scores   string
+	Pins     string
+	Settings string
+}
+
+// ReadEntries returns the current entries for the config.
+//
+// If the scores file is missing or empty, the returned entries are empty.
+func (c *fileConfig) ReadEntries() (entries scoring.Entries, err error) {
+	err = readFile(c.Scores, &entries)
+	return
+}
+
+// WriteEntries the input scoring entries to a file.
+//
+// Sorts the entries before writing them to disk.
+func (c *fileConfig) WriteEntries(entries scoring.Entries) error {
+	entries.Sort()
+
+	return writeFile(c.Scores, entries)
+}
+
+// ReadSearch reads the search to retry.
+//
+// A process cannot change the environment of its shell, so the shell
+// integration remembers the last search itself. It passes the term in
+// $JUMP_TERM and the number of the retry in $JUMP_TRY, only when j is called
+// without arguments. If they are not set, a zero value Search is returned.
+func (c *fileConfig) ReadSearch() Search {
+	index, err := strconv.Atoi(os.Getenv("JUMP_TRY"))
+	if err != nil || index < 0 {
+		index = 0
+	}
+
+	return Search{os.Getenv("JUMP_TERM"), index}
+}
+
+// ReadPins reads the pinned search terms and their directories.
+//
+// If the pins file is missing or empty, the returned pins are empty.
+func (c *fileConfig) ReadPins() (map[string]string, error) {
+	pins := map[string]string{}
+
+	return pins, readFile(c.Pins, &pins)
+}
+
+// FindPin tries to find a directory for a pinned search term.
+func (c *fileConfig) FindPin(term string) (dir string, found bool) {
+	pins, err := c.ReadPins()
+	if err != nil {
+		return
+	}
+
+	dir, found = pins[term]
+
+	return
+}
+
+// WritePin saves a pinned search term into a file.
+func (c *fileConfig) WritePin(pin, value string) error {
+	pins, err := c.ReadPins()
+	if err != nil {
+		return err
+	}
+
+	pins[pin] = value
+
+	return writeFile(c.Pins, pins)
+}
+
+// RemovePin removes a pinned search term from a file.
+func (c *fileConfig) RemovePin(pin string) error {
+	pins, err := c.ReadPins()
+	if err != nil {
+		return err
+	}
+
+	delete(pins, pin)
+
+	return writeFile(c.Pins, pins)
+}
+
+// ReadSettings reads the current user settings.
+//
+// If the settings don't exist, the zero value Settings is returned.
+func (c *fileConfig) ReadSettings() (settings Settings) {
+	readFile(c.Settings, &settings)
+
+	return
+}
+
+// WriteSettings preserves the user settings.
+func (c *fileConfig) WriteSettings(settings Settings) error {
+	return writeFile(c.Settings, settings)
 }
 
 // findConfigDir finds the jump configuration directory.
