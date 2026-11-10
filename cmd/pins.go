@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"maps"
+	"slices"
+
 	"github.com/gsamokovarov/jump/cli"
 	"github.com/gsamokovarov/jump/config"
 )
@@ -11,8 +14,8 @@ func pinsCmd(args cli.Args, conf config.Config) error {
 		return err
 	}
 
-	for term, dir := range pins {
-		cli.Outf("%s\t%s\n", term, dir)
+	for _, term := range slices.Sorted(maps.Keys(pins)) {
+		cli.Outf("%s\t%s\n", term, pins[term])
 	}
 
 	return nil

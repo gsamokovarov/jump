@@ -21,3 +21,25 @@ func Test_pinsCmd(t *testing.T) {
 
 	assert.Equal(t, "r\t/home/user/projects/rails\n", output)
 }
+
+func Test_pinsCmd_sortedByTerm(t *testing.T) {
+	conf := &config.InMemory{
+		Pins: map[string]string{
+			"z": "/home/user/projects/zeta",
+			"a": "/home/user/projects/alpha",
+			"R": "/home/user/projects/Rails",
+			"m": "/home/user/projects/mid",
+		},
+	}
+
+	for range 5 {
+		output := capture(&os.Stdout, func() {
+			assert.Nil(t, pinsCmd(nil, conf))
+		})
+
+		assert.Equal(t, "R\t/home/user/projects/Rails\n"+
+			"a\t/home/user/projects/alpha\n"+
+			"m\t/home/user/projects/mid\n"+
+			"z\t/home/user/projects/zeta\n", output)
+	}
+}
