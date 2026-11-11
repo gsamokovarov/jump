@@ -108,7 +108,7 @@ func (i *z) newEntryFromLine(line string) (*scoring.Entry, error) {
 
 	return &scoring.Entry{
 		Path: path,
-		Score: &scoring.Score{
+		Score: scoring.Score{
 			Weight: int64(math.Round(weight)),
 			Age:    time.Unix(epoch, 0),
 		},

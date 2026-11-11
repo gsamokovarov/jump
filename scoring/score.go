@@ -50,10 +50,10 @@ func (s *Score) String() string {
 	return fmt.Sprintf("{%d %s}", s.Weight, s.Age)
 }
 
-// NewScore creates a new score object with default weight of 1 and age set to
+// NewScore creates a new score with default weight of 1 and age set to
 // now.
-func NewScore() *Score {
-	return &Score{1, Now}
+func NewScore() Score {
+	return Score{1, Now}
 }
 
 func init() {

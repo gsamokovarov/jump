@@ -5,7 +5,7 @@ import "fmt"
 // Entry represents a path and a score.
 type Entry struct {
 	Path  string
-	Score *Score
+	Score Score
 }
 
 // UpdateScore updates the score for an entry.
@@ -19,7 +19,7 @@ func (e *Entry) CalculateScore() float64 {
 }
 
 func (e *Entry) String() string {
-	return fmt.Sprintf("{%s %s}", e.Path, e.Score)
+	return fmt.Sprintf("{%s %s}", e.Path, &e.Score)
 }
 
 // NewEntry creates a new entry with the specified path. The score is created
