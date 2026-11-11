@@ -143,7 +143,7 @@ func readZoxideEntry(r *zoxideDBReader) (*scoring.Entry, error) {
 
 	return &scoring.Entry{
 		Path: path,
-		Score: &scoring.Score{
+		Score: scoring.Score{
 			Weight: int64(math.Round(rank)),
 			Age:    time.Unix(int64(lastAccessed), 0),
 		},

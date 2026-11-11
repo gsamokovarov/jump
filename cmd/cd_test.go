@@ -16,8 +16,8 @@ func Test_cdCmd(t *testing.T) {
 	t.Run("basic fuzzy matching", func(t *testing.T) {
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
-				entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
+				entry(p.Join(td, "web-console"), s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(td, "/client/website"), s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -41,8 +41,8 @@ func Test_cdCmd(t *testing.T) {
 	t.Run("multiple arguments as separators", func(t *testing.T) {
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
-				entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
+				entry(p.Join(td, "web-console"), s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(td, "/client/website"), s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -56,8 +56,8 @@ func Test_cdCmd(t *testing.T) {
 	t.Run("absolute path", func(t *testing.T) {
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now}),
-				entry(p.Join(td, "/client/website"), &s.Score{Weight: 90, Age: s.Now}),
+				entry(p.Join(td, "web-console"), s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(td, "/client/website"), s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -77,9 +77,9 @@ func Test_cdCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p3, &s.Score{Weight: 80, Age: s.Now}),
-				entry(p2, &s.Score{Weight: 90, Age: s.Now}),
-				entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+				entry(p3, s.Score{Weight: 80, Age: s.Now}),
+				entry(p2, s.Score{Weight: 90, Age: s.Now}),
+				entry(p1, s.Score{Weight: 100, Age: s.Now}),
 			},
 		}
 
@@ -100,9 +100,9 @@ func Test_cdCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p3, &s.Score{Weight: 80, Age: s.Now}),
-				entry(p2, &s.Score{Weight: 90, Age: s.Now}),
-				entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+				entry(p3, s.Score{Weight: 80, Age: s.Now}),
+				entry(p2, s.Score{Weight: 90, Age: s.Now}),
+				entry(p1, s.Score{Weight: 100, Age: s.Now}),
 			},
 		}
 
@@ -121,9 +121,9 @@ func Test_cdCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p3, &s.Score{Weight: 80, Age: s.Now}),
-				entry(p2, &s.Score{Weight: 90, Age: s.Now}),
-				entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+				entry(p3, s.Score{Weight: 80, Age: s.Now}),
+				entry(p2, s.Score{Weight: 90, Age: s.Now}),
+				entry(p1, s.Score{Weight: 100, Age: s.Now}),
 			},
 		}
 
@@ -141,9 +141,9 @@ func Test_cdCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p3, &s.Score{Weight: 80, Age: s.Now}),
-				entry(p2, &s.Score{Weight: 90, Age: s.Now}),
-				entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+				entry(p3, s.Score{Weight: 80, Age: s.Now}),
+				entry(p2, s.Score{Weight: 90, Age: s.Now}),
+				entry(p1, s.Score{Weight: 100, Age: s.Now}),
 			},
 			Settings: config.Settings{Space: config.SpaceSlash},
 		}
@@ -178,9 +178,9 @@ func Test_cdCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(p.Join(baseDir, "website"), &s.Score{Weight: 100, Age: s.Now}),
-				entry(p.Join(baseDir, "webtools"), &s.Score{Weight: 90, Age: s.Now}),
-				entry(p.Join(td, "web-console"), &s.Score{Weight: 200, Age: s.Now}), // Higher score but not under baseDir
+				entry(p.Join(baseDir, "website"), s.Score{Weight: 100, Age: s.Now}),
+				entry(p.Join(baseDir, "webtools"), s.Score{Weight: 90, Age: s.Now}),
+				entry(p.Join(td, "web-console"), s.Score{Weight: 200, Age: s.Now}), // Higher score but not under baseDir
 			},
 		}
 
@@ -250,8 +250,8 @@ func Test_cdCmd_staleEntryInBasedMode(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			entry(other, &s.Score{Weight: 100, Age: s.Now}),
-			entry(stale, &s.Score{Weight: 90, Age: s.Now}),
+			entry(other, s.Score{Weight: 100, Age: s.Now}),
+			entry(stale, s.Score{Weight: 90, Age: s.Now}),
 		},
 	}
 
@@ -272,9 +272,9 @@ func Test_cdCmd_staleEntryKeepsReverseJumping(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			entry(stale, &s.Score{Weight: 300, Age: s.Now}),
-			entry(console, &s.Score{Weight: 200, Age: s.Now}),
-			entry(web, &s.Score{Weight: 100, Age: s.Now}),
+			entry(stale, s.Score{Weight: 300, Age: s.Now}),
+			entry(console, s.Score{Weight: 200, Age: s.Now}),
+			entry(web, s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 

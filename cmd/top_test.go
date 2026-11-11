@@ -22,8 +22,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
-				entry(web, &s.Score{Weight: 90, Age: s.Now}),
+				entry(wc, s.Score{Weight: 100, Age: s.Now}),
+				entry(web, s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -45,8 +45,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
-				entry(web, &s.Score{Weight: 90, Age: s.Now}),
+				entry(wc, s.Score{Weight: 100, Age: s.Now}),
+				entry(web, s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -68,8 +68,8 @@ func Test_topCmd(t *testing.T) {
 
 		conf := &config.InMemory{
 			Entries: s.Entries{
-				entry(wc, &s.Score{Weight: 100, Age: s.Now}),
-				entry(neu, &s.Score{Weight: 90, Age: s.Now}),
+				entry(wc, s.Score{Weight: 100, Age: s.Now}),
+				entry(neu, s.Score{Weight: 90, Age: s.Now}),
 			},
 		}
 
@@ -86,8 +86,8 @@ func Test_topCmd(t *testing.T) {
 	})
 
 	t.Run("jump top neuv --score", func(t *testing.T) {
-		wc := entry(p.Join(td, "web-console"), &s.Score{Weight: 100, Age: s.Now})
-		neu := entry(p.Join(td, "neuvents"), &s.Score{Weight: 90, Age: s.Now})
+		wc := entry(p.Join(td, "web-console"), s.Score{Weight: 100, Age: s.Now})
+		neu := entry(p.Join(td, "neuvents"), s.Score{Weight: 90, Age: s.Now})
 
 		conf := &config.InMemory{Entries: s.Entries{wc, neu}}
 

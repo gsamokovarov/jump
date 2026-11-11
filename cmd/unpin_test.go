@@ -17,8 +17,8 @@ func Test_unpinCmd(t *testing.T) {
 
 	conf := &config.InMemory{
 		Entries: s.Entries{
-			entry(p2, &s.Score{Weight: 1, Age: s.Now}),
-			entry(p1, &s.Score{Weight: 100, Age: s.Now}),
+			entry(p2, s.Score{Weight: 1, Age: s.Now}),
+			entry(p1, s.Score{Weight: 100, Age: s.Now}),
 		},
 	}
 

@@ -7,16 +7,16 @@ import (
 )
 
 func TestEntriesLen(t *testing.T) {
-	e1 := &Entry{"/foo", &Score{100, Now}}
-	e2 := &Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", Score{100, Now}}
+	e2 := &Entry{"/foo/bar", Score{200, Now}}
 
 	entries := Entries{e1, e2}
 	assert.Len(t, 2, entries)
 }
 
 func TestEntriesFind(t *testing.T) {
-	e1 := &Entry{"/foo", &Score{100, Now}}
-	e2 := &Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", Score{100, Now}}
+	e2 := &Entry{"/foo/bar", Score{200, Now}}
 
 	entries := Entries{e1, e2}
 
@@ -30,8 +30,8 @@ func TestEntriesFind(t *testing.T) {
 }
 
 func TestEntriesRemove(t *testing.T) {
-	e1 := &Entry{"/foo", &Score{100, Now}}
-	e2 := &Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", Score{100, Now}}
+	e2 := &Entry{"/foo/bar", Score{200, Now}}
 
 	entries := Entries{e1, e2}
 
@@ -40,8 +40,8 @@ func TestEntriesRemove(t *testing.T) {
 }
 
 func TestEntriesSort(t *testing.T) {
-	e1 := &Entry{"/foo", &Score{100, Now}}
-	e2 := &Entry{"/foo/bar", &Score{200, Now}}
+	e1 := &Entry{"/foo", Score{100, Now}}
+	e2 := &Entry{"/foo/bar", Score{200, Now}}
 
 	entries := Entries{e2, e1}
 	entries.Sort()
@@ -50,11 +50,11 @@ func TestEntriesSort(t *testing.T) {
 }
 
 func TestEntriesUnder(t *testing.T) {
-	e1 := &Entry{"/home", &Score{100, Now}}
-	e2 := &Entry{"/home/user", &Score{200, Now}}
-	e3 := &Entry{"/home/user/documents", &Score{300, Now}}
-	e4 := &Entry{"/home/user/downloads", &Score{400, Now}}
-	e5 := &Entry{"/var/log", &Score{500, Now}}
+	e1 := &Entry{"/home", Score{100, Now}}
+	e2 := &Entry{"/home/user", Score{200, Now}}
+	e3 := &Entry{"/home/user/documents", Score{300, Now}}
+	e4 := &Entry{"/home/user/downloads", Score{400, Now}}
+	e5 := &Entry{"/var/log", Score{500, Now}}
 
 	entries := Entries{e1, e2, e3, e4, e5}
 
@@ -83,10 +83,10 @@ func TestEntriesUnder(t *testing.T) {
 	})
 
 	t.Run("excludes siblings sharing the prefix", func(t *testing.T) {
-		repo := &Entry{"/work/repo", &Score{100, Now}}
-		lib := &Entry{"/work/repo/lib", &Score{200, Now}}
-		old := &Entry{"/work/repo-old", &Score{300, Now}}
-		oldLib := &Entry{"/work/repo-old/lib", &Score{400, Now}}
+		repo := &Entry{"/work/repo", Score{100, Now}}
+		lib := &Entry{"/work/repo/lib", Score{200, Now}}
+		old := &Entry{"/work/repo-old", Score{300, Now}}
+		oldLib := &Entry{"/work/repo-old/lib", Score{400, Now}}
 
 		result := Entries{repo, lib, old, oldLib}.Under("/work/repo")
 		assert.Equal(t, Entries{lib}, result)
@@ -97,7 +97,7 @@ func TestEntriesUnder(t *testing.T) {
 	})
 
 	t.Run("root includes everything but itself", func(t *testing.T) {
-		root := &Entry{"/", &Score{100, Now}}
+		root := &Entry{"/", Score{100, Now}}
 
 		result := append(Entries{root}, entries...).Under("/")
 		assert.Equal(t, entries, result)
@@ -106,8 +106,8 @@ func TestEntriesUnder(t *testing.T) {
 
 func TestEntriesRanked(t *testing.T) {
 	t.Run("best match first", func(t *testing.T) {
-		e1 := &Entry{"/Development/web-console", &Score{100, Now}}
-		e2 := &Entry{"/Development/website", &Score{200, Now}}
+		e1 := &Entry{"/Development/web-console", Score{100, Now}}
+		e2 := &Entry{"/Development/website", Score{200, Now}}
 
 		ranked := Entries{e1, e2}.Ranked("wc")
 
@@ -115,23 +115,23 @@ func TestEntriesRanked(t *testing.T) {
 	})
 
 	t.Run("heavier entry first among equal matches", func(t *testing.T) {
-		e1 := &Entry{"/Development/web-client", &Score{100, Now}}
-		e2 := &Entry{"/Development/web-console", &Score{200, Now}}
+		e1 := &Entry{"/Development/web-client", Score{100, Now}}
+		e2 := &Entry{"/Development/web-console", Score{200, Now}}
 
 		assert.Equal(t, Entries{e2, e1}, Entries{e1, e2}.Ranked("wc"))
 		assert.Equal(t, Entries{e2, e1}, Entries{e2, e1}.Ranked("wc"))
 	})
 
 	t.Run("empty term orders by score alone", func(t *testing.T) {
-		e1 := &Entry{"/Development/web-client", &Score{100, Now}}
-		e2 := &Entry{"/Development/web-console", &Score{200, Now}}
+		e1 := &Entry{"/Development/web-client", Score{100, Now}}
+		e2 := &Entry{"/Development/web-console", Score{200, Now}}
 
 		assert.Equal(t, Entries{e2, e1}, Entries{e1, e2}.Ranked(""))
 	})
 
 	t.Run("leaves the entries untouched", func(t *testing.T) {
-		e1 := &Entry{"/Development/web-client", &Score{100, Now}}
-		e2 := &Entry{"/Development/web-console", &Score{200, Now}}
+		e1 := &Entry{"/Development/web-client", Score{100, Now}}
+		e2 := &Entry{"/Development/web-console", Score{200, Now}}
 
 		entries := Entries{e1, e2}
 		entries.Ranked("wc")
