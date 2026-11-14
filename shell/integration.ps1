@@ -93,7 +93,7 @@ if (Get-Command Register-ArgumentCompleter -ErrorAction Ignore) {
     Register-ArgumentCompleter -CommandName '{{.Bind}}' -ScriptBlock {
         param ($commandName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
-        $word = if ($wordToComplete -match '^j\s+(.*)$') { $Matches[1] } else { $wordToComplete }
+        $word = if ($wordToComplete -match '^{{.Bind}}\s+(.*)$') { $Matches[1] } else { $wordToComplete }
         $dirPrefix = if ($word -match '^(.+[/\\])[^/\\]*$') { $Matches[1] } else { "" }
         $localDirs = @(Get-ChildItem -Directory -Path "$word*" -ErrorAction SilentlyContinue)
 

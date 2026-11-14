@@ -12,7 +12,7 @@ function __jump_z_complete() {
   [[ "${#words[@]}" -eq "${CURRENT}" ]] || return 0
 
   if [[ "${#words[@]}" -eq 2 ]]; then
-    if [[ -n $(echo ${~words[2]}*(/N)) ]]; then
+    if [[ -n $(echo ${~${(Q)words[2]}}*(-/N)) ]]; then
       _cd -/
     elif [[ "${words[2]}" != */* ]]; then
       local hint="$(jump hint "${words[2]}" | head -1)"
