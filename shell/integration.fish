@@ -11,7 +11,7 @@ end
 
 function __jump_hint
     set -l term (commandline --cut-at-cursor --current-token)
-    set -l local_dirs (complete --do-complete "cd $term" | string match --regex -- '.*/$')
+    set -l local_dirs (__fish_complete_directories "$term" "")
 
     if test (count $local_dirs) -gt 0
         printf '%s\n' $local_dirs

@@ -47,7 +47,7 @@ __jump_base_dir() {
       builtin cd -
       ;;
     ".")
-      local dir="$(jump cd "$(__jump_base_dir)" ${@:2})"
+      local dir="$(jump cd "$(__jump_base_dir)" "${@:2}")"
       [[ $# -gt 1 ]] && __jump_term="${*:2}" __jump_try=0
       builtin cd "$dir"
       ;;
@@ -57,7 +57,7 @@ __jump_base_dir() {
       test -d "$dir" && builtin cd "$dir" && __jump_boost=$__jump_try
       ;;
     *)
-      local dir="$(jump cd $@)"
+      local dir="$(jump cd "$@")"
       __jump_term="$*" __jump_try=0
       test -d "$dir" && builtin cd "$dir"
       ;;
